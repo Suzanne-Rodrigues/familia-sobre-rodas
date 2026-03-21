@@ -32,7 +32,7 @@
     }
 
     .wrap{
-      max-width:1180px;
+      max-width:1200px;
       margin:0 auto;
       padding:18px;
     }
@@ -57,12 +57,41 @@
       opacity:.95;
     }
 
+    .tabs{
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+      margin-bottom:18px;
+    }
+
+    .tabBtn{
+      border:none;
+      border-radius:16px;
+      padding:12px 18px;
+      font-size:15px;
+      font-weight:bold;
+      cursor:pointer;
+      background:rgba(255,255,255,.2);
+      color:#fff;
+      backdrop-filter:blur(6px);
+    }
+
+    .tabBtn.active{
+      background:#fff;
+      color:#111827;
+      box-shadow:var(--shadow);
+    }
+
     .grid{
       display:grid;
       gap:18px;
     }
 
     .grid2{
+      grid-template-columns:repeat(auto-fit,minmax(320px,1fr));
+    }
+
+    .grid3{
       grid-template-columns:repeat(auto-fit,minmax(320px,1fr));
     }
 
@@ -165,14 +194,16 @@
       padding:12px;
     }
 
-    .sessionsWrap{
-      margin-top:18px;
+    .sessionsGrid{
+      display:grid;
+      grid-template-columns:repeat(auto-fit,minmax(320px,1fr));
+      gap:16px;
+      align-items:start;
     }
 
     .session{
       border-radius:24px;
       padding:18px;
-      margin-top:14px;
       color:#fff;
       box-shadow:var(--shadow);
       position:relative;
@@ -442,11 +473,20 @@
       "Jipe UTV"
     ];
 
+    const defaultPlans = [
+      { tempo: 5, preco: 5 },
+      { tempo: 10, preco: 10 },
+      { tempo: 15, preco: 15 }
+    ];
+
     let vehicles = [];
+    let plans = [];
     let sessions = [];
-    let seeded = false;
+    let seededVehicles = false;
+    let seededPlans = false;
     let timerInterval = null;
     let currentView = "attendant";
+    let activeTab = localStorage.getItem("fsr_active_tab") || "atendimentos";
     let wakeLock = null;
 
     let vibrated120 = new Set();
@@ -461,11 +501,21 @@
       return url.searchParams.get(name);
     }
 
+    function setTab(tab){
+      activeTab = tab;
+      localStorage.setItem("fsr_active_tab", tab);
+      renderAttendant();
+    }
+
     function formatTime(sec){
       const s = Math.max(0, Math.floor(sec));
       const min = Math.floor(s / 60);
       const seg = s % 60;
       return `${min}:${String(seg).padStart(2, "0")}`;
+    }
+
+    function formatMoney(value){
+      return Number(value || 0).toFixed(2).replace(".", ",");
     }
 
     function colorClass(secondsLeft){
@@ -540,12 +590,23 @@
     }
 
     async function seedVehiclesIfNeeded(){
-      if(seeded) return;
-      seeded = true;
+      if(seededVehicles) return;
+      seededVehicles = true;
       const snap = await getDocs(collection(db, "vehicles"));
       if(snap.empty){
         for(const name of defaultVehicles){
           await addDoc(collection(db, "vehicles"), { name });
+        }
+      }
+    }
+
+    async function seedPlansIfNeeded(){
+      if(seededPlans) return;
+      seededPlans = true;
+      const snap = await getDocs(collection(db, "plans"));
+      if(snap.empty){
+        for(const plan of defaultPlans){
+          await addDoc(collection(db, "plans"), plan);
         }
       }
     }
@@ -571,14 +632,41 @@
       await deleteDoc(doc(db, "vehicles", id));
     }
 
+    async function addPlan(){
+      const tempoInput = document.getElementById("tempoPlano");
+      const precoInput = document.getElementById("precoPlano");
+
+      const tempo = parseInt((tempoInput.value || "").trim(), 10);
+      const preco = parseFloat((precoInput.value || "").replace(",", "."));
+
+      if(!tempo || tempo <= 0){
+        alert("Digite um tempo válido.");
+        return;
+      }
+
+      if(isNaN(preco) || preco < 0){
+        alert("Digite um preço válido.");
+        return;
+      }
+
+      await addDoc(collection(db, "plans"), { tempo, preco });
+      tempoInput.value = "";
+      precoInput.value = "";
+    }
+
+    async function removePlan(id){
+      if(!confirm("Excluir este plano?")) return;
+      await deleteDoc(doc(db, "plans", id));
+    }
+
     async function startSession(){
       const nomeInput = document.getElementById("nome");
       const veiculoSelect = document.getElementById("veiculo");
-      const tempoSelect = document.getElementById("tempo");
+      const planoSelect = document.getElementById("plano");
 
       const nome = (nomeInput.value || "").trim();
       const vehicleId = veiculoSelect.value;
-      const tempo = parseInt(tempoSelect.value, 10);
+      const planId = planoSelect.value;
 
       if(!nome){
         alert("Digite o nome da criança.");
@@ -592,14 +680,22 @@
         return;
       }
 
+      const plan = plans.find(p => p.id === planId);
+      if(!plan){
+        alert("Selecione um plano.");
+        return;
+      }
+
       const now = Date.now();
-      const endAt = now + tempo * 60 * 1000;
+      const endAt = now + plan.tempo * 60 * 1000;
 
       await addDoc(collection(db, "sessions"), {
         nome,
         vehicleId,
         veiculo: vehicle.name,
-        minutesBought: tempo,
+        planId,
+        minutesBought: plan.tempo,
+        price: plan.preco,
         startAt: now,
         endAt,
         status: "active",
@@ -610,7 +706,7 @@
 
       nomeInput.value = "";
       veiculoSelect.value = "";
-      tempoSelect.value = "5";
+      planoSelect.value = "";
     }
 
     async function approveMore(id){
@@ -662,15 +758,136 @@
         });
     }
 
+    function renderTabs(){
+      return `
+        <div class="tabs">
+          <button class="tabBtn ${activeTab === "atendimentos" ? "active" : ""}" data-tab="atendimentos">Atendimentos</button>
+          <button class="tabBtn ${activeTab === "andamento" ? "active" : ""}" data-tab="andamento">Em andamento</button>
+          <button class="tabBtn ${activeTab === "veiculos" ? "active" : ""}" data-tab="veiculos">Veículos</button>
+          <button class="tabBtn ${activeTab === "planos" ? "active" : ""}" data-tab="planos">Planos / Preços</button>
+        </div>
+      `;
+    }
+
+    function renderAtendimentosTab(){
+      return `
+        <div class="card">
+          <h2>🎉 Novo atendimento</h2>
+          <p class="sub">Preencha rapidinho e inicie o tempo.</p>
+
+          <label>Nome da criança</label>
+          <input id="nome" placeholder="Ex.: Miguel" />
+
+          <label>Veículo</label>
+          <select id="veiculo">
+            <option value="">Selecione um veículo</option>
+            ${vehicles.map(v => `<option value="${v.id}">${escapeHtml(v.name)}</option>`).join("")}
+          </select>
+
+          <label>Plano</label>
+          <select id="plano">
+            <option value="">Selecione um plano</option>
+            ${plans.map(p => `<option value="${p.id}">${p.tempo} min - R$ ${formatMoney(p.preco)}</option>`).join("")}
+          </select>
+
+          <div class="actions">
+            <button class="btn-green" id="btnIniciar">Iniciar atendimento</button>
+          </div>
+        </div>
+      `;
+    }
+
+    function renderEmAndamentoTab(){
+      const active = sortedActiveSessions();
+
+      return `
+        <div class="card">
+          <h2>⏱️ Atendimentos ativos</h2>
+          <p class="sub">Quem pediu +5 min fica no topo. Depois vem quem tem menos tempo.</p>
+
+          <div id="activeSessions" class="sessionsGrid">
+            ${active.length === 0 ? `<div class="empty">Nenhum atendimento ativo agora.</div>` : ""}
+            ${active.map(item => renderSessionCard(item)).join("")}
+          </div>
+        </div>
+
+        <div class="card" style="margin-top:18px;">
+          <h2>🧾 Últimos encerrados</h2>
+          ${sessions.filter(s => s.status === "ended").sort((a,b) => b.createdAt - a.createdAt).slice(0,10).map(item => `
+            <div class="vehicleItem" style="margin-top:10px;">
+              <div>
+                <strong>${escapeHtml(item.nome)}</strong> - ${escapeHtml(item.veiculo)}
+              </div>
+              <button class="btn-dark" data-reopen="${item.id}">Reabrir +5 min</button>
+            </div>
+          `).join("") || `<div class="empty">Nenhum atendimento encerrado ainda.</div>`}
+        </div>
+      `;
+    }
+
+    function renderVeiculosTab(){
+      return `
+        <div class="card">
+          <h2>🌈 Veículos</h2>
+          <p class="sub">Adicione novos veículos quando comprar mais.</p>
+
+          <label>Novo veículo</label>
+          <div class="row">
+            <input id="novoVeiculo" placeholder="Ex.: Mini Fusca Azul" />
+            <button class="btn-blue" id="btnAddVeiculo">Adicionar</button>
+          </div>
+
+          <div class="vehicleList">
+            ${vehicles.length === 0 ? `<div class="empty">Nenhum veículo cadastrado.</div>` : ""}
+            ${vehicles.map(v => `
+              <div class="vehicleItem">
+                <div><strong>${escapeHtml(v.name)}</strong></div>
+                <button class="btn-red" data-remove-vehicle="${v.id}">Excluir</button>
+              </div>
+            `).join("")}
+          </div>
+        </div>
+      `;
+    }
+
+    function renderPlanosTab(){
+      return `
+        <div class="card">
+          <h2>💰 Planos / Preços</h2>
+          <p class="sub">Aqui você edita minutos e valores quando quiser.</p>
+
+          <label>Tempo (minutos)</label>
+          <input id="tempoPlano" type="number" placeholder="Ex.: 5" />
+
+          <label>Preço (R$)</label>
+          <input id="precoPlano" type="number" step="0.01" placeholder="Ex.: 5,00" />
+
+          <div class="actions">
+            <button class="btn-green" id="btnAddPlano">Adicionar plano</button>
+          </div>
+
+          <div class="vehicleList">
+            ${plans.length === 0 ? `<div class="empty">Nenhum plano cadastrado.</div>` : ""}
+            ${plans.map(p => `
+              <div class="vehicleItem">
+                <div><strong>${p.tempo} min - R$ ${formatMoney(p.preco)}</strong></div>
+                <button class="btn-red" data-remove-plan="${p.id}">Excluir</button>
+              </div>
+            `).join("")}
+          </div>
+        </div>
+      `;
+    }
+
     function renderAttendant(){
       currentView = "attendant";
       const appEl = document.getElementById("app");
 
-      const active = sortedActiveSessions();
-      const ended = sessions
-        .filter(s => s.status === "ended")
-        .sort((a,b) => b.createdAt - a.createdAt)
-        .slice(0, 10);
+      let content = "";
+      if(activeTab === "atendimentos") content = renderAtendimentosTab();
+      if(activeTab === "andamento") content = renderEmAndamentoTab();
+      if(activeTab === "veiculos") content = renderVeiculosTab();
+      if(activeTab === "planos") content = renderPlanosTab();
 
       appEl.innerHTML = `
         <div class="wrap">
@@ -679,93 +896,30 @@
             <p>Painel do atendente</p>
           </div>
 
-          <div class="grid grid2">
-            <div class="card">
-              <h2>🎉 Novo atendimento</h2>
-              <p class="sub">Preencha rapidinho e inicie o tempo.</p>
-
-              <label>Nome da criança</label>
-              <input id="nome" placeholder="Ex.: Miguel" />
-
-              <label>Veículo</label>
-              <select id="veiculo">
-                <option value="">Selecione um veículo</option>
-                ${vehicles.map(v => `<option value="${v.id}">${escapeHtml(v.name)}</option>`).join("")}
-              </select>
-
-              <label>Tempo</label>
-              <select id="tempo">
-                <option value="5">5 min</option>
-                <option value="10">10 min</option>
-                <option value="15">15 min</option>
-                <option value="20">20 min</option>
-                <option value="25">25 min</option>
-                <option value="30">30 min</option>
-                <option value="35">35 min</option>
-                <option value="40">40 min</option>
-                <option value="45">45 min</option>
-                <option value="50">50 min</option>
-                <option value="55">55 min</option>
-                <option value="60">60 min</option>
-              </select>
-
-              <div class="actions">
-                <button class="btn-green" id="btnIniciar">Iniciar atendimento</button>
-              </div>
-            </div>
-
-            <div class="card">
-              <h2>🌈 Veículos</h2>
-              <p class="sub">Adicione novos veículos quando comprar mais.</p>
-
-              <label>Novo veículo</label>
-              <div class="row">
-                <input id="novoVeiculo" placeholder="Ex.: Mini Fusca Azul" />
-                <button class="btn-blue" id="btnAddVeiculo">Adicionar</button>
-              </div>
-
-              <div class="vehicleList">
-                ${vehicles.length === 0 ? `<div class="empty">Nenhum veículo cadastrado.</div>` : ""}
-                ${vehicles.map(v => `
-                  <div class="vehicleItem">
-                    <div><strong>${escapeHtml(v.name)}</strong></div>
-                    <button class="btn-red" data-remove-vehicle="${v.id}">Excluir</button>
-                  </div>
-                `).join("")}
-              </div>
-            </div>
-          </div>
-
-          <div class="card sessionsWrap">
-            <h2>⏱️ Atendimentos ativos</h2>
-            <p class="sub">Cliente pode acompanhar pelo celular escaneando o QR Code.</p>
-
-            <div id="activeSessions">
-              ${active.length === 0 ? `<div class="empty">Nenhum atendimento ativo agora.</div>` : ""}
-              ${active.map(item => renderSessionCard(item)).join("")}
-            </div>
-          </div>
-
-          <div class="card sessionsWrap">
-            <h2>🧾 Últimos encerrados</h2>
-            ${ended.length === 0 ? `<div class="empty">Nenhum atendimento encerrado ainda.</div>` : ""}
-            ${ended.map(item => `
-              <div class="vehicleItem">
-                <div>
-                  <strong>${escapeHtml(item.nome)}</strong> - ${escapeHtml(item.veiculo)}
-                </div>
-                <button class="btn-dark" data-reopen="${item.id}">Reabrir +5 min</button>
-              </div>
-            `).join("")}
-          </div>
+          ${renderTabs()}
+          ${content}
         </div>
       `;
 
-      document.getElementById("btnIniciar").onclick = startSession;
-      document.getElementById("btnAddVeiculo").onclick = addVehicle;
+      document.querySelectorAll("[data-tab]").forEach(btn => {
+        btn.onclick = () => setTab(btn.dataset.tab);
+      });
+
+      const btnIniciar = document.getElementById("btnIniciar");
+      if(btnIniciar) btnIniciar.onclick = startSession;
+
+      const btnAddVeiculo = document.getElementById("btnAddVeiculo");
+      if(btnAddVeiculo) btnAddVeiculo.onclick = addVehicle;
+
+      const btnAddPlano = document.getElementById("btnAddPlano");
+      if(btnAddPlano) btnAddPlano.onclick = addPlan;
 
       document.querySelectorAll("[data-remove-vehicle]").forEach(btn => {
         btn.onclick = () => removeVehicle(btn.dataset.removeVehicle);
+      });
+
+      document.querySelectorAll("[data-remove-plan]").forEach(btn => {
+        btn.onclick = () => removePlan(btn.dataset.removePlan);
       });
 
       document.querySelectorAll("[data-approve]").forEach(btn => {
@@ -816,7 +970,7 @@
             <div>
               <div class="name">${escapeHtml(item.nome)}</div>
               <div class="vehicle">🚘 ${escapeHtml(item.veiculo)}</div>
-              <div class="badge">Acompanhar por QR Code</div>
+              <div class="badge">Plano: ${item.minutesBought} min - R$ ${formatMoney(item.price)}</div>
             </div>
             <div>
               ${item.requestMore ? `<div class="badge">🚨 PEDIU +5 MIN</div>` : ""}
@@ -826,7 +980,7 @@
           ${item.requestMore ? `<div class="requestBanner">⚠️ O CLIENTE PEDIU MAIS 5 MINUTOS</div>` : ""}
 
           <div class="timer" data-timer="${item.id}">${left > 0 ? "⏳ " + formatTime(left) : "⛔ 00:00"}</div>
-          <div class="small">Tempo comprado: ${item.minutesBought} min</div>
+          <div class="small">Tempo comprado: ${item.minutesBought} min | Valor: R$ ${formatMoney(item.price)}</div>
 
           <div class="qrWrap">
             <div class="qrBox" data-qrcode="${item.id}"></div>
@@ -844,7 +998,7 @@
     }
 
     function updateTimersOnly(){
-      if(currentView === "attendant"){
+      if(currentView === "attendant" && activeTab === "andamento"){
         sessions.filter(s => s.status === "active").forEach(item => {
           const left = Math.floor((item.endAt - Date.now()) / 1000);
           const timerEl = document.querySelector(`[data-timer="${item.id}"]`);
@@ -858,7 +1012,7 @@
             if(left <= 60) cardEl.classList.add("flash");
           }
         });
-      } else {
+      } else if(currentView === "client") {
         const clientId = qs("cliente");
         const session = sessions.find(s => s.id === clientId);
         if(session) renderClient(session);
@@ -921,6 +1075,10 @@
             ${nearlyDone}
             ${veryEnded}
 
+            <div class="badge" style="background:#111827;color:#fff;margin-top:14px;">
+              Plano: ${session.minutesBought} min - R$ ${formatMoney(session.price)}
+            </div>
+
             <div class="actions" style="justify-content:center; margin-top:18px;">
               <button class="btn-pink" id="btnPedirMais" ${ended ? "disabled" : ""}>Pedir +5 min</button>
               <button class="btn-white" id="btnManterTela">Manter tela ligada</button>
@@ -967,11 +1125,22 @@
     async function init(){
       try{
         await seedVehiclesIfNeeded();
+        await seedPlansIfNeeded();
 
         onSnapshot(collection(db, "vehicles"), snap => {
           vehicles = snap.docs
             .map(d => ({ id:d.id, ...d.data() }))
             .sort((a,b) => a.name.localeCompare(b.name));
+
+          if(!qs("cliente")){
+            renderAttendant();
+          }
+        });
+
+        onSnapshot(collection(db, "plans"), snap => {
+          plans = snap.docs
+            .map(d => ({ id:d.id, ...d.data() }))
+            .sort((a,b) => a.tempo - b.tempo);
 
           if(!qs("cliente")){
             renderAttendant();
