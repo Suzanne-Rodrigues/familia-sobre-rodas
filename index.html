@@ -6,84 +6,108 @@
   <title>Família Sobre Rodas</title>
   <style>
     :root{
-      --bg:#0f1115;
-      --card:#1a1f29;
-      --card2:#232a35;
-      --line:#313949;
-      --text:#ffffff;
-      --muted:#b7c0cc;
-      --green:#1f8f4d;
-      --yellow:#f0b429;
-      --red:#cc3d3d;
-      --blue:#2f7df6;
+      --bg1:#6a11cb;
+      --bg2:#2575fc;
+      --card:#ffffff;
+      --text:#1f2937;
+      --muted:#6b7280;
+      --green:#22c55e;
+      --yellow:#f59e0b;
+      --red:#ef4444;
+      --blue:#3b82f6;
+      --pink:#ec4899;
+      --purple:#8b5cf6;
+      --cyan:#06b6d4;
+      --line:#e5e7eb;
+      --shadow:0 12px 25px rgba(0,0,0,.18);
     }
 
     *{box-sizing:border-box}
+
     body{
       margin:0;
-      font-family:Arial, Helvetica, sans-serif;
-      background:var(--bg);
+      font-family: Arial, Helvetica, sans-serif;
       color:var(--text);
+      background: linear-gradient(135deg, var(--bg1), var(--bg2));
+      min-height:100vh;
     }
 
     .wrap{
-      max-width:1100px;
+      max-width:1150px;
       margin:0 auto;
       padding:18px;
     }
 
-    .top{
-      display:flex;
-      justify-content:space-between;
-      align-items:center;
-      gap:12px;
-      flex-wrap:wrap;
+    .hero{
+      background: linear-gradient(135deg, #ff7eb3, #ff758c, #ffb347);
+      color:white;
+      border-radius:24px;
+      padding:22px;
+      box-shadow:var(--shadow);
       margin-bottom:18px;
     }
 
-    h1,h2,h3,p{margin:0}
-    h1{font-size:30px}
-    h2{font-size:22px}
-    h3{font-size:18px}
+    .hero h1{
+      margin:0;
+      font-size:36px;
+    }
 
-    .sub{
-      color:var(--muted);
-      margin-top:6px;
+    .hero p{
+      margin:8px 0 0;
+      font-size:18px;
+      opacity:.95;
     }
 
     .grid{
       display:grid;
-      gap:16px;
+      gap:18px;
     }
 
     .grid2{
-      grid-template-columns:repeat(auto-fit,minmax(300px,1fr));
+      grid-template-columns:repeat(auto-fit,minmax(320px,1fr));
     }
 
     .card{
       background:var(--card);
-      border:1px solid var(--line);
-      border-radius:18px;
-      padding:16px;
-      box-shadow:0 10px 22px rgba(0,0,0,.2);
+      border-radius:24px;
+      padding:18px;
+      box-shadow:var(--shadow);
+      border:4px solid rgba(255,255,255,.25);
+    }
+
+    .card h2{
+      margin:0 0 10px;
+      font-size:22px;
+      color:#111827;
+    }
+
+    .sub{
+      color:var(--muted);
+      margin:0 0 10px;
     }
 
     label{
       display:block;
-      font-size:14px;
-      color:var(--muted);
-      margin:10px 0 6px;
+      margin:12px 0 6px;
+      font-weight:bold;
+      color:#374151;
     }
 
-    input, select {
+    input, select{
       width:100%;
-      padding:12px 14px;
-      border-radius:12px;
-      border:1px solid var(--line);
-      background:var(--card2);
-      color:var(--text);
+      padding:14px 16px;
+      border-radius:16px;
+      border:3px solid #dbeafe;
       font-size:16px;
       outline:none;
+      background:#f8fbff;
+      color:#111827;
+      pointer-events:auto;
+    }
+
+    input:focus, select:focus{
+      border-color:#60a5fa;
+      background:#ffffff;
     }
 
     .row{
@@ -97,91 +121,43 @@
       min-width:120px;
     }
 
-    button{
+    button, .linkBtn{
       border:none;
-      border-radius:12px;
-      padding:12px 14px;
+      border-radius:16px;
+      padding:12px 16px;
       font-size:15px;
-      cursor:pointer;
       font-weight:bold;
+      cursor:pointer;
+      text-decoration:none;
+      display:inline-block;
+      text-align:center;
+      transition:transform .12s ease;
     }
 
-    .btn-green{background:var(--green); color:#fff;}
-    .btn-blue{background:var(--blue); color:#fff;}
-    .btn-yellow{background:var(--yellow); color:#111;}
-    .btn-red{background:var(--red); color:#fff;}
-    .btn-dark{background:#2b3340; color:#fff;}
+    button:hover, .linkBtn:hover{
+      transform:scale(1.02);
+    }
+
+    .btn-green{ background:var(--green); color:white; }
+    .btn-blue{ background:var(--blue); color:white; }
+    .btn-yellow{ background:var(--yellow); color:white; }
+    .btn-red{ background:var(--red); color:white; }
+    .btn-pink{ background:var(--pink); color:white; }
+    .btn-purple{ background:var(--purple); color:white; }
+    .btn-dark{ background:#111827; color:white; }
 
     .actions{
       display:flex;
+      gap:10px;
       flex-wrap:wrap;
-      gap:8px;
-      margin-top:12px;
-    }
-
-    .session{
-      border-radius:18px;
-      padding:16px;
-      margin-top:14px;
-      border:1px solid rgba(255,255,255,0.06);
-    }
-
-    .green{background:#173c27;}
-    .yellow{background:#6d5610; color:#111;}
-    .red{background:#6f1c1c;}
-
-    .flash{
-      animation:piscar 1s linear infinite;
-    }
-
-    @keyframes piscar{
-      0%,50%,100% { filter:brightness(1); }
-      25%,75% { filter:brightness(1.28); }
-    }
-
-    .sessionTop{
-      display:flex;
-      justify-content:space-between;
-      gap:12px;
-      flex-wrap:wrap;
-    }
-
-    .name{
-      font-size:24px;
-      font-weight:bold;
-    }
-
-    .vehicle{
-      margin-top:6px;
-      font-size:17px;
-    }
-
-    .timer{
-      font-size:42px;
-      font-weight:bold;
       margin-top:14px;
     }
 
-    .small{
-      color:var(--muted);
-      font-size:13px;
-      margin-top:6px;
-    }
-
-    .badge{
-      display:inline-block;
-      padding:6px 10px;
-      border-radius:999px;
-      background:#2b3340;
-      font-size:12px;
-      margin-top:8px;
-    }
-
-    .list{
+    .vehicleList{
       display:flex;
       flex-direction:column;
       gap:10px;
-      margin-top:12px;
+      margin-top:14px;
     }
 
     .vehicleItem{
@@ -189,10 +165,83 @@
       justify-content:space-between;
       align-items:center;
       gap:10px;
+      background:linear-gradient(135deg, #eff6ff, #fdf2f8);
+      border:2px solid #dbeafe;
+      border-radius:18px;
       padding:12px;
-      border-radius:12px;
-      background:var(--card2);
-      border:1px solid var(--line);
+    }
+
+    .sessionsWrap{
+      margin-top:18px;
+    }
+
+    .session{
+      border-radius:24px;
+      padding:18px;
+      margin-top:14px;
+      color:white;
+      box-shadow:var(--shadow);
+    }
+
+    .session.green{
+      background: linear-gradient(135deg, #22c55e, #16a34a);
+    }
+
+    .session.yellow{
+      background: linear-gradient(135deg, #f59e0b, #f97316);
+    }
+
+    .session.red{
+      background: linear-gradient(135deg, #ef4444, #dc2626);
+    }
+
+    .flash{
+      animation:piscar 1s linear infinite;
+    }
+
+    @keyframes piscar{
+      0%,50%,100% { filter:brightness(1); }
+      25%,75% { filter:brightness(1.15); }
+    }
+
+    .sessionTop{
+      display:flex;
+      justify-content:space-between;
+      align-items:flex-start;
+      gap:10px;
+      flex-wrap:wrap;
+    }
+
+    .name{
+      font-size:28px;
+      font-weight:bold;
+    }
+
+    .vehicle{
+      margin-top:6px;
+      font-size:18px;
+    }
+
+    .timer{
+      font-size:48px;
+      font-weight:bold;
+      margin-top:16px;
+    }
+
+    .badge{
+      display:inline-block;
+      margin-top:8px;
+      padding:8px 12px;
+      border-radius:999px;
+      background:rgba(255,255,255,.2);
+      font-size:13px;
+      font-weight:bold;
+    }
+
+    .small{
+      margin-top:8px;
+      font-size:13px;
+      opacity:.95;
     }
 
     .clientWrap{
@@ -204,58 +253,69 @@
     }
 
     .clientCard{
-      width:min(700px,100%);
-      background:var(--card);
-      border:1px solid var(--line);
-      border-radius:24px;
+      width:min(760px,100%);
+      background:white;
+      border-radius:28px;
+      box-shadow:var(--shadow);
       padding:24px;
       text-align:center;
+      border:5px solid rgba(255,255,255,.4);
+    }
+
+    .clientTitle{
+      font-size:18px;
+      color:#6b7280;
     }
 
     .clientName{
-      font-size:34px;
+      font-size:38px;
       font-weight:bold;
-      margin-top:8px;
+      margin-top:10px;
+      color:#111827;
     }
 
     .clientVehicle{
-      font-size:20px;
+      font-size:22px;
       margin-top:8px;
+      color:#374151;
     }
 
     .clientTimer{
-      font-size:68px;
+      font-size:76px;
       font-weight:bold;
-      margin:22px 0;
+      margin:24px 0;
+      color:#111827;
     }
 
     .notice{
+      font-size:20px;
+      font-weight:bold;
       margin-top:10px;
-      font-size:18px;
-      font-weight:bold;
     }
 
-    .muted{
-      color:var(--muted);
+    .clientGreen{
+      background:linear-gradient(135deg, #d1fae5, #a7f3d0);
     }
 
-    .hidden{display:none !important;}
+    .clientYellow{
+      background:linear-gradient(135deg, #fef3c7, #fdba74);
+    }
 
-    a.linkBtn{
-      display:inline-block;
-      text-decoration:none;
-      background:#2b3340;
-      color:#fff;
-      padding:12px 14px;
-      border-radius:12px;
-      font-weight:bold;
+    .clientRed{
+      background:linear-gradient(135deg, #fee2e2, #fca5a5);
+    }
+
+    .empty{
+      color:#6b7280;
+      padding:8px 0;
     }
 
     @media (max-width:640px){
-      .timer{font-size:34px;}
-      .clientTimer{font-size:54px;}
-      .clientName{font-size:28px;}
-      h1{font-size:24px;}
+      .hero h1{ font-size:28px; }
+      .name{ font-size:22px; }
+      .timer{ font-size:36px; }
+      .clientName{ font-size:30px; }
+      .clientTimer{ font-size:56px; }
     }
   </style>
 </head>
@@ -299,6 +359,7 @@
     let vehicles = [];
     let sessions = [];
     let ticking = null;
+    let seeded = false;
 
     function qs(name){
       const url = new URL(window.location.href);
@@ -318,6 +379,12 @@
       return "green";
     }
 
+    function clientColor(secondsLeft){
+      if(secondsLeft <= 0) return "clientRed";
+      if(secondsLeft <= 120) return "clientYellow";
+      return "clientGreen";
+    }
+
     function vibrate(pattern){
       if(navigator.vibrate){
         navigator.vibrate(pattern);
@@ -328,7 +395,18 @@
       return `${window.location.origin}${window.location.pathname}?cliente=${id}`;
     }
 
-    async function seedVehicles(){
+    function escapeHtml(str){
+      return String(str)
+        .replaceAll("&", "&amp;")
+        .replaceAll("<", "&lt;")
+        .replaceAll(">", "&gt;")
+        .replaceAll('"', "&quot;")
+        .replaceAll("'", "&#039;");
+    }
+
+    async function seedVehiclesIfNeeded(){
+      if(seeded) return;
+      seeded = true;
       const snap = await getDocs(collection(db, "vehicles"));
       if(snap.empty){
         for(const name of defaultVehicles){
@@ -339,24 +417,49 @@
 
     async function addVehicle(){
       const input = document.getElementById("novoVeiculo");
+      if(!input) return;
       const name = (input.value || "").trim();
-      if(!name) return;
+      if(!name){
+        alert("Digite o nome do veículo.");
+        return;
+      }
       await addDoc(collection(db, "vehicles"), { name });
       input.value = "";
     }
 
     async function removeVehicle(id){
+      const activeUsing = sessions.some(s => s.status === "active" && s.vehicleId === id);
+      if(activeUsing){
+        alert("Esse veículo está em uso agora.");
+        return;
+      }
       if(!confirm("Excluir este veículo?")) return;
       await deleteDoc(doc(db, "vehicles", id));
     }
 
     async function startSession(){
-      const nome = (document.getElementById("nome").value || "").trim();
-      const veiculo = document.getElementById("veiculo").value;
-      const tempo = parseInt(document.getElementById("tempo").value, 10);
+      const nomeInput = document.getElementById("nome");
+      const veiculoSelect = document.getElementById("veiculo");
+      const tempoSelect = document.getElementById("tempo");
+
+      if(!nomeInput || !veiculoSelect || !tempoSelect){
+        alert("Tela ainda carregando. Tente novamente.");
+        return;
+      }
+
+      const nome = (nomeInput.value || "").trim();
+      const vehicleId = veiculoSelect.value;
+      const tempo = parseInt(tempoSelect.value, 10);
 
       if(!nome){
         alert("Digite o nome da criança.");
+        nomeInput.focus();
+        return;
+      }
+
+      const vehicle = vehicles.find(v => v.id === vehicleId);
+      if(!vehicle){
+        alert("Selecione um veículo.");
         return;
       }
 
@@ -365,7 +468,8 @@
 
       await addDoc(collection(db, "sessions"), {
         nome,
-        veiculo,
+        vehicleId,
+        veiculo: vehicle.name,
         minutesBought: tempo,
         startAt: now,
         endAt,
@@ -375,7 +479,7 @@
         createdAt: now
       });
 
-      document.getElementById("nome").value = "";
+      nomeInput.value = "";
     }
 
     async function approveMore(id){
@@ -408,7 +512,9 @@
       const base = Date.now();
       await updateDoc(doc(db, "sessions", id), {
         status: "active",
-        endAt: base + 5 * 60 * 1000
+        endAt: base + 5 * 60 * 1000,
+        requestMore: false,
+        requestAt: null
       });
     }
 
@@ -426,23 +532,23 @@
 
       appEl.innerHTML = `
         <div class="wrap">
-          <div class="top">
-            <div>
-              <h1>🚗 Família Sobre Rodas</h1>
-              <p class="sub">Painel do atendente</p>
-            </div>
+          <div class="hero">
+            <h1>🚗 Família Sobre Rodas</h1>
+            <p>Painel do atendente</p>
           </div>
 
           <div class="grid grid2">
             <div class="card">
-              <h2>Novo atendimento</h2>
+              <h2>🎉 Novo atendimento</h2>
+              <p class="sub">Preencha rapidinho e inicie o tempo.</p>
 
               <label>Nome da criança</label>
               <input id="nome" placeholder="Ex.: Miguel" />
 
               <label>Veículo</label>
               <select id="veiculo">
-                ${vehicles.map(v => `<option>${escapeHtml(v.name)}</option>`).join("")}
+                <option value="">Selecione um veículo</option>
+                ${vehicles.map(v => `<option value="${v.id}">${escapeHtml(v.name)}</option>`).join("")}
               </select>
 
               <label>Tempo</label>
@@ -467,17 +573,20 @@
             </div>
 
             <div class="card">
-              <h2>Veículos</h2>
+              <h2>🌈 Veículos</h2>
+              <p class="sub">Adicione novos veículos quando comprar mais.</p>
+
               <label>Novo veículo</label>
               <div class="row">
                 <input id="novoVeiculo" placeholder="Ex.: Mini Fusca Azul" />
                 <button class="btn-blue" id="btnAddVeiculo">Adicionar</button>
               </div>
 
-              <div class="list">
+              <div class="vehicleList">
+                ${vehicles.length === 0 ? `<div class="empty">Nenhum veículo cadastrado.</div>` : ""}
                 ${vehicles.map(v => `
                   <div class="vehicleItem">
-                    <div>${escapeHtml(v.name)}</div>
+                    <div><strong>${escapeHtml(v.name)}</strong></div>
                     <button class="btn-red" data-remove-vehicle="${v.id}">Excluir</button>
                   </div>
                 `).join("")}
@@ -485,11 +594,11 @@
             </div>
           </div>
 
-          <div class="card" style="margin-top:16px;">
-            <h2>Atendimentos ativos</h2>
-            <p class="sub">Cliente pode acompanhar pelo próprio celular.</p>
+          <div class="card sessionsWrap">
+            <h2>⏱️ Atendimentos ativos</h2>
+            <p class="sub">O cliente pode acompanhar pelo próprio celular.</p>
 
-            ${active.length === 0 ? `<p class="sub" style="margin-top:14px;">Nenhum atendimento ativo agora.</p>` : ""}
+            ${active.length === 0 ? `<div class="empty">Nenhum atendimento ativo agora.</div>` : ""}
 
             ${active.map(item => {
               const left = Math.floor((item.endAt - Date.now()) / 1000);
@@ -504,15 +613,15 @@
                       <div class="badge">Link do cliente</div>
                     </div>
                     <div>
-                      ${item.requestMore ? `<div class="badge" style="background:#b11d1d;">⚠️ Pediu +5 min</div>` : ""}
+                      ${item.requestMore ? `<div class="badge">⚠️ Pediu +5 min</div>` : ""}
                     </div>
                   </div>
 
-                  <div class="timer">${left > 0 ? "⏳ " + formatTime(left) : "⛔ Encerrado"}</div>
-                  <div class="small">Comprado: ${item.minutesBought} min</div>
+                  <div class="timer">${left > 0 ? "⏳ " + formatTime(left) : "⛔ 00:00"}</div>
+                  <div class="small">Tempo comprado: ${item.minutesBought} min</div>
 
                   <div class="actions">
-                    <a class="linkBtn" href="${clientLink(item.id)}" target="_blank">Tela do cliente</a>
+                    <a class="linkBtn btn-purple" href="${clientLink(item.id)}" target="_blank">Tela do cliente</a>
                     <button class="btn-blue" data-copy="${item.id}">Copiar link</button>
                     <button class="btn-yellow" data-approve="${item.id}">Liberar +5 min</button>
                     <button class="btn-red" data-end="${item.id}">Encerrar</button>
@@ -522,9 +631,9 @@
             }).join("")}
           </div>
 
-          <div class="card" style="margin-top:16px;">
-            <h2>Últimos encerrados</h2>
-            ${ended.length === 0 ? `<p class="sub" style="margin-top:14px;">Nenhum atendimento encerrado ainda.</p>` : ""}
+          <div class="card sessionsWrap">
+            <h2>🧾 Últimos encerrados</h2>
+            ${ended.length === 0 ? `<div class="empty">Nenhum atendimento encerrado ainda.</div>` : ""}
             ${ended.map(item => `
               <div class="vehicleItem">
                 <div>
@@ -537,8 +646,11 @@
         </div>
       `;
 
-      document.getElementById("btnIniciar").onclick = startSession;
-      document.getElementById("btnAddVeiculo").onclick = addVehicle;
+      const btnIniciar = document.getElementById("btnIniciar");
+      const btnAddVeiculo = document.getElementById("btnAddVeiculo");
+
+      if(btnIniciar) btnIniciar.onclick = startSession;
+      if(btnAddVeiculo) btnAddVeiculo.onclick = addVehicle;
 
       document.querySelectorAll("[data-remove-vehicle]").forEach(btn => {
         btn.onclick = () => removeVehicle(btn.dataset.removeVehicle);
@@ -571,31 +683,27 @@
 
     function renderClient(session){
       const left = Math.floor((session.endAt - Date.now()) / 1000);
-      const color = colorClass(left);
-      const flash = left <= 60 ? "flash" : "";
       const ended = session.status !== "active" || left <= 0;
-
       const appEl = document.getElementById("app");
+
       appEl.innerHTML = `
         <div class="clientWrap">
-          <div class="clientCard ${color} ${flash}">
-            <div class="muted">Família Sobre Rodas</div>
+          <div class="clientCard ${clientColor(left)} ${left <= 60 ? "flash" : ""}">
+            <div class="clientTitle">Família Sobre Rodas</div>
             <div class="clientName">${escapeHtml(session.nome)}</div>
             <div class="clientVehicle">🚘 ${escapeHtml(session.veiculo)}</div>
-            <div class="clientTimer">${ended ? "⛔ 00:00" : formatTime(left)}</div>
+            <div class="clientTimer">${ended ? "00:00" : formatTime(left)}</div>
 
             <div class="notice">
-              ${ended ? "Tempo encerrado" : left <= 60 ? "Está acabando" : left <= 120 ? "Faltam 2 minutos" : "Tempo em andamento"}
+              ${ended ? "⛔ Tempo encerrado" : left <= 60 ? "⚠️ Está acabando" : left <= 120 ? "⌛ Faltam 2 minutos" : "🎉 Tempo em andamento"}
             </div>
 
             <div class="actions" style="justify-content:center; margin-top:18px;">
-              <button class="btn-yellow" id="btnPedirMais" ${ended ? "disabled" : ""}>
-                Pedir +5 min
-              </button>
+              <button class="btn-pink" id="btnPedirMais" ${ended ? "disabled" : ""}>Pedir +5 min</button>
             </div>
 
             <p class="sub" style="margin-top:14px;">
-              ${session.requestMore ? "Pedido enviado. Aguarde a liberação do atendente." : "Ao clicar em +5 min, o pedido vai para o painel do atendente."}
+              ${session.requestMore ? "Pedido enviado. Aguarde a liberação do atendente." : "Se quiser mais tempo, clique no botão acima."}
             </p>
           </div>
         </div>
@@ -608,61 +716,71 @@
 
       if(left === 120) vibrate([200,100,200]);
       if(left === 60) vibrate([300,100,300,100,300]);
-      if(left === 0) vibrate([500,150,500,150,500]);
+      if(left === 0) vibrate([500,150,500]);
     }
 
-    function escapeHtml(str){
-      return String(str)
-        .replaceAll("&", "&amp;")
-        .replaceAll("<", "&lt;")
-        .replaceAll(">", "&gt;")
-        .replaceAll('"', "&quot;")
-        .replaceAll("'", "&#039;");
+    function renderNotFound(){
+      document.getElementById("app").innerHTML = `
+        <div class="clientWrap">
+          <div class="clientCard">
+            <h2>Atendimento não encontrado</h2>
+          </div>
+        </div>
+      `;
     }
 
-    function startRealtime(){
-      onSnapshot(collection(db, "vehicles"), snap => {
-        vehicles = snap.docs.map(d => ({ id:d.id, ...d.data() }))
-          .sort((a,b) => a.name.localeCompare(b.name));
-        if(!qs("cliente")) renderAttendant();
-      });
+    async function init(){
+      try{
+        await seedVehiclesIfNeeded();
 
-      onSnapshot(collection(db, "sessions"), snap => {
-        sessions = snap.docs.map(d => ({ id:d.id, ...d.data() }));
+        onSnapshot(collection(db, "vehicles"), snap => {
+          vehicles = snap.docs
+            .map(d => ({ id:d.id, ...d.data() }))
+            .sort((a,b) => a.name.localeCompare(b.name));
 
-        const clientId = qs("cliente");
-        if(clientId){
-          const session = sessions.find(s => s.id === clientId);
-          if(session){
-            renderClient(session);
-          }else{
-            document.getElementById("app").innerHTML = `
-              <div class="clientWrap">
-                <div class="clientCard">
-                  <h2>Atendimento não encontrado</h2>
-                </div>
-              </div>
-            `;
+          if(!qs("cliente")){
+            renderAttendant();
           }
-        }else{
-          renderAttendant();
-        }
-      });
+        });
 
-      if(ticking) clearInterval(ticking);
-      ticking = setInterval(() => {
-        const clientId = qs("cliente");
-        if(clientId){
-          const session = sessions.find(s => s.id === clientId);
-          if(session) renderClient(session);
-        }else{
-          renderAttendant();
-        }
-      }, 1000);
+        onSnapshot(collection(db, "sessions"), snap => {
+          sessions = snap.docs.map(d => ({ id:d.id, ...d.data() }));
+
+          const clientId = qs("cliente");
+          if(clientId){
+            const session = sessions.find(s => s.id === clientId);
+            if(session) renderClient(session);
+            else renderNotFound();
+          }else{
+            renderAttendant();
+          }
+        });
+
+        if(ticking) clearInterval(ticking);
+        ticking = setInterval(() => {
+          const clientId = qs("cliente");
+          if(clientId){
+            const session = sessions.find(s => s.id === clientId);
+            if(session) renderClient(session);
+          }else{
+            renderAttendant();
+          }
+        }, 1000);
+
+      }catch(err){
+        console.error(err);
+        document.getElementById("app").innerHTML = `
+          <div class="wrap">
+            <div class="card">
+              <h2>Erro ao carregar</h2>
+              <p class="sub">Atualize a página. Se continuar, me avise.</p>
+            </div>
+          </div>
+        `;
+      }
     }
 
-    await seedVehicles();
-    startRealtime();
+    init();
   </script>
 </body>
 </html>
