@@ -1,66 +1,668 @@
 <!DOCTYPE html>
-<html>
+<html lang="pt-BR">
 <head>
-  <meta charset="UTF-8">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Família Sobre Rodas</title>
+  <style>
+    :root{
+      --bg:#0f1115;
+      --card:#1a1f29;
+      --card2:#232a35;
+      --line:#313949;
+      --text:#ffffff;
+      --muted:#b7c0cc;
+      --green:#1f8f4d;
+      --yellow:#f0b429;
+      --red:#cc3d3d;
+      --blue:#2f7df6;
+    }
+
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      font-family:Arial, Helvetica, sans-serif;
+      background:var(--bg);
+      color:var(--text);
+    }
+
+    .wrap{
+      max-width:1100px;
+      margin:0 auto;
+      padding:18px;
+    }
+
+    .top{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap:12px;
+      flex-wrap:wrap;
+      margin-bottom:18px;
+    }
+
+    h1,h2,h3,p{margin:0}
+    h1{font-size:30px}
+    h2{font-size:22px}
+    h3{font-size:18px}
+
+    .sub{
+      color:var(--muted);
+      margin-top:6px;
+    }
+
+    .grid{
+      display:grid;
+      gap:16px;
+    }
+
+    .grid2{
+      grid-template-columns:repeat(auto-fit,minmax(300px,1fr));
+    }
+
+    .card{
+      background:var(--card);
+      border:1px solid var(--line);
+      border-radius:18px;
+      padding:16px;
+      box-shadow:0 10px 22px rgba(0,0,0,.2);
+    }
+
+    label{
+      display:block;
+      font-size:14px;
+      color:var(--muted);
+      margin:10px 0 6px;
+    }
+
+    input, select {
+      width:100%;
+      padding:12px 14px;
+      border-radius:12px;
+      border:1px solid var(--line);
+      background:var(--card2);
+      color:var(--text);
+      font-size:16px;
+      outline:none;
+    }
+
+    .row{
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+    }
+
+    .row > *{
+      flex:1;
+      min-width:120px;
+    }
+
+    button{
+      border:none;
+      border-radius:12px;
+      padding:12px 14px;
+      font-size:15px;
+      cursor:pointer;
+      font-weight:bold;
+    }
+
+    .btn-green{background:var(--green); color:#fff;}
+    .btn-blue{background:var(--blue); color:#fff;}
+    .btn-yellow{background:var(--yellow); color:#111;}
+    .btn-red{background:var(--red); color:#fff;}
+    .btn-dark{background:#2b3340; color:#fff;}
+
+    .actions{
+      display:flex;
+      flex-wrap:wrap;
+      gap:8px;
+      margin-top:12px;
+    }
+
+    .session{
+      border-radius:18px;
+      padding:16px;
+      margin-top:14px;
+      border:1px solid rgba(255,255,255,0.06);
+    }
+
+    .green{background:#173c27;}
+    .yellow{background:#6d5610; color:#111;}
+    .red{background:#6f1c1c;}
+
+    .flash{
+      animation:piscar 1s linear infinite;
+    }
+
+    @keyframes piscar{
+      0%,50%,100% { filter:brightness(1); }
+      25%,75% { filter:brightness(1.28); }
+    }
+
+    .sessionTop{
+      display:flex;
+      justify-content:space-between;
+      gap:12px;
+      flex-wrap:wrap;
+    }
+
+    .name{
+      font-size:24px;
+      font-weight:bold;
+    }
+
+    .vehicle{
+      margin-top:6px;
+      font-size:17px;
+    }
+
+    .timer{
+      font-size:42px;
+      font-weight:bold;
+      margin-top:14px;
+    }
+
+    .small{
+      color:var(--muted);
+      font-size:13px;
+      margin-top:6px;
+    }
+
+    .badge{
+      display:inline-block;
+      padding:6px 10px;
+      border-radius:999px;
+      background:#2b3340;
+      font-size:12px;
+      margin-top:8px;
+    }
+
+    .list{
+      display:flex;
+      flex-direction:column;
+      gap:10px;
+      margin-top:12px;
+    }
+
+    .vehicleItem{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap:10px;
+      padding:12px;
+      border-radius:12px;
+      background:var(--card2);
+      border:1px solid var(--line);
+    }
+
+    .clientWrap{
+      min-height:100vh;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      padding:20px;
+    }
+
+    .clientCard{
+      width:min(700px,100%);
+      background:var(--card);
+      border:1px solid var(--line);
+      border-radius:24px;
+      padding:24px;
+      text-align:center;
+    }
+
+    .clientName{
+      font-size:34px;
+      font-weight:bold;
+      margin-top:8px;
+    }
+
+    .clientVehicle{
+      font-size:20px;
+      margin-top:8px;
+    }
+
+    .clientTimer{
+      font-size:68px;
+      font-weight:bold;
+      margin:22px 0;
+    }
+
+    .notice{
+      margin-top:10px;
+      font-size:18px;
+      font-weight:bold;
+    }
+
+    .muted{
+      color:var(--muted);
+    }
+
+    .hidden{display:none !important;}
+
+    a.linkBtn{
+      display:inline-block;
+      text-decoration:none;
+      background:#2b3340;
+      color:#fff;
+      padding:12px 14px;
+      border-radius:12px;
+      font-weight:bold;
+    }
+
+    @media (max-width:640px){
+      .timer{font-size:34px;}
+      .clientTimer{font-size:54px;}
+      .clientName{font-size:28px;}
+      h1{font-size:24px;}
+    }
+  </style>
 </head>
+<body>
+  <div id="app"></div>
 
-<body style="font-family: Arial; text-align: center;">
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-app.js";
+    import {
+      getFirestore,
+      collection,
+      addDoc,
+      onSnapshot,
+      updateDoc,
+      deleteDoc,
+      doc,
+      getDocs
+    } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js";
 
-<h1>🚗 Família Sobre Rodas</h1>
+    const firebaseConfig = {
+      apiKey: "AIzaSyB5Urxcz07j4Q5Adn-l2CMthjjeydXYuQ",
+      authDomain: "familia-sobre-rodas.firebaseapp.com",
+      projectId: "familia-sobre-rodas",
+      storageBucket: "familia-sobre-rodas.firebasestorage.app",
+      messagingSenderId: "36117571121",
+      appId: "1:36117571121:web:a3104270db6ce852561710",
+      measurementId: "G-R5B8BJ829H"
+    };
 
-<h2>Controle de Tempo</h2>
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
 
-<select id="veiculo">
-  <option>Moto Edge Titan</option>
-  <option>Quadriciclo Vermelho</option>
-  <option>Jipe Titan</option>
-  <option>Audi</option>
-  <option>Jipe UTV</option>
-</select>
+    const defaultVehicles = [
+      "Moto Edge Titan",
+      "Quadriciclo Vermelho",
+      "Jipe Titan",
+      "Audi",
+      "Jipe UTV"
+    ];
 
-<br><br>
+    let vehicles = [];
+    let sessions = [];
+    let ticking = null;
 
-<button onclick="iniciar()">Iniciar</button>
-<button onclick="maisTempo()">+5 min</button>
-
-<h2 id="tempo">00:00</h2>
-
-<script>
-let tempo = 0;
-let intervalo;
-
-function iniciar(){
-  tempo = 300;
-  atualizar();
-  intervalo = setInterval(() => {
-    tempo--;
-    atualizar();
-
-    if(tempo <= 10){
-      document.body.style.backgroundColor = "red";
+    function qs(name){
+      const url = new URL(window.location.href);
+      return url.searchParams.get(name);
     }
 
-    if(tempo <= 0){
-      clearInterval(intervalo);
-      alert("Tempo acabou!");
-      document.body.style.backgroundColor = "white";
+    function formatTime(sec){
+      const s = Math.max(0, Math.floor(sec));
+      const min = Math.floor(s / 60);
+      const seg = s % 60;
+      return `${min}:${String(seg).padStart(2, "0")}`;
     }
 
-  }, 1000);
-}
+    function colorClass(secondsLeft){
+      if(secondsLeft <= 0) return "red";
+      if(secondsLeft <= 120) return "yellow";
+      return "green";
+    }
 
-function maisTempo(){
-  tempo += 300;
-}
+    function vibrate(pattern){
+      if(navigator.vibrate){
+        navigator.vibrate(pattern);
+      }
+    }
 
-function atualizar(){
-  let min = Math.floor(tempo / 60);
-  let seg = tempo % 60;
-  document.getElementById("tempo").innerText =
-    (min < 10 ? "0"+min : min) + ":" + (seg < 10 ? "0"+seg : seg);
-}
-</script>
+    function clientLink(id){
+      return `${window.location.origin}${window.location.pathname}?cliente=${id}`;
+    }
 
+    async function seedVehicles(){
+      const snap = await getDocs(collection(db, "vehicles"));
+      if(snap.empty){
+        for(const name of defaultVehicles){
+          await addDoc(collection(db, "vehicles"), { name });
+        }
+      }
+    }
+
+    async function addVehicle(){
+      const input = document.getElementById("novoVeiculo");
+      const name = (input.value || "").trim();
+      if(!name) return;
+      await addDoc(collection(db, "vehicles"), { name });
+      input.value = "";
+    }
+
+    async function removeVehicle(id){
+      if(!confirm("Excluir este veículo?")) return;
+      await deleteDoc(doc(db, "vehicles", id));
+    }
+
+    async function startSession(){
+      const nome = (document.getElementById("nome").value || "").trim();
+      const veiculo = document.getElementById("veiculo").value;
+      const tempo = parseInt(document.getElementById("tempo").value, 10);
+
+      if(!nome){
+        alert("Digite o nome da criança.");
+        return;
+      }
+
+      const now = Date.now();
+      const endAt = now + tempo * 60 * 1000;
+
+      await addDoc(collection(db, "sessions"), {
+        nome,
+        veiculo,
+        minutesBought: tempo,
+        startAt: now,
+        endAt,
+        status: "active",
+        requestMore: false,
+        requestAt: null,
+        createdAt: now
+      });
+
+      document.getElementById("nome").value = "";
+    }
+
+    async function approveMore(id){
+      const item = sessions.find(s => s.id === id);
+      if(!item) return;
+      const base = item.endAt > Date.now() ? item.endAt : Date.now();
+      await updateDoc(doc(db, "sessions", id), {
+        endAt: base + 5 * 60 * 1000,
+        requestMore: false,
+        requestAt: null
+      });
+    }
+
+    async function requestMore(id){
+      await updateDoc(doc(db, "sessions", id), {
+        requestMore: true,
+        requestAt: Date.now()
+      });
+    }
+
+    async function endSession(id){
+      if(!confirm("Encerrar atendimento?")) return;
+      await updateDoc(doc(db, "sessions", id), {
+        status: "ended",
+        requestMore: false
+      });
+    }
+
+    async function reopenSession(id){
+      const base = Date.now();
+      await updateDoc(doc(db, "sessions", id), {
+        status: "active",
+        endAt: base + 5 * 60 * 1000
+      });
+    }
+
+    function renderAttendant(){
+      const appEl = document.getElementById("app");
+
+      const active = sessions
+        .filter(s => s.status === "active")
+        .sort((a,b) => a.createdAt - b.createdAt);
+
+      const ended = sessions
+        .filter(s => s.status === "ended")
+        .sort((a,b) => b.createdAt - a.createdAt)
+        .slice(0, 10);
+
+      appEl.innerHTML = `
+        <div class="wrap">
+          <div class="top">
+            <div>
+              <h1>🚗 Família Sobre Rodas</h1>
+              <p class="sub">Painel do atendente</p>
+            </div>
+          </div>
+
+          <div class="grid grid2">
+            <div class="card">
+              <h2>Novo atendimento</h2>
+
+              <label>Nome da criança</label>
+              <input id="nome" placeholder="Ex.: Miguel" />
+
+              <label>Veículo</label>
+              <select id="veiculo">
+                ${vehicles.map(v => `<option>${escapeHtml(v.name)}</option>`).join("")}
+              </select>
+
+              <label>Tempo</label>
+              <select id="tempo">
+                <option value="5">5 min</option>
+                <option value="10">10 min</option>
+                <option value="15">15 min</option>
+                <option value="20">20 min</option>
+                <option value="25">25 min</option>
+                <option value="30">30 min</option>
+                <option value="35">35 min</option>
+                <option value="40">40 min</option>
+                <option value="45">45 min</option>
+                <option value="50">50 min</option>
+                <option value="55">55 min</option>
+                <option value="60">60 min</option>
+              </select>
+
+              <div class="actions">
+                <button class="btn-green" id="btnIniciar">Iniciar atendimento</button>
+              </div>
+            </div>
+
+            <div class="card">
+              <h2>Veículos</h2>
+              <label>Novo veículo</label>
+              <div class="row">
+                <input id="novoVeiculo" placeholder="Ex.: Mini Fusca Azul" />
+                <button class="btn-blue" id="btnAddVeiculo">Adicionar</button>
+              </div>
+
+              <div class="list">
+                ${vehicles.map(v => `
+                  <div class="vehicleItem">
+                    <div>${escapeHtml(v.name)}</div>
+                    <button class="btn-red" data-remove-vehicle="${v.id}">Excluir</button>
+                  </div>
+                `).join("")}
+              </div>
+            </div>
+          </div>
+
+          <div class="card" style="margin-top:16px;">
+            <h2>Atendimentos ativos</h2>
+            <p class="sub">Cliente pode acompanhar pelo próprio celular.</p>
+
+            ${active.length === 0 ? `<p class="sub" style="margin-top:14px;">Nenhum atendimento ativo agora.</p>` : ""}
+
+            ${active.map(item => {
+              const left = Math.floor((item.endAt - Date.now()) / 1000);
+              const color = colorClass(left);
+              const flash = left <= 60 ? "flash" : "";
+              return `
+                <div class="session ${color} ${flash}">
+                  <div class="sessionTop">
+                    <div>
+                      <div class="name">${escapeHtml(item.nome)}</div>
+                      <div class="vehicle">🚘 ${escapeHtml(item.veiculo)}</div>
+                      <div class="badge">Link do cliente</div>
+                    </div>
+                    <div>
+                      ${item.requestMore ? `<div class="badge" style="background:#b11d1d;">⚠️ Pediu +5 min</div>` : ""}
+                    </div>
+                  </div>
+
+                  <div class="timer">${left > 0 ? "⏳ " + formatTime(left) : "⛔ Encerrado"}</div>
+                  <div class="small">Comprado: ${item.minutesBought} min</div>
+
+                  <div class="actions">
+                    <a class="linkBtn" href="${clientLink(item.id)}" target="_blank">Tela do cliente</a>
+                    <button class="btn-blue" data-copy="${item.id}">Copiar link</button>
+                    <button class="btn-yellow" data-approve="${item.id}">Liberar +5 min</button>
+                    <button class="btn-red" data-end="${item.id}">Encerrar</button>
+                  </div>
+                </div>
+              `;
+            }).join("")}
+          </div>
+
+          <div class="card" style="margin-top:16px;">
+            <h2>Últimos encerrados</h2>
+            ${ended.length === 0 ? `<p class="sub" style="margin-top:14px;">Nenhum atendimento encerrado ainda.</p>` : ""}
+            ${ended.map(item => `
+              <div class="vehicleItem">
+                <div>
+                  <strong>${escapeHtml(item.nome)}</strong> - ${escapeHtml(item.veiculo)}
+                </div>
+                <button class="btn-dark" data-reopen="${item.id}">Reabrir +5 min</button>
+              </div>
+            `).join("")}
+          </div>
+        </div>
+      `;
+
+      document.getElementById("btnIniciar").onclick = startSession;
+      document.getElementById("btnAddVeiculo").onclick = addVehicle;
+
+      document.querySelectorAll("[data-remove-vehicle]").forEach(btn => {
+        btn.onclick = () => removeVehicle(btn.dataset.removeVehicle);
+      });
+
+      document.querySelectorAll("[data-approve]").forEach(btn => {
+        btn.onclick = () => approveMore(btn.dataset.approve);
+      });
+
+      document.querySelectorAll("[data-end]").forEach(btn => {
+        btn.onclick = () => endSession(btn.dataset.end);
+      });
+
+      document.querySelectorAll("[data-reopen]").forEach(btn => {
+        btn.onclick = () => reopenSession(btn.dataset.reopen);
+      });
+
+      document.querySelectorAll("[data-copy]").forEach(btn => {
+        btn.onclick = async () => {
+          const link = clientLink(btn.dataset.copy);
+          try{
+            await navigator.clipboard.writeText(link);
+            alert("Link copiado.");
+          }catch{
+            alert(link);
+          }
+        };
+      });
+    }
+
+    function renderClient(session){
+      const left = Math.floor((session.endAt - Date.now()) / 1000);
+      const color = colorClass(left);
+      const flash = left <= 60 ? "flash" : "";
+      const ended = session.status !== "active" || left <= 0;
+
+      const appEl = document.getElementById("app");
+      appEl.innerHTML = `
+        <div class="clientWrap">
+          <div class="clientCard ${color} ${flash}">
+            <div class="muted">Família Sobre Rodas</div>
+            <div class="clientName">${escapeHtml(session.nome)}</div>
+            <div class="clientVehicle">🚘 ${escapeHtml(session.veiculo)}</div>
+            <div class="clientTimer">${ended ? "⛔ 00:00" : formatTime(left)}</div>
+
+            <div class="notice">
+              ${ended ? "Tempo encerrado" : left <= 60 ? "Está acabando" : left <= 120 ? "Faltam 2 minutos" : "Tempo em andamento"}
+            </div>
+
+            <div class="actions" style="justify-content:center; margin-top:18px;">
+              <button class="btn-yellow" id="btnPedirMais" ${ended ? "disabled" : ""}>
+                Pedir +5 min
+              </button>
+            </div>
+
+            <p class="sub" style="margin-top:14px;">
+              ${session.requestMore ? "Pedido enviado. Aguarde a liberação do atendente." : "Ao clicar em +5 min, o pedido vai para o painel do atendente."}
+            </p>
+          </div>
+        </div>
+      `;
+
+      const btn = document.getElementById("btnPedirMais");
+      if(btn){
+        btn.onclick = () => requestMore(session.id);
+      }
+
+      if(left === 120) vibrate([200,100,200]);
+      if(left === 60) vibrate([300,100,300,100,300]);
+      if(left === 0) vibrate([500,150,500,150,500]);
+    }
+
+    function escapeHtml(str){
+      return String(str)
+        .replaceAll("&", "&amp;")
+        .replaceAll("<", "&lt;")
+        .replaceAll(">", "&gt;")
+        .replaceAll('"', "&quot;")
+        .replaceAll("'", "&#039;");
+    }
+
+    function startRealtime(){
+      onSnapshot(collection(db, "vehicles"), snap => {
+        vehicles = snap.docs.map(d => ({ id:d.id, ...d.data() }))
+          .sort((a,b) => a.name.localeCompare(b.name));
+        if(!qs("cliente")) renderAttendant();
+      });
+
+      onSnapshot(collection(db, "sessions"), snap => {
+        sessions = snap.docs.map(d => ({ id:d.id, ...d.data() }));
+
+        const clientId = qs("cliente");
+        if(clientId){
+          const session = sessions.find(s => s.id === clientId);
+          if(session){
+            renderClient(session);
+          }else{
+            document.getElementById("app").innerHTML = `
+              <div class="clientWrap">
+                <div class="clientCard">
+                  <h2>Atendimento não encontrado</h2>
+                </div>
+              </div>
+            `;
+          }
+        }else{
+          renderAttendant();
+        }
+      });
+
+      if(ticking) clearInterval(ticking);
+      ticking = setInterval(() => {
+        const clientId = qs("cliente");
+        if(clientId){
+          const session = sessions.find(s => s.id === clientId);
+          if(session) renderClient(session);
+        }else{
+          renderAttendant();
+        }
+      }, 1000);
+    }
+
+    await seedVehicles();
+    startRealtime();
+  </script>
 </body>
 </html>
