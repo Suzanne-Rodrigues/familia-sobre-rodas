@@ -4,6 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Família Sobre Rodas</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
   <style>
     :root{
       --bg1:#6a11cb;
@@ -17,7 +18,7 @@
       --blue:#3b82f6;
       --pink:#ec4899;
       --purple:#8b5cf6;
-      --line:#e5e7eb;
+      --dark:#111827;
       --shadow:0 12px 25px rgba(0,0,0,.18);
     }
 
@@ -31,7 +32,7 @@
     }
 
     .wrap{
-      max-width:1150px;
+      max-width:1180px;
       margin:0 auto;
       padding:18px;
     }
@@ -137,6 +138,7 @@
     .btn-pink{ background:#ec4899; color:#fff; }
     .btn-purple{ background:#8b5cf6; color:#fff; }
     .btn-dark{ background:#111827; color:#fff; }
+    .btn-white{ background:#ffffff; color:#111827; }
 
     .actions{
       display:flex;
@@ -173,6 +175,8 @@
       margin-top:14px;
       color:#fff;
       box-shadow:var(--shadow);
+      position:relative;
+      overflow:hidden;
     }
 
     .session.green{
@@ -187,13 +191,24 @@
       background:linear-gradient(135deg,#ef4444,#dc2626);
     }
 
+    .session.requesting{
+      border:6px solid #fff200;
+      box-shadow:0 0 0 6px rgba(255,242,0,.35), 0 14px 30px rgba(0,0,0,.28);
+      animation:requestPulse 1s linear infinite;
+    }
+
+    @keyframes requestPulse{
+      0%,100%{ transform:scale(1); filter:brightness(1); }
+      50%{ transform:scale(1.01); filter:brightness(1.15); }
+    }
+
     .flash{
-      animation:piscar 1s linear infinite;
+      animation:piscar 0.8s linear infinite;
     }
 
     @keyframes piscar{
       0%,50%,100% { filter:brightness(1); }
-      25%,75% { filter:brightness(1.15); }
+      25%,75% { filter:brightness(1.18); }
     }
 
     .sessionTop{
@@ -230,10 +245,51 @@
       font-weight:bold;
     }
 
+    .requestBanner{
+      margin-top:12px;
+      background:#fff200;
+      color:#111827;
+      border-radius:16px;
+      padding:12px 14px;
+      font-size:18px;
+      font-weight:bold;
+      text-align:center;
+      box-shadow:0 8px 20px rgba(0,0,0,.18);
+    }
+
     .small{
       margin-top:8px;
       font-size:13px;
       opacity:.95;
+    }
+
+    .qrWrap{
+      margin-top:14px;
+      background:rgba(255,255,255,.18);
+      border-radius:18px;
+      padding:14px;
+      display:flex;
+      flex-direction:column;
+      align-items:center;
+      gap:8px;
+    }
+
+    .qrBox{
+      background:#fff;
+      padding:10px;
+      border-radius:16px;
+      min-width:140px;
+      min-height:140px;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+    }
+
+    .qrHelp{
+      font-size:13px;
+      color:#fff;
+      text-align:center;
+      max-width:220px;
     }
 
     .clientWrap{
@@ -245,13 +301,14 @@
     }
 
     .clientCard{
-      width:min(760px,100%);
+      width:min(780px,100%);
       background:#fff;
       border-radius:28px;
       box-shadow:var(--shadow);
       padding:24px;
       text-align:center;
       border:5px solid rgba(255,255,255,.4);
+      transition:all .2s ease;
     }
 
     .clientTitle{
@@ -260,27 +317,28 @@
     }
 
     .clientName{
-      font-size:38px;
+      font-size:40px;
       font-weight:bold;
       margin-top:10px;
       color:#111827;
     }
 
     .clientVehicle{
-      font-size:22px;
+      font-size:24px;
       margin-top:8px;
       color:#374151;
     }
 
     .clientTimer{
-      font-size:76px;
+      font-size:84px;
       font-weight:bold;
       margin:24px 0;
       color:#111827;
+      line-height:1;
     }
 
     .notice{
-      font-size:20px;
+      font-size:24px;
       font-weight:bold;
       margin-top:10px;
     }
@@ -297,9 +355,43 @@
       background:linear-gradient(135deg,#fee2e2,#fca5a5);
     }
 
+    .clientDanger{
+      animation:dangerFlash 0.55s linear infinite;
+      box-shadow:0 0 0 10px rgba(239,68,68,.18), 0 16px 30px rgba(0,0,0,.25);
+    }
+
+    @keyframes dangerFlash{
+      0%,100%{
+        transform:scale(1);
+        filter:brightness(1);
+      }
+      50%{
+        transform:scale(1.015);
+        filter:brightness(1.2);
+      }
+    }
+
+    .bigWarning{
+      margin-top:16px;
+      background:#ef4444;
+      color:#fff;
+      border-radius:20px;
+      padding:16px;
+      font-size:28px;
+      font-weight:bold;
+      box-shadow:0 10px 20px rgba(0,0,0,.18);
+    }
+
     .empty{
       color:#6b7280;
       padding:8px 0;
+    }
+
+    .wakeNote{
+      margin-top:12px;
+      font-size:14px;
+      color:#374151;
+      font-weight:bold;
     }
 
     @media (max-width:640px){
@@ -307,7 +399,9 @@
       .name{ font-size:22px; }
       .timer{ font-size:36px; }
       .clientName{ font-size:30px; }
-      .clientTimer{ font-size:56px; }
+      .clientTimer{ font-size:58px; }
+      .notice{ font-size:20px; }
+      .bigWarning{ font-size:22px; }
     }
   </style>
 </head>
@@ -353,6 +447,14 @@
     let seeded = false;
     let timerInterval = null;
     let currentView = "attendant";
+    let wakeLock = null;
+
+    let vibrated120 = new Set();
+    let vibrated60 = new Set();
+    let vibrated0 = new Set();
+    let sounded120 = new Set();
+    let sounded60 = new Set();
+    let sounded0 = new Set();
 
     function qs(name){
       const url = new URL(window.location.href);
@@ -383,6 +485,46 @@
         navigator.vibrate(pattern);
       }
     }
+
+    function beep(times = 1, duration = 220, gap = 120){
+      try{
+        const AudioCtx = window.AudioContext || window.webkitAudioContext;
+        if(!AudioCtx) return;
+        const ctx = new AudioCtx();
+        let startAt = ctx.currentTime;
+
+        for(let i = 0; i < times; i++){
+          const osc = ctx.createOscillator();
+          const gain = ctx.createGain();
+          osc.type = "sine";
+          osc.frequency.value = i % 2 === 0 ? 880 : 660;
+          gain.gain.setValueAtTime(0.001, startAt);
+          gain.gain.exponentialRampToValueAtTime(0.15, startAt + 0.02);
+          gain.gain.exponentialRampToValueAtTime(0.001, startAt + duration / 1000);
+
+          osc.connect(gain);
+          gain.connect(ctx.destination);
+          osc.start(startAt);
+          osc.stop(startAt + duration / 1000);
+
+          startAt += (duration + gap) / 1000;
+        }
+      }catch(e){}
+    }
+
+    async function requestWakeLock(){
+      try{
+        if("wakeLock" in navigator && document.visibilityState === "visible"){
+          wakeLock = await navigator.wakeLock.request("screen");
+        }
+      }catch(e){}
+    }
+
+    document.addEventListener("visibilitychange", async () => {
+      if(currentView === "client" && document.visibilityState === "visible"){
+        await requestWakeLock();
+      }
+    });
 
     function clientLink(id){
       return `${window.location.origin}${window.location.pathname}?cliente=${id}`;
@@ -507,14 +649,24 @@
       });
     }
 
+    function sortedActiveSessions(){
+      return sessions
+        .filter(s => s.status === "active")
+        .sort((a,b) => {
+          if(a.requestMore !== b.requestMore){
+            return a.requestMore ? -1 : 1;
+          }
+          const aLeft = a.endAt - Date.now();
+          const bLeft = b.endAt - Date.now();
+          return aLeft - bLeft;
+        });
+    }
+
     function renderAttendant(){
       currentView = "attendant";
       const appEl = document.getElementById("app");
 
-      const active = sessions
-        .filter(s => s.status === "active")
-        .sort((a,b) => a.createdAt - b.createdAt);
-
+      const active = sortedActiveSessions();
       const ended = sessions
         .filter(s => s.status === "ended")
         .sort((a,b) => b.createdAt - a.createdAt)
@@ -586,7 +738,7 @@
 
           <div class="card sessionsWrap">
             <h2>⏱️ Atendimentos ativos</h2>
-            <p class="sub">O cliente pode acompanhar pelo próprio celular.</p>
+            <p class="sub">Cliente pode acompanhar pelo celular escaneando o QR Code.</p>
 
             <div id="activeSessions">
               ${active.length === 0 ? `<div class="empty">Nenhum atendimento ativo agora.</div>` : ""}
@@ -639,27 +791,47 @@
           }
         };
       });
+
+      document.querySelectorAll("[data-qrcode]").forEach(el => {
+        const id = el.dataset.qrcode;
+        const url = clientLink(id);
+        el.innerHTML = "";
+        new QRCode(el, {
+          text: url,
+          width: 140,
+          height: 140
+        });
+      });
     }
 
     function renderSessionCard(item){
       const left = Math.floor((item.endAt - Date.now()) / 1000);
       const color = colorClass(left);
       const flash = left <= 60 ? "flash" : "";
+      const requesting = item.requestMore ? "requesting" : "";
+
       return `
-        <div class="session ${color} ${flash}" data-session-id="${item.id}">
+        <div class="session ${color} ${flash} ${requesting}" data-session-id="${item.id}">
           <div class="sessionTop">
             <div>
               <div class="name">${escapeHtml(item.nome)}</div>
               <div class="vehicle">🚘 ${escapeHtml(item.veiculo)}</div>
-              <div class="badge">Link do cliente</div>
+              <div class="badge">Acompanhar por QR Code</div>
             </div>
             <div>
-              ${item.requestMore ? `<div class="badge">⚠️ Pediu +5 min</div>` : ""}
+              ${item.requestMore ? `<div class="badge">🚨 PEDIU +5 MIN</div>` : ""}
             </div>
           </div>
 
+          ${item.requestMore ? `<div class="requestBanner">⚠️ O CLIENTE PEDIU MAIS 5 MINUTOS</div>` : ""}
+
           <div class="timer" data-timer="${item.id}">${left > 0 ? "⏳ " + formatTime(left) : "⛔ 00:00"}</div>
           <div class="small">Tempo comprado: ${item.minutesBought} min</div>
+
+          <div class="qrWrap">
+            <div class="qrBox" data-qrcode="${item.id}"></div>
+            <div class="qrHelp">Peça para o cliente apontar a câmera para este QR Code.</div>
+          </div>
 
           <div class="actions">
             <a class="linkBtn btn-purple" href="${clientLink(item.id)}" target="_blank">Tela do cliente</a>
@@ -693,31 +865,74 @@
       }
     }
 
-    function renderClient(session){
+    async function activateClientAlerts(session, left){
+      const id = session.id;
+
+      if(left <= 120 && left > 60 && !vibrated120.has(id)){
+        vibrated120.add(id);
+        vibrate([250,120,250]);
+      }
+      if(left <= 120 && left > 60 && !sounded120.has(id)){
+        sounded120.add(id);
+        beep(2, 200, 100);
+      }
+
+      if(left <= 60 && left > 0 && !vibrated60.has(id)){
+        vibrated60.add(id);
+        vibrate([400,120,400,120,400,120,400]);
+      }
+      if(left <= 60 && left > 0 && !sounded60.has(id)){
+        sounded60.add(id);
+        beep(4, 220, 120);
+      }
+
+      if(left <= 0 && !vibrated0.has(id)){
+        vibrated0.add(id);
+        vibrate([600,140,600,140,600]);
+      }
+      if(left <= 0 && !sounded0.has(id)){
+        sounded0.add(id);
+        beep(5, 260, 130);
+      }
+    }
+
+    async function renderClient(session){
       currentView = "client";
       const left = Math.floor((session.endAt - Date.now()) / 1000);
       const ended = session.status !== "active" || left <= 0;
       const appEl = document.getElementById("app");
 
+      const strongAlert = left <= 60;
+      const veryEnded = ended ? `<div class="bigWarning">⛔ TEMPO ENCERRADO</div>` : "";
+      const nearlyDone = !ended && strongAlert ? `<div class="bigWarning">⚠️ ESTÁ ACABANDO ⚠️</div>` : "";
+
       appEl.innerHTML = `
         <div class="clientWrap">
-          <div class="clientCard ${clientColor(left)} ${left <= 60 ? "flash" : ""}">
+          <div class="clientCard ${clientColor(left)} ${strongAlert || ended ? "clientDanger" : ""}">
             <div class="clientTitle">Família Sobre Rodas</div>
             <div class="clientName">${escapeHtml(session.nome)}</div>
             <div class="clientVehicle">🚘 ${escapeHtml(session.veiculo)}</div>
             <div class="clientTimer">${ended ? "00:00" : formatTime(left)}</div>
 
             <div class="notice">
-              ${ended ? "⛔ Tempo encerrado" : left <= 60 ? "⚠️ Está acabando" : left <= 120 ? "⌛ Faltam 2 minutos" : "🎉 Tempo em andamento"}
+              ${ended ? "Tempo encerrado" : left <= 60 ? "Último minuto" : left <= 120 ? "Faltam 2 minutos" : "Tempo em andamento"}
             </div>
+
+            ${nearlyDone}
+            ${veryEnded}
 
             <div class="actions" style="justify-content:center; margin-top:18px;">
               <button class="btn-pink" id="btnPedirMais" ${ended ? "disabled" : ""}>Pedir +5 min</button>
+              <button class="btn-white" id="btnManterTela">Manter tela ligada</button>
             </div>
 
             <p class="sub" style="margin-top:14px;">
               ${session.requestMore ? "Pedido enviado. Aguarde a liberação do atendente." : "Se quiser mais tempo, clique no botão acima."}
             </p>
+
+            <div class="wakeNote">
+              Para não perder o alerta, mantenha essa tela aberta.
+            </div>
           </div>
         </div>
       `;
@@ -727,9 +942,16 @@
         btn.onclick = () => requestMore(session.id);
       }
 
-      if(left === 120) vibrate([200,100,200]);
-      if(left === 60) vibrate([300,100,300,100,300]);
-      if(left === 0) vibrate([500,150,500]);
+      const wakeBtn = document.getElementById("btnManterTela");
+      if(wakeBtn){
+        wakeBtn.onclick = async () => {
+          await requestWakeLock();
+          alert("Pronto. O celular vai tentar manter a tela ligada.");
+        };
+      }
+
+      await activateClientAlerts(session, left);
+      await requestWakeLock();
     }
 
     function renderNotFound(){
