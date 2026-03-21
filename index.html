@@ -443,6 +443,34 @@
       font-weight:bold;
     }
 
+    .reportGrid{
+      display:grid;
+      grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+      gap:16px;
+      margin-top:10px;
+    }
+
+    .reportCard{
+      background:linear-gradient(135deg,#ffffff,#f8fbff);
+      border:2px solid #dbeafe;
+      border-radius:20px;
+      padding:18px;
+      box-shadow:var(--shadow);
+    }
+
+    .reportTitle{
+      font-size:14px;
+      color:#6b7280;
+      font-weight:bold;
+    }
+
+    .reportValue{
+      font-size:30px;
+      font-weight:bold;
+      margin-top:8px;
+      color:#111827;
+    }
+
     .empty{
       color:#6b7280;
       padding:8px 0;
@@ -563,7 +591,10 @@
     }
 
     function totalValue(session){
-      return Number(session.totalPaid ?? (Number(session.price || 0) + extrasValue(session)));
+      if (session.totalPaid !== undefined && session.totalPaid !== null) {
+        return Number(session.totalPaid);
+      }
+      return Number(session.price || 0) + extrasValue(session);
     }
 
     function colorClass(secondsLeft){
@@ -635,6 +666,40 @@
         .replaceAll(">", "&gt;")
         .replaceAll('"', "&quot;")
         .replaceAll("'", "&#039;");
+    }
+
+    function endedSessions(){
+      return sessions.filter(s => s.status === "ended");
+    }
+
+    function totalRevenue(){
+      return endedSessions().reduce((sum, s) => sum + totalValue(s), 0);
+    }
+
+    function totalExtrasSold(){
+      return endedSessions().reduce((sum, s) => sum + extrasCount(s), 0);
+    }
+
+    function averageTicket(){
+      const ended = endedSessions();
+      if (!ended.length) return 0;
+      return totalRevenue() / ended.length;
+    }
+
+    function mostUsedVehicle(){
+      const counts = {};
+      endedSessions().forEach(s => {
+        counts[s.veiculo] = (counts[s.veiculo] || 0) + 1;
+      });
+      let winner = "-";
+      let max = 0;
+      Object.entries(counts).forEach(([vehicle, count]) => {
+        if(count > max){
+          max = count;
+          winner = vehicle;
+        }
+      });
+      return winner;
     }
 
     async function seedVehiclesIfNeeded(){
@@ -765,8 +830,9 @@
       if(!item) return;
 
       const base = item.endAt > Date.now() ? item.endAt : Date.now();
-      const newExtrasCount = extrasCount(item) + 1;
-      const newTotalPaid = Number(item.price || 0) + (newExtrasCount * extraPrice(item));
+      const newExtrasCount = Number(item.extrasCount || 0) + 1;
+      const extraUnit = Number(item.extraPrice || EXTRA_5MIN_PRICE);
+      const newTotalPaid = Number(item.price || 0) + (newExtrasCount * extraUnit);
 
       await updateDoc(doc(db, "sessions", id), {
         endAt: base + 5 * 60 * 1000,
@@ -801,8 +867,9 @@
       if(!item) return;
 
       const base = Date.now();
-      const newExtrasCount = extrasCount(item) + 1;
-      const newTotalPaid = Number(item.price || 0) + (newExtrasCount * extraPrice(item));
+      const newExtrasCount = Number(item.extrasCount || 0) + 1;
+      const extraUnit = Number(item.extraPrice || EXTRA_5MIN_PRICE);
+      const newTotalPaid = Number(item.price || 0) + (newExtrasCount * extraUnit);
 
       await updateDoc(doc(db, "sessions", id), {
         status: "active",
@@ -834,6 +901,7 @@
           <button class="tabBtn ${activeTab === "andamento" ? "active" : ""}" data-tab="andamento">Em andamento</button>
           <button class="tabBtn ${activeTab === "veiculos" ? "active" : ""}" data-tab="veiculos">Veículos</button>
           <button class="tabBtn ${activeTab === "planos" ? "active" : ""}" data-tab="planos">Planos / Preços</button>
+          <button class="tabBtn ${activeTab === "relatorio" ? "active" : ""}" data-tab="relatorio">Relatório</button>
         </div>
       `;
     }
@@ -962,6 +1030,62 @@
       `;
     }
 
+    function renderRelatorioTab(){
+      const ended = endedSessions();
+
+      return `
+        <div class="card">
+          <h2>📊 Relatório</h2>
+          <p class="sub">Resumo dos atendimentos encerrados.</p>
+
+          <div class="reportGrid">
+            <div class="reportCard">
+              <div class="reportTitle">Atendimentos encerrados</div>
+              <div class="reportValue">${ended.length}</div>
+            </div>
+
+            <div class="reportCard">
+              <div class="reportTitle">Valor total recebido</div>
+              <div class="reportValue">R$ ${formatMoney(totalRevenue())}</div>
+            </div>
+
+            <div class="reportCard">
+              <div class="reportTitle">Extras +5 vendidos</div>
+              <div class="reportValue">${totalExtrasSold()}</div>
+            </div>
+
+            <div class="reportCard">
+              <div class="reportTitle">Ticket médio</div>
+              <div class="reportValue">R$ ${formatMoney(averageTicket())}</div>
+            </div>
+
+            <div class="reportCard">
+              <div class="reportTitle">Veículo mais usado</div>
+              <div class="reportValue" style="font-size:22px;">${escapeHtml(mostUsedVehicle())}</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="card" style="margin-top:18px;">
+          <h2>🧾 Lista de encerrados</h2>
+          ${ended.length === 0 ? `<div class="empty">Nenhum atendimento encerrado ainda.</div>` : ""}
+          ${ended
+            .sort((a,b) => b.createdAt - a.createdAt)
+            .map(item => `
+              <div class="vehicleItem" style="margin-top:10px;">
+                <div>
+                  <strong>${escapeHtml(item.nome)}</strong><br>
+                  <span style="font-size:14px;color:#374151;">${escapeHtml(item.veiculo)}</span><br>
+                  <span style="font-size:13px;color:#6b7280;">
+                    Plano: ${item.minutesBought} min | Extras: ${extrasCount(item)} | Valor pago: <strong>R$ ${formatMoney(totalValue(item))}</strong>
+                  </span>
+                </div>
+              </div>
+            `).join("")}
+        </div>
+      `;
+    }
+
     function renderAttendant(){
       currentView = "attendant";
       const appEl = document.getElementById("app");
@@ -971,6 +1095,7 @@
       if(activeTab === "andamento") content = renderEmAndamentoTab();
       if(activeTab === "veiculos") content = renderVeiculosTab();
       if(activeTab === "planos") content = renderPlanosTab();
+      if(activeTab === "relatorio") content = renderRelatorioTab();
 
       appEl.innerHTML = `
         <div class="wrap">
