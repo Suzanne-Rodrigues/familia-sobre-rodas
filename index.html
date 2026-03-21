@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Família Sobre Rodas</title>
+</head>
+
+<body style="font-family: Arial; text-align: center;">
+
+<h1>🚗 Família Sobre Rodas</h1>
+
+<h2>Controle de Tempo</h2>
+
+<select id="veiculo">
+  <option>Moto Edge Titan</option>
+  <option>Quadriciclo Vermelho</option>
+  <option>Jipe Titan</option>
+  <option>Audi</option>
+  <option>Jipe UTV</option>
+</select>
+
+<br><br>
+
+<button onclick="iniciar()">Iniciar</button>
+<button onclick="maisTempo()">+5 min</button>
+
+<h2 id="tempo">00:00</h2>
+
+<script>
+let tempo = 0;
+let intervalo;
+
+function iniciar(){
+  tempo = 300;
+  atualizar();
+  intervalo = setInterval(() => {
+    tempo--;
+    atualizar();
+
+    if(tempo <= 10){
+      document.body.style.backgroundColor = "red";
+    }
+
+    if(tempo <= 0){
+      clearInterval(intervalo);
+      alert("Tempo acabou!");
+      document.body.style.backgroundColor = "white";
+    }
+
+  }, 1000);
+}
+
+function maisTempo(){
+  tempo += 300;
+}
+
+function atualizar(){
+  let min = Math.floor(tempo / 60);
+  let seg = tempo % 60;
+  document.getElementById("tempo").innerText =
+    (min < 10 ? "0"+min : min) + ":" + (seg < 10 ? "0"+seg : seg);
+}
+</script>
+
+</body>
+</html>
