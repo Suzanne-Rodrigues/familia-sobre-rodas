@@ -1,1012 +1,186 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Família Sobre Rodas</title>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
-  <style>
-    :root{
-      --bg1:#6a11cb;
-      --bg2:#2575fc;
-      --card:#ffffff;
-      --text:#1f2937;
-      --muted:#6b7280;
-      --green:#22c55e;
-      --yellow:#f59e0b;
-      --red:#ef4444;
-      --blue:#3b82f6;
-      --pink:#ec4899;
-      --purple:#8b5cf6;
-      --dark:#111827;
-      --shadow:0 12px 25px rgba(0,0,0,.18);
-    }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Família Sobre Rodas</title>
 
-    *{box-sizing:border-box}
-    body{
-      margin:0;
-      font-family:Arial, Helvetica, sans-serif;
-      color:var(--text);
-      background:linear-gradient(135deg,var(--bg1),var(--bg2));
-      min-height:100vh;
-    }
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 
-    .wrap{
-      max-width:1180px;
-      margin:0 auto;
-      padding:18px;
-    }
+<style>
+body{
+margin:0;
+font-family:Arial;
+background:linear-gradient(135deg,#6a11cb,#2575fc);
+color:#111;
+}
 
-    .hero{
-      background:linear-gradient(135deg,#ff7eb3,#ff758c,#ffb347);
-      color:#fff;
-      border-radius:24px;
-      padding:22px;
-      box-shadow:var(--shadow);
-      margin-bottom:18px;
-    }
+.wrap{max-width:1200px;margin:auto;padding:15px;}
 
-    .hero h1{
-      margin:0;
-      font-size:36px;
-    }
+.hero{
+background:linear-gradient(135deg,#ff7eb3,#ff758c,#ffb347);
+color:#fff;
+padding:20px;
+border-radius:20px;
+margin-bottom:15px;
+}
 
-    .hero p{
-      margin:8px 0 0;
-      font-size:18px;
-      opacity:.95;
-    }
+.card{
+background:#fff;
+padding:15px;
+border-radius:20px;
+margin-bottom:15px;
+}
 
-    .grid{
-      display:grid;
-      gap:18px;
-    }
+input,select{
+width:100%;
+padding:12px;
+border-radius:12px;
+margin-top:5px;
+}
 
-    .grid2{
-      grid-template-columns:repeat(auto-fit,minmax(320px,1fr));
-    }
+button{
+border:none;
+padding:12px;
+border-radius:12px;
+cursor:pointer;
+}
 
-    .card{
-      background:var(--card);
-      border-radius:24px;
-      padding:18px;
-      box-shadow:var(--shadow);
-      border:4px solid rgba(255,255,255,.25);
-    }
+.btn-green{background:#22c55e;color:#fff;}
+.btn-blue{background:#3b82f6;color:#fff;}
+.btn-yellow{background:#f59e0b;color:#fff;}
+.btn-red{background:#ef4444;color:#fff;}
 
-    .card h2{
-      margin:0 0 10px;
-      font-size:22px;
-      color:#111827;
-    }
+.session{
+padding:15px;
+border-radius:20px;
+color:#fff;
+}
 
-    .sub{
-      color:var(--muted);
-      margin:0 0 10px;
-    }
+.green{background:#22c55e;}
+.yellow{background:#f59e0b;}
+.red{background:#ef4444;}
 
-    label{
-      display:block;
-      margin:12px 0 6px;
-      font-weight:bold;
-      color:#374151;
-    }
+.flash{animation:flash 0.7s infinite;}
 
-    input, select{
-      width:100%;
-      padding:14px 16px;
-      border-radius:16px;
-      border:3px solid #dbeafe;
-      font-size:16px;
-      outline:none;
-      background:#f8fbff;
-      color:#111827;
-    }
+@keyframes flash{
+0%,100%{opacity:1;}
+50%{opacity:0.5;}
+}
 
-    input:focus, select:focus{
-      border-color:#60a5fa;
-      background:#fff;
-    }
+.timer{font-size:30px;font-weight:bold;}
 
-    .row{
-      display:flex;
-      gap:10px;
-      flex-wrap:wrap;
-    }
-
-    .row > *{
-      flex:1;
-      min-width:120px;
-    }
-
-    button, .linkBtn{
-      border:none;
-      border-radius:16px;
-      padding:12px 16px;
-      font-size:15px;
-      font-weight:bold;
-      cursor:pointer;
-      text-decoration:none;
-      display:inline-block;
-      text-align:center;
-    }
-
-    .btn-green{ background:#22c55e; color:#fff; }
-    .btn-blue{ background:#3b82f6; color:#fff; }
-    .btn-yellow{ background:#f59e0b; color:#fff; }
-    .btn-red{ background:#ef4444; color:#fff; }
-    .btn-pink{ background:#ec4899; color:#fff; }
-    .btn-purple{ background:#8b5cf6; color:#fff; }
-    .btn-dark{ background:#111827; color:#fff; }
-    .btn-white{ background:#ffffff; color:#111827; }
-
-    .actions{
-      display:flex;
-      gap:10px;
-      flex-wrap:wrap;
-      margin-top:14px;
-    }
-
-    .vehicleList{
-      display:flex;
-      flex-direction:column;
-      gap:10px;
-      margin-top:14px;
-    }
-
-    .vehicleItem{
-      display:flex;
-      justify-content:space-between;
-      align-items:center;
-      gap:10px;
-      background:linear-gradient(135deg,#eff6ff,#fdf2f8);
-      border:2px solid #dbeafe;
-      border-radius:18px;
-      padding:12px;
-    }
-
-    .sessionsWrap{
-      margin-top:18px;
-    }
-
-    .session{
-      border-radius:24px;
-      padding:18px;
-      margin-top:14px;
-      color:#fff;
-      box-shadow:var(--shadow);
-      position:relative;
-      overflow:hidden;
-    }
-
-    .session.green{
-      background:linear-gradient(135deg,#22c55e,#16a34a);
-    }
-
-    .session.yellow{
-      background:linear-gradient(135deg,#f59e0b,#f97316);
-    }
-
-    .session.red{
-      background:linear-gradient(135deg,#ef4444,#dc2626);
-    }
-
-    .session.requesting{
-      border:6px solid #fff200;
-      box-shadow:0 0 0 6px rgba(255,242,0,.35), 0 14px 30px rgba(0,0,0,.28);
-      animation:requestPulse 1s linear infinite;
-    }
-
-    @keyframes requestPulse{
-      0%,100%{ transform:scale(1); filter:brightness(1); }
-      50%{ transform:scale(1.01); filter:brightness(1.15); }
-    }
-
-    .flash{
-      animation:piscar 0.8s linear infinite;
-    }
-
-    @keyframes piscar{
-      0%,50%,100% { filter:brightness(1); }
-      25%,75% { filter:brightness(1.18); }
-    }
-
-    .sessionTop{
-      display:flex;
-      justify-content:space-between;
-      align-items:flex-start;
-      gap:10px;
-      flex-wrap:wrap;
-    }
-
-    .name{
-      font-size:28px;
-      font-weight:bold;
-    }
-
-    .vehicle{
-      margin-top:6px;
-      font-size:18px;
-    }
-
-    .timer{
-      font-size:48px;
-      font-weight:bold;
-      margin-top:16px;
-    }
-
-    .badge{
-      display:inline-block;
-      margin-top:8px;
-      padding:8px 12px;
-      border-radius:999px;
-      background:rgba(255,255,255,.2);
-      font-size:13px;
-      font-weight:bold;
-    }
-
-    .requestBanner{
-      margin-top:12px;
-      background:#fff200;
-      color:#111827;
-      border-radius:16px;
-      padding:12px 14px;
-      font-size:18px;
-      font-weight:bold;
-      text-align:center;
-      box-shadow:0 8px 20px rgba(0,0,0,.18);
-    }
-
-    .small{
-      margin-top:8px;
-      font-size:13px;
-      opacity:.95;
-    }
-
-    .qrWrap{
-      margin-top:14px;
-      background:rgba(255,255,255,.18);
-      border-radius:18px;
-      padding:14px;
-      display:flex;
-      flex-direction:column;
-      align-items:center;
-      gap:8px;
-    }
-
-    .qrBox{
-      background:#fff;
-      padding:10px;
-      border-radius:16px;
-      min-width:140px;
-      min-height:140px;
-      display:flex;
-      align-items:center;
-      justify-content:center;
-    }
-
-    .qrHelp{
-      font-size:13px;
-      color:#fff;
-      text-align:center;
-      max-width:220px;
-    }
-
-    .clientWrap{
-      min-height:100vh;
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      padding:20px;
-    }
-
-    .clientCard{
-      width:min(780px,100%);
-      background:#fff;
-      border-radius:28px;
-      box-shadow:var(--shadow);
-      padding:24px;
-      text-align:center;
-      border:5px solid rgba(255,255,255,.4);
-      transition:all .2s ease;
-    }
-
-    .clientTitle{
-      font-size:18px;
-      color:#6b7280;
-    }
-
-    .clientName{
-      font-size:40px;
-      font-weight:bold;
-      margin-top:10px;
-      color:#111827;
-    }
-
-    .clientVehicle{
-      font-size:24px;
-      margin-top:8px;
-      color:#374151;
-    }
-
-    .clientTimer{
-      font-size:84px;
-      font-weight:bold;
-      margin:24px 0;
-      color:#111827;
-      line-height:1;
-    }
-
-    .notice{
-      font-size:24px;
-      font-weight:bold;
-      margin-top:10px;
-    }
-
-    .clientGreen{
-      background:linear-gradient(135deg,#d1fae5,#a7f3d0);
-    }
-
-    .clientYellow{
-      background:linear-gradient(135deg,#fef3c7,#fdba74);
-    }
-
-    .clientRed{
-      background:linear-gradient(135deg,#fee2e2,#fca5a5);
-    }
-
-    .clientDanger{
-      animation:dangerFlash 0.55s linear infinite;
-      box-shadow:0 0 0 10px rgba(239,68,68,.18), 0 16px 30px rgba(0,0,0,.25);
-    }
-
-    @keyframes dangerFlash{
-      0%,100%{
-        transform:scale(1);
-        filter:brightness(1);
-      }
-      50%{
-        transform:scale(1.015);
-        filter:brightness(1.2);
-      }
-    }
-
-    .bigWarning{
-      margin-top:16px;
-      background:#ef4444;
-      color:#fff;
-      border-radius:20px;
-      padding:16px;
-      font-size:28px;
-      font-weight:bold;
-      box-shadow:0 10px 20px rgba(0,0,0,.18);
-    }
-
-    .empty{
-      color:#6b7280;
-      padding:8px 0;
-    }
-
-    .wakeNote{
-      margin-top:12px;
-      font-size:14px;
-      color:#374151;
-      font-weight:bold;
-    }
-
-    @media (max-width:640px){
-      .hero h1{ font-size:28px; }
-      .name{ font-size:22px; }
-      .timer{ font-size:36px; }
-      .clientName{ font-size:30px; }
-      .clientTimer{ font-size:58px; }
-      .notice{ font-size:20px; }
-      .bigWarning{ font-size:22px; }
-    }
-  </style>
+.qr{background:#fff;padding:10px;border-radius:10px;margin-top:10px;}
+</style>
 </head>
+
 <body>
-  <div id="app"></div>
-
-  <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-app.js";
-    import {
-      getFirestore,
-      collection,
-      addDoc,
-      onSnapshot,
-      updateDoc,
-      deleteDoc,
-      doc,
-      getDocs
-    } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js";
-
-    const firebaseConfig = {
-      apiKey: "AIzaSyB5Urxcz07j4Q5Adn-l2CMthjjeydXYuQ",
-      authDomain: "familia-sobre-rodas.firebaseapp.com",
-      projectId: "familia-sobre-rodas",
-      storageBucket: "familia-sobre-rodas.firebasestorage.app",
-      messagingSenderId: "36117571121",
-      appId: "1:36117571121:web:a3104270db6ce852561710",
-      measurementId: "G-R5B8BJ829H"
-    };
-
-    const app = initializeApp(firebaseConfig);
-    const db = getFirestore(app);
-
-    const defaultVehicles = [
-      "Moto Edge Titan",
-      "Quadriciclo Vermelho",
-      "Jipe Titan",
-      "Audi",
-      "Jipe UTV"
-    ];
-
-    let vehicles = [];
-    let sessions = [];
-    let seeded = false;
-    let timerInterval = null;
-    let currentView = "attendant";
-    let wakeLock = null;
-
-    let vibrated120 = new Set();
-    let vibrated60 = new Set();
-    let vibrated0 = new Set();
-    let sounded120 = new Set();
-    let sounded60 = new Set();
-    let sounded0 = new Set();
-
-    function qs(name){
-      const url = new URL(window.location.href);
-      return url.searchParams.get(name);
-    }
-
-    function formatTime(sec){
-      const s = Math.max(0, Math.floor(sec));
-      const min = Math.floor(s / 60);
-      const seg = s % 60;
-      return `${min}:${String(seg).padStart(2, "0")}`;
-    }
-
-    function colorClass(secondsLeft){
-      if(secondsLeft <= 0) return "red";
-      if(secondsLeft <= 120) return "yellow";
-      return "green";
-    }
-
-    function clientColor(secondsLeft){
-      if(secondsLeft <= 0) return "clientRed";
-      if(secondsLeft <= 120) return "clientYellow";
-      return "clientGreen";
-    }
-
-    function vibrate(pattern){
-      if(navigator.vibrate){
-        navigator.vibrate(pattern);
-      }
-    }
-
-    function beep(times = 1, duration = 220, gap = 120){
-      try{
-        const AudioCtx = window.AudioContext || window.webkitAudioContext;
-        if(!AudioCtx) return;
-        const ctx = new AudioCtx();
-        let startAt = ctx.currentTime;
-
-        for(let i = 0; i < times; i++){
-          const osc = ctx.createOscillator();
-          const gain = ctx.createGain();
-          osc.type = "sine";
-          osc.frequency.value = i % 2 === 0 ? 880 : 660;
-          gain.gain.setValueAtTime(0.001, startAt);
-          gain.gain.exponentialRampToValueAtTime(0.15, startAt + 0.02);
-          gain.gain.exponentialRampToValueAtTime(0.001, startAt + duration / 1000);
-
-          osc.connect(gain);
-          gain.connect(ctx.destination);
-          osc.start(startAt);
-          osc.stop(startAt + duration / 1000);
-
-          startAt += (duration + gap) / 1000;
-        }
-      }catch(e){}
-    }
-
-    async function requestWakeLock(){
-      try{
-        if("wakeLock" in navigator && document.visibilityState === "visible"){
-          wakeLock = await navigator.wakeLock.request("screen");
-        }
-      }catch(e){}
-    }
-
-    document.addEventListener("visibilitychange", async () => {
-      if(currentView === "client" && document.visibilityState === "visible"){
-        await requestWakeLock();
-      }
-    });
-
-    function clientLink(id){
-      return `${window.location.origin}${window.location.pathname}?cliente=${id}`;
-    }
-
-    function escapeHtml(str){
-      return String(str)
-        .replaceAll("&", "&amp;")
-        .replaceAll("<", "&lt;")
-        .replaceAll(">", "&gt;")
-        .replaceAll('"', "&quot;")
-        .replaceAll("'", "&#039;");
-    }
-
-    async function seedVehiclesIfNeeded(){
-      if(seeded) return;
-      seeded = true;
-      const snap = await getDocs(collection(db, "vehicles"));
-      if(snap.empty){
-        for(const name of defaultVehicles){
-          await addDoc(collection(db, "vehicles"), { name });
-        }
-      }
-    }
-
-    async function addVehicle(){
-      const input = document.getElementById("novoVeiculo");
-      const name = (input.value || "").trim();
-      if(!name){
-        alert("Digite o nome do veículo.");
-        return;
-      }
-      await addDoc(collection(db, "vehicles"), { name });
-      input.value = "";
-    }
-
-    async function removeVehicle(id){
-      const activeUsing = sessions.some(s => s.status === "active" && s.vehicleId === id);
-      if(activeUsing){
-        alert("Esse veículo está em uso agora.");
-        return;
-      }
-      if(!confirm("Excluir este veículo?")) return;
-      await deleteDoc(doc(db, "vehicles", id));
-    }
-
-    async function startSession(){
-      const nomeInput = document.getElementById("nome");
-      const veiculoSelect = document.getElementById("veiculo");
-      const tempoSelect = document.getElementById("tempo");
-
-      const nome = (nomeInput.value || "").trim();
-      const vehicleId = veiculoSelect.value;
-      const tempo = parseInt(tempoSelect.value, 10);
-
-      if(!nome){
-        alert("Digite o nome da criança.");
-        nomeInput.focus();
-        return;
-      }
-
-      const vehicle = vehicles.find(v => v.id === vehicleId);
-      if(!vehicle){
-        alert("Selecione um veículo.");
-        return;
-      }
-
-      const now = Date.now();
-      const endAt = now + tempo * 60 * 1000;
-
-      await addDoc(collection(db, "sessions"), {
-        nome,
-        vehicleId,
-        veiculo: vehicle.name,
-        minutesBought: tempo,
-        startAt: now,
-        endAt,
-        status: "active",
-        requestMore: false,
-        requestAt: null,
-        createdAt: now
-      });
-
-      nomeInput.value = "";
-      veiculoSelect.value = "";
-      tempoSelect.value = "5";
-    }
-
-    async function approveMore(id){
-      const item = sessions.find(s => s.id === id);
-      if(!item) return;
-      const base = item.endAt > Date.now() ? item.endAt : Date.now();
-      await updateDoc(doc(db, "sessions", id), {
-        endAt: base + 5 * 60 * 1000,
-        requestMore: false,
-        requestAt: null
-      });
-    }
-
-    async function requestMore(id){
-      await updateDoc(doc(db, "sessions", id), {
-        requestMore: true,
-        requestAt: Date.now()
-      });
-    }
-
-    async function endSession(id){
-      if(!confirm("Encerrar atendimento?")) return;
-      await updateDoc(doc(db, "sessions", id), {
-        status: "ended",
-        requestMore: false
-      });
-    }
-
-    async function reopenSession(id){
-      const base = Date.now();
-      await updateDoc(doc(db, "sessions", id), {
-        status: "active",
-        endAt: base + 5 * 60 * 1000,
-        requestMore: false,
-        requestAt: null
-      });
-    }
-
-    function sortedActiveSessions(){
-      return sessions
-        .filter(s => s.status === "active")
-        .sort((a,b) => {
-          if(a.requestMore !== b.requestMore){
-            return a.requestMore ? -1 : 1;
-          }
-          const aLeft = a.endAt - Date.now();
-          const bLeft = b.endAt - Date.now();
-          return aLeft - bLeft;
-        });
-    }
-
-    function renderAttendant(){
-      currentView = "attendant";
-      const appEl = document.getElementById("app");
-
-      const active = sortedActiveSessions();
-      const ended = sessions
-        .filter(s => s.status === "ended")
-        .sort((a,b) => b.createdAt - a.createdAt)
-        .slice(0, 10);
-
-      appEl.innerHTML = `
-        <div class="wrap">
-          <div class="hero">
-            <h1>🚗 Família Sobre Rodas</h1>
-            <p>Painel do atendente</p>
-          </div>
-
-          <div class="grid grid2">
-            <div class="card">
-              <h2>🎉 Novo atendimento</h2>
-              <p class="sub">Preencha rapidinho e inicie o tempo.</p>
-
-              <label>Nome da criança</label>
-              <input id="nome" placeholder="Ex.: Miguel" />
-
-              <label>Veículo</label>
-              <select id="veiculo">
-                <option value="">Selecione um veículo</option>
-                ${vehicles.map(v => `<option value="${v.id}">${escapeHtml(v.name)}</option>`).join("")}
-              </select>
-
-              <label>Tempo</label>
-              <select id="tempo">
-                <option value="5">5 min</option>
-                <option value="10">10 min</option>
-                <option value="15">15 min</option>
-                <option value="20">20 min</option>
-                <option value="25">25 min</option>
-                <option value="30">30 min</option>
-                <option value="35">35 min</option>
-                <option value="40">40 min</option>
-                <option value="45">45 min</option>
-                <option value="50">50 min</option>
-                <option value="55">55 min</option>
-                <option value="60">60 min</option>
-              </select>
-
-              <div class="actions">
-                <button class="btn-green" id="btnIniciar">Iniciar atendimento</button>
-              </div>
-            </div>
-
-            <div class="card">
-              <h2>🌈 Veículos</h2>
-              <p class="sub">Adicione novos veículos quando comprar mais.</p>
-
-              <label>Novo veículo</label>
-              <div class="row">
-                <input id="novoVeiculo" placeholder="Ex.: Mini Fusca Azul" />
-                <button class="btn-blue" id="btnAddVeiculo">Adicionar</button>
-              </div>
-
-              <div class="vehicleList">
-                ${vehicles.length === 0 ? `<div class="empty">Nenhum veículo cadastrado.</div>` : ""}
-                ${vehicles.map(v => `
-                  <div class="vehicleItem">
-                    <div><strong>${escapeHtml(v.name)}</strong></div>
-                    <button class="btn-red" data-remove-vehicle="${v.id}">Excluir</button>
-                  </div>
-                `).join("")}
-              </div>
-            </div>
-          </div>
-
-          <div class="card sessionsWrap">
-            <h2>⏱️ Atendimentos ativos</h2>
-            <p class="sub">Cliente pode acompanhar pelo celular escaneando o QR Code.</p>
-
-            <div id="activeSessions">
-              ${active.length === 0 ? `<div class="empty">Nenhum atendimento ativo agora.</div>` : ""}
-              ${active.map(item => renderSessionCard(item)).join("")}
-            </div>
-          </div>
-
-          <div class="card sessionsWrap">
-            <h2>🧾 Últimos encerrados</h2>
-            ${ended.length === 0 ? `<div class="empty">Nenhum atendimento encerrado ainda.</div>` : ""}
-            ${ended.map(item => `
-              <div class="vehicleItem">
-                <div>
-                  <strong>${escapeHtml(item.nome)}</strong> - ${escapeHtml(item.veiculo)}
-                </div>
-                <button class="btn-dark" data-reopen="${item.id}">Reabrir +5 min</button>
-              </div>
-            `).join("")}
-          </div>
-        </div>
-      `;
-
-      document.getElementById("btnIniciar").onclick = startSession;
-      document.getElementById("btnAddVeiculo").onclick = addVehicle;
-
-      document.querySelectorAll("[data-remove-vehicle]").forEach(btn => {
-        btn.onclick = () => removeVehicle(btn.dataset.removeVehicle);
-      });
-
-      document.querySelectorAll("[data-approve]").forEach(btn => {
-        btn.onclick = () => approveMore(btn.dataset.approve);
-      });
-
-      document.querySelectorAll("[data-end]").forEach(btn => {
-        btn.onclick = () => endSession(btn.dataset.end);
-      });
-
-      document.querySelectorAll("[data-reopen]").forEach(btn => {
-        btn.onclick = () => reopenSession(btn.dataset.reopen);
-      });
-
-      document.querySelectorAll("[data-copy]").forEach(btn => {
-        btn.onclick = async () => {
-          const link = clientLink(btn.dataset.copy);
-          try{
-            await navigator.clipboard.writeText(link);
-            alert("Link copiado.");
-          }catch{
-            alert(link);
-          }
-        };
-      });
-
-      document.querySelectorAll("[data-qrcode]").forEach(el => {
-        const id = el.dataset.qrcode;
-        const url = clientLink(id);
-        el.innerHTML = "";
-        new QRCode(el, {
-          text: url,
-          width: 140,
-          height: 140
-        });
-      });
-    }
-
-    function renderSessionCard(item){
-      const left = Math.floor((item.endAt - Date.now()) / 1000);
-      const color = colorClass(left);
-      const flash = left <= 60 ? "flash" : "";
-      const requesting = item.requestMore ? "requesting" : "";
-
-      return `
-        <div class="session ${color} ${flash} ${requesting}" data-session-id="${item.id}">
-          <div class="sessionTop">
-            <div>
-              <div class="name">${escapeHtml(item.nome)}</div>
-              <div class="vehicle">🚘 ${escapeHtml(item.veiculo)}</div>
-              <div class="badge">Acompanhar por QR Code</div>
-            </div>
-            <div>
-              ${item.requestMore ? `<div class="badge">🚨 PEDIU +5 MIN</div>` : ""}
-            </div>
-          </div>
-
-          ${item.requestMore ? `<div class="requestBanner">⚠️ O CLIENTE PEDIU MAIS 5 MINUTOS</div>` : ""}
-
-          <div class="timer" data-timer="${item.id}">${left > 0 ? "⏳ " + formatTime(left) : "⛔ 00:00"}</div>
-          <div class="small">Tempo comprado: ${item.minutesBought} min</div>
-
-          <div class="qrWrap">
-            <div class="qrBox" data-qrcode="${item.id}"></div>
-            <div class="qrHelp">Peça para o cliente apontar a câmera para este QR Code.</div>
-          </div>
-
-          <div class="actions">
-            <a class="linkBtn btn-purple" href="${clientLink(item.id)}" target="_blank">Tela do cliente</a>
-            <button class="btn-blue" data-copy="${item.id}">Copiar link</button>
-            <button class="btn-yellow" data-approve="${item.id}">Liberar +5 min</button>
-            <button class="btn-red" data-end="${item.id}">Encerrar</button>
-          </div>
-        </div>
-      `;
-    }
-
-    function updateTimersOnly(){
-      if(currentView === "attendant"){
-        sessions.filter(s => s.status === "active").forEach(item => {
-          const left = Math.floor((item.endAt - Date.now()) / 1000);
-          const timerEl = document.querySelector(`[data-timer="${item.id}"]`);
-          const cardEl = document.querySelector(`[data-session-id="${item.id}"]`);
-          if(timerEl){
-            timerEl.textContent = left > 0 ? "⏳ " + formatTime(left) : "⛔ 00:00";
-          }
-          if(cardEl){
-            cardEl.classList.remove("green","yellow","red","flash");
-            cardEl.classList.add(colorClass(left));
-            if(left <= 60) cardEl.classList.add("flash");
-          }
-        });
-      } else {
-        const clientId = qs("cliente");
-        const session = sessions.find(s => s.id === clientId);
-        if(session) renderClient(session);
-      }
-    }
-
-    async function activateClientAlerts(session, left){
-      const id = session.id;
-
-      if(left <= 120 && left > 60 && !vibrated120.has(id)){
-        vibrated120.add(id);
-        vibrate([250,120,250]);
-      }
-      if(left <= 120 && left > 60 && !sounded120.has(id)){
-        sounded120.add(id);
-        beep(2, 200, 100);
-      }
-
-      if(left <= 60 && left > 0 && !vibrated60.has(id)){
-        vibrated60.add(id);
-        vibrate([400,120,400,120,400,120,400]);
-      }
-      if(left <= 60 && left > 0 && !sounded60.has(id)){
-        sounded60.add(id);
-        beep(4, 220, 120);
-      }
-
-      if(left <= 0 && !vibrated0.has(id)){
-        vibrated0.add(id);
-        vibrate([600,140,600,140,600]);
-      }
-      if(left <= 0 && !sounded0.has(id)){
-        sounded0.add(id);
-        beep(5, 260, 130);
-      }
-    }
-
-    async function renderClient(session){
-      currentView = "client";
-      const left = Math.floor((session.endAt - Date.now()) / 1000);
-      const ended = session.status !== "active" || left <= 0;
-      const appEl = document.getElementById("app");
-
-      const strongAlert = left <= 60;
-      const veryEnded = ended ? `<div class="bigWarning">⛔ TEMPO ENCERRADO</div>` : "";
-      const nearlyDone = !ended && strongAlert ? `<div class="bigWarning">⚠️ ESTÁ ACABANDO ⚠️</div>` : "";
-
-      appEl.innerHTML = `
-        <div class="clientWrap">
-          <div class="clientCard ${clientColor(left)} ${strongAlert || ended ? "clientDanger" : ""}">
-            <div class="clientTitle">Família Sobre Rodas</div>
-            <div class="clientName">${escapeHtml(session.nome)}</div>
-            <div class="clientVehicle">🚘 ${escapeHtml(session.veiculo)}</div>
-            <div class="clientTimer">${ended ? "00:00" : formatTime(left)}</div>
-
-            <div class="notice">
-              ${ended ? "Tempo encerrado" : left <= 60 ? "Último minuto" : left <= 120 ? "Faltam 2 minutos" : "Tempo em andamento"}
-            </div>
-
-            ${nearlyDone}
-            ${veryEnded}
-
-            <div class="actions" style="justify-content:center; margin-top:18px;">
-              <button class="btn-pink" id="btnPedirMais" ${ended ? "disabled" : ""}>Pedir +5 min</button>
-              <button class="btn-white" id="btnManterTela">Manter tela ligada</button>
-            </div>
-
-            <p class="sub" style="margin-top:14px;">
-              ${session.requestMore ? "Pedido enviado. Aguarde a liberação do atendente." : "Se quiser mais tempo, clique no botão acima."}
-            </p>
-
-            <div class="wakeNote">
-              Para não perder o alerta, mantenha essa tela aberta.
-            </div>
-          </div>
-        </div>
-      `;
-
-      const btn = document.getElementById("btnPedirMais");
-      if(btn){
-        btn.onclick = () => requestMore(session.id);
-      }
-
-      const wakeBtn = document.getElementById("btnManterTela");
-      if(wakeBtn){
-        wakeBtn.onclick = async () => {
-          await requestWakeLock();
-          alert("Pronto. O celular vai tentar manter a tela ligada.");
-        };
-      }
-
-      await activateClientAlerts(session, left);
-      await requestWakeLock();
-    }
-
-    function renderNotFound(){
-      document.getElementById("app").innerHTML = `
-        <div class="clientWrap">
-          <div class="clientCard">
-            <h2>Atendimento não encontrado</h2>
-          </div>
-        </div>
-      `;
-    }
-
-    async function init(){
-      try{
-        await seedVehiclesIfNeeded();
-
-        onSnapshot(collection(db, "vehicles"), snap => {
-          vehicles = snap.docs
-            .map(d => ({ id:d.id, ...d.data() }))
-            .sort((a,b) => a.name.localeCompare(b.name));
-
-          if(!qs("cliente")){
-            renderAttendant();
-          }
-        });
-
-        onSnapshot(collection(db, "sessions"), snap => {
-          sessions = snap.docs.map(d => ({ id:d.id, ...d.data() }));
-
-          const clientId = qs("cliente");
-          if(clientId){
-            const session = sessions.find(s => s.id === clientId);
-            if(session) renderClient(session);
-            else renderNotFound();
-          }else{
-            renderAttendant();
-          }
-        });
-
-        if(timerInterval) clearInterval(timerInterval);
-        timerInterval = setInterval(updateTimersOnly, 1000);
-      }catch(err){
-        console.error(err);
-        document.getElementById("app").innerHTML = `
-          <div class="wrap">
-            <div class="card">
-              <h2>Erro ao carregar</h2>
-              <p class="sub">Atualize a página. Se continuar, me avise.</p>
-            </div>
-          </div>
-        `;
-      }
-    }
-
-    init();
-  </script>
+<div id="app"></div>
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-app.js";
+import { getFirestore,collection,addDoc,onSnapshot,updateDoc,doc } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js";
+
+const app=initializeApp({
+apiKey:"AIza...",
+authDomain:"familia-sobre-rodas.firebaseapp.com",
+projectId:"familia-sobre-rodas"
+});
+
+const db=getFirestore(app);
+
+let sessions=[];
+
+function format(t){
+let m=Math.floor(t/60);
+let s=t%60;
+return m+":"+String(s).padStart(2,"0");
+}
+
+function sorted(){
+return sessions.sort((a,b)=>{
+if(a.requestMore!==b.requestMore){
+return a.requestMore?-1:1;
+}
+return a.endAt-b.endAt;
+});
+}
+
+function render(){
+
+let html=`
+<div class="wrap">
+<div class="hero">
+<h1>🚗 Família Sobre Rodas</h1>
+</div>
+
+<div class="card">
+<input id="nome" placeholder="Nome"/>
+<select id="tempo">
+<option value="5">5</option>
+<option value="10">10</option>
+</select>
+<button class="btn-green" onclick="start()">Iniciar</button>
+</div>
+
+<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:10px;">
+`;
+
+sorted().forEach(s=>{
+
+let left=Math.floor((s.endAt-Date.now())/1000);
+let cor=left<=0?"red":left<=60?"yellow":"green";
+
+html+=`
+<div class="session ${cor} ${left<=60?"flash":""}">
+<div>${s.nome}</div>
+<div class="timer">${format(left)}</div>
+
+<div id="qr${s.id}" class="qr"></div>
+
+<button onclick="mais('${s.id}')">+5</button>
+<button onclick="aprovar('${s.id}')">Liberar</button>
+</div>
+`;
+});
+
+html+=`</div></div>`;
+
+document.getElementById("app").innerHTML=html;
+
+sessions.forEach(s=>{
+new QRCode(document.getElementById("qr"+s.id), location.href+"?cliente="+s.id);
+});
+}
+
+window.start=async()=>{
+let nome=document.getElementById("nome").value;
+let tempo=parseInt(document.getElementById("tempo").value);
+
+await addDoc(collection(db,"sessions"),{
+nome,
+endAt:Date.now()+tempo*60000,
+requestMore:false
+});
+};
+
+window.mais=async(id)=>{
+await updateDoc(doc(db,"sessions",id),{requestMore:true});
+};
+
+window.aprovar=async(id)=>{
+await updateDoc(doc(db,"sessions",id),{
+endAt:Date.now()+5*60000,
+requestMore:false
+});
+};
+
+onSnapshot(collection(db,"sessions"),snap=>{
+sessions=snap.docs.map(d=>({id:d.id,...d.data()}));
+render();
+});
+
+setInterval(render,1000);
+</script>
 </body>
 </html>
