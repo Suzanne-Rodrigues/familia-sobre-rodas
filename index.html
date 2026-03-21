@@ -82,19 +82,6 @@
       box-shadow:var(--shadow);
     }
 
-    .grid{
-      display:grid;
-      gap:18px;
-    }
-
-    .grid2{
-      grid-template-columns:repeat(auto-fit,minmax(320px,1fr));
-    }
-
-    .grid3{
-      grid-template-columns:repeat(auto-fit,minmax(320px,1fr));
-    }
-
     .card{
       background:var(--card);
       border-radius:24px;
@@ -288,10 +275,28 @@
       box-shadow:0 8px 20px rgba(0,0,0,.18);
     }
 
-    .small{
-      margin-top:8px;
-      font-size:13px;
-      opacity:.95;
+    .moneyBox{
+      margin-top:14px;
+      background:rgba(255,255,255,.18);
+      border-radius:18px;
+      padding:12px;
+    }
+
+    .moneyRow{
+      display:flex;
+      justify-content:space-between;
+      gap:10px;
+      margin-top:6px;
+      font-size:15px;
+      font-weight:bold;
+    }
+
+    .moneyTotal{
+      margin-top:10px;
+      padding-top:10px;
+      border-top:2px dashed rgba(255,255,255,.35);
+      font-size:20px;
+      font-weight:bold;
     }
 
     .qrWrap{
@@ -413,6 +418,31 @@
       box-shadow:0 10px 20px rgba(0,0,0,.18);
     }
 
+    .clientMoney{
+      margin-top:16px;
+      background:#111827;
+      color:#fff;
+      border-radius:20px;
+      padding:16px;
+      text-align:left;
+    }
+
+    .clientMoney .line{
+      display:flex;
+      justify-content:space-between;
+      gap:10px;
+      margin-top:8px;
+      font-size:16px;
+    }
+
+    .clientMoney .total{
+      margin-top:12px;
+      padding-top:12px;
+      border-top:2px dashed rgba(255,255,255,.25);
+      font-size:22px;
+      font-weight:bold;
+    }
+
     .empty{
       color:#6b7280;
       padding:8px 0;
@@ -465,6 +495,8 @@
     const app = initializeApp(firebaseConfig);
     const db = getFirestore(app);
 
+    const EXTRA_5MIN_PRICE = 5;
+
     const defaultVehicles = [
       "Moto Edge Titan",
       "Quadriciclo Vermelho",
@@ -516,6 +548,22 @@
 
     function formatMoney(value){
       return Number(value || 0).toFixed(2).replace(".", ",");
+    }
+
+    function extrasCount(session){
+      return Number(session.extrasCount || 0);
+    }
+
+    function extraPrice(session){
+      return Number(session.extraPrice || EXTRA_5MIN_PRICE);
+    }
+
+    function extrasValue(session){
+      return extrasCount(session) * extraPrice(session);
+    }
+
+    function totalValue(session){
+      return Number(session.totalPaid ?? (Number(session.price || 0) + extrasValue(session)));
     }
 
     function colorClass(secondsLeft){
@@ -695,7 +743,10 @@
         veiculo: vehicle.name,
         planId,
         minutesBought: plan.tempo,
-        price: plan.preco,
+        price: Number(plan.preco),
+        extrasCount: 0,
+        extraPrice: EXTRA_5MIN_PRICE,
+        totalPaid: Number(plan.preco),
         startAt: now,
         endAt,
         status: "active",
@@ -712,9 +763,15 @@
     async function approveMore(id){
       const item = sessions.find(s => s.id === id);
       if(!item) return;
+
       const base = item.endAt > Date.now() ? item.endAt : Date.now();
+      const newExtrasCount = extrasCount(item) + 1;
+      const newTotalPaid = Number(item.price || 0) + (newExtrasCount * extraPrice(item));
+
       await updateDoc(doc(db, "sessions", id), {
         endAt: base + 5 * 60 * 1000,
+        extrasCount: newExtrasCount,
+        totalPaid: newTotalPaid,
         requestMore: false,
         requestAt: null
       });
@@ -728,18 +785,30 @@
     }
 
     async function endSession(id){
+      const item = sessions.find(s => s.id === id);
+      if(!item) return;
       if(!confirm("Encerrar atendimento?")) return;
+
       await updateDoc(doc(db, "sessions", id), {
         status: "ended",
-        requestMore: false
+        requestMore: false,
+        totalPaid: totalValue(item)
       });
     }
 
     async function reopenSession(id){
+      const item = sessions.find(s => s.id === id);
+      if(!item) return;
+
       const base = Date.now();
+      const newExtrasCount = extrasCount(item) + 1;
+      const newTotalPaid = Number(item.price || 0) + (newExtrasCount * extraPrice(item));
+
       await updateDoc(doc(db, "sessions", id), {
         status: "active",
         endAt: base + 5 * 60 * 1000,
+        extrasCount: newExtrasCount,
+        totalPaid: newTotalPaid,
         requestMore: false,
         requestAt: null
       });
@@ -799,6 +868,10 @@
 
     function renderEmAndamentoTab(){
       const active = sortedActiveSessions();
+      const ended = sessions
+        .filter(s => s.status === "ended")
+        .sort((a,b) => b.createdAt - a.createdAt)
+        .slice(0, 10);
 
       return `
         <div class="card">
@@ -813,14 +886,19 @@
 
         <div class="card" style="margin-top:18px;">
           <h2>🧾 Últimos encerrados</h2>
-          ${sessions.filter(s => s.status === "ended").sort((a,b) => b.createdAt - a.createdAt).slice(0,10).map(item => `
+          ${ended.length === 0 ? `<div class="empty">Nenhum atendimento encerrado ainda.</div>` : ""}
+          ${ended.map(item => `
             <div class="vehicleItem" style="margin-top:10px;">
               <div>
-                <strong>${escapeHtml(item.nome)}</strong> - ${escapeHtml(item.veiculo)}
+                <strong>${escapeHtml(item.nome)}</strong><br>
+                <span style="font-size:14px;color:#374151;">${escapeHtml(item.veiculo)}</span><br>
+                <span style="font-size:13px;color:#6b7280;">
+                  Valor pago: <strong>R$ ${formatMoney(totalValue(item))}</strong>
+                </span>
               </div>
               <button class="btn-dark" data-reopen="${item.id}">Reabrir +5 min</button>
             </div>
-          `).join("") || `<div class="empty">Nenhum atendimento encerrado ainda.</div>`}
+          `).join("")}
         </div>
       `;
     }
@@ -874,6 +952,11 @@
                 <button class="btn-red" data-remove-plan="${p.id}">Excluir</button>
               </div>
             `).join("")}
+          </div>
+
+          <div class="card" style="margin-top:18px;background:#f9fafb;">
+            <h2 style="font-size:18px;">ℹ️ Extra automático</h2>
+            <p class="sub">Cada +5 min aprovado soma R$ ${formatMoney(EXTRA_5MIN_PRICE)} no total.</p>
           </div>
         </div>
       `;
@@ -980,7 +1063,24 @@
           ${item.requestMore ? `<div class="requestBanner">⚠️ O CLIENTE PEDIU MAIS 5 MINUTOS</div>` : ""}
 
           <div class="timer" data-timer="${item.id}">${left > 0 ? "⏳ " + formatTime(left) : "⛔ 00:00"}</div>
-          <div class="small">Tempo comprado: ${item.minutesBought} min | Valor: R$ ${formatMoney(item.price)}</div>
+
+          <div class="moneyBox">
+            <div class="moneyRow">
+              <span>Plano inicial</span>
+              <span>R$ ${formatMoney(item.price)}</span>
+            </div>
+            <div class="moneyRow">
+              <span>Extras aprovados</span>
+              <span>${extrasCount(item)} x R$ ${formatMoney(extraPrice(item))}</span>
+            </div>
+            <div class="moneyRow">
+              <span>Valor extra</span>
+              <span>R$ ${formatMoney(extrasValue(item))}</span>
+            </div>
+            <div class="moneyTotal">
+              Total a cobrar: R$ ${formatMoney(totalValue(item))}
+            </div>
+          </div>
 
           <div class="qrWrap">
             <div class="qrBox" data-qrcode="${item.id}"></div>
@@ -1075,8 +1175,22 @@
             ${nearlyDone}
             ${veryEnded}
 
-            <div class="badge" style="background:#111827;color:#fff;margin-top:14px;">
-              Plano: ${session.minutesBought} min - R$ ${formatMoney(session.price)}
+            <div class="clientMoney">
+              <div class="line">
+                <span>Plano inicial</span>
+                <span>R$ ${formatMoney(session.price)}</span>
+              </div>
+              <div class="line">
+                <span>Extras aprovados</span>
+                <span>${extrasCount(session)} x R$ ${formatMoney(extraPrice(session))}</span>
+              </div>
+              <div class="line">
+                <span>Valor extra</span>
+                <span>R$ ${formatMoney(extrasValue(session))}</span>
+              </div>
+              <div class="total">
+                Total atual: R$ ${formatMoney(totalValue(session))}
+              </div>
             </div>
 
             <div class="actions" style="justify-content:center; margin-top:18px;">
