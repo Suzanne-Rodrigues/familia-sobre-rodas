@@ -17,18 +17,16 @@
       --blue:#3b82f6;
       --pink:#ec4899;
       --purple:#8b5cf6;
-      --cyan:#06b6d4;
       --line:#e5e7eb;
       --shadow:0 12px 25px rgba(0,0,0,.18);
     }
 
     *{box-sizing:border-box}
-
     body{
       margin:0;
-      font-family: Arial, Helvetica, sans-serif;
+      font-family:Arial, Helvetica, sans-serif;
       color:var(--text);
-      background: linear-gradient(135deg, var(--bg1), var(--bg2));
+      background:linear-gradient(135deg,var(--bg1),var(--bg2));
       min-height:100vh;
     }
 
@@ -39,8 +37,8 @@
     }
 
     .hero{
-      background: linear-gradient(135deg, #ff7eb3, #ff758c, #ffb347);
-      color:white;
+      background:linear-gradient(135deg,#ff7eb3,#ff758c,#ffb347);
+      color:#fff;
       border-radius:24px;
       padding:22px;
       box-shadow:var(--shadow);
@@ -102,12 +100,11 @@
       outline:none;
       background:#f8fbff;
       color:#111827;
-      pointer-events:auto;
     }
 
     input:focus, select:focus{
       border-color:#60a5fa;
-      background:#ffffff;
+      background:#fff;
     }
 
     .row{
@@ -131,20 +128,15 @@
       text-decoration:none;
       display:inline-block;
       text-align:center;
-      transition:transform .12s ease;
     }
 
-    button:hover, .linkBtn:hover{
-      transform:scale(1.02);
-    }
-
-    .btn-green{ background:var(--green); color:white; }
-    .btn-blue{ background:var(--blue); color:white; }
-    .btn-yellow{ background:var(--yellow); color:white; }
-    .btn-red{ background:var(--red); color:white; }
-    .btn-pink{ background:var(--pink); color:white; }
-    .btn-purple{ background:var(--purple); color:white; }
-    .btn-dark{ background:#111827; color:white; }
+    .btn-green{ background:#22c55e; color:#fff; }
+    .btn-blue{ background:#3b82f6; color:#fff; }
+    .btn-yellow{ background:#f59e0b; color:#fff; }
+    .btn-red{ background:#ef4444; color:#fff; }
+    .btn-pink{ background:#ec4899; color:#fff; }
+    .btn-purple{ background:#8b5cf6; color:#fff; }
+    .btn-dark{ background:#111827; color:#fff; }
 
     .actions{
       display:flex;
@@ -165,7 +157,7 @@
       justify-content:space-between;
       align-items:center;
       gap:10px;
-      background:linear-gradient(135deg, #eff6ff, #fdf2f8);
+      background:linear-gradient(135deg,#eff6ff,#fdf2f8);
       border:2px solid #dbeafe;
       border-radius:18px;
       padding:12px;
@@ -179,20 +171,20 @@
       border-radius:24px;
       padding:18px;
       margin-top:14px;
-      color:white;
+      color:#fff;
       box-shadow:var(--shadow);
     }
 
     .session.green{
-      background: linear-gradient(135deg, #22c55e, #16a34a);
+      background:linear-gradient(135deg,#22c55e,#16a34a);
     }
 
     .session.yellow{
-      background: linear-gradient(135deg, #f59e0b, #f97316);
+      background:linear-gradient(135deg,#f59e0b,#f97316);
     }
 
     .session.red{
-      background: linear-gradient(135deg, #ef4444, #dc2626);
+      background:linear-gradient(135deg,#ef4444,#dc2626);
     }
 
     .flash{
@@ -254,7 +246,7 @@
 
     .clientCard{
       width:min(760px,100%);
-      background:white;
+      background:#fff;
       border-radius:28px;
       box-shadow:var(--shadow);
       padding:24px;
@@ -294,15 +286,15 @@
     }
 
     .clientGreen{
-      background:linear-gradient(135deg, #d1fae5, #a7f3d0);
+      background:linear-gradient(135deg,#d1fae5,#a7f3d0);
     }
 
     .clientYellow{
-      background:linear-gradient(135deg, #fef3c7, #fdba74);
+      background:linear-gradient(135deg,#fef3c7,#fdba74);
     }
 
     .clientRed{
-      background:linear-gradient(135deg, #fee2e2, #fca5a5);
+      background:linear-gradient(135deg,#fee2e2,#fca5a5);
     }
 
     .empty{
@@ -358,8 +350,9 @@
 
     let vehicles = [];
     let sessions = [];
-    let ticking = null;
     let seeded = false;
+    let timerInterval = null;
+    let currentView = "attendant";
 
     function qs(name){
       const url = new URL(window.location.href);
@@ -417,7 +410,6 @@
 
     async function addVehicle(){
       const input = document.getElementById("novoVeiculo");
-      if(!input) return;
       const name = (input.value || "").trim();
       if(!name){
         alert("Digite o nome do veículo.");
@@ -441,11 +433,6 @@
       const nomeInput = document.getElementById("nome");
       const veiculoSelect = document.getElementById("veiculo");
       const tempoSelect = document.getElementById("tempo");
-
-      if(!nomeInput || !veiculoSelect || !tempoSelect){
-        alert("Tela ainda carregando. Tente novamente.");
-        return;
-      }
 
       const nome = (nomeInput.value || "").trim();
       const vehicleId = veiculoSelect.value;
@@ -480,6 +467,8 @@
       });
 
       nomeInput.value = "";
+      veiculoSelect.value = "";
+      tempoSelect.value = "5";
     }
 
     async function approveMore(id){
@@ -519,6 +508,7 @@
     }
 
     function renderAttendant(){
+      currentView = "attendant";
       const appEl = document.getElementById("app");
 
       const active = sessions
@@ -598,37 +588,10 @@
             <h2>⏱️ Atendimentos ativos</h2>
             <p class="sub">O cliente pode acompanhar pelo próprio celular.</p>
 
-            ${active.length === 0 ? `<div class="empty">Nenhum atendimento ativo agora.</div>` : ""}
-
-            ${active.map(item => {
-              const left = Math.floor((item.endAt - Date.now()) / 1000);
-              const color = colorClass(left);
-              const flash = left <= 60 ? "flash" : "";
-              return `
-                <div class="session ${color} ${flash}">
-                  <div class="sessionTop">
-                    <div>
-                      <div class="name">${escapeHtml(item.nome)}</div>
-                      <div class="vehicle">🚘 ${escapeHtml(item.veiculo)}</div>
-                      <div class="badge">Link do cliente</div>
-                    </div>
-                    <div>
-                      ${item.requestMore ? `<div class="badge">⚠️ Pediu +5 min</div>` : ""}
-                    </div>
-                  </div>
-
-                  <div class="timer">${left > 0 ? "⏳ " + formatTime(left) : "⛔ 00:00"}</div>
-                  <div class="small">Tempo comprado: ${item.minutesBought} min</div>
-
-                  <div class="actions">
-                    <a class="linkBtn btn-purple" href="${clientLink(item.id)}" target="_blank">Tela do cliente</a>
-                    <button class="btn-blue" data-copy="${item.id}">Copiar link</button>
-                    <button class="btn-yellow" data-approve="${item.id}">Liberar +5 min</button>
-                    <button class="btn-red" data-end="${item.id}">Encerrar</button>
-                  </div>
-                </div>
-              `;
-            }).join("")}
+            <div id="activeSessions">
+              ${active.length === 0 ? `<div class="empty">Nenhum atendimento ativo agora.</div>` : ""}
+              ${active.map(item => renderSessionCard(item)).join("")}
+            </div>
           </div>
 
           <div class="card sessionsWrap">
@@ -646,11 +609,8 @@
         </div>
       `;
 
-      const btnIniciar = document.getElementById("btnIniciar");
-      const btnAddVeiculo = document.getElementById("btnAddVeiculo");
-
-      if(btnIniciar) btnIniciar.onclick = startSession;
-      if(btnAddVeiculo) btnAddVeiculo.onclick = addVehicle;
+      document.getElementById("btnIniciar").onclick = startSession;
+      document.getElementById("btnAddVeiculo").onclick = addVehicle;
 
       document.querySelectorAll("[data-remove-vehicle]").forEach(btn => {
         btn.onclick = () => removeVehicle(btn.dataset.removeVehicle);
@@ -681,7 +641,60 @@
       });
     }
 
+    function renderSessionCard(item){
+      const left = Math.floor((item.endAt - Date.now()) / 1000);
+      const color = colorClass(left);
+      const flash = left <= 60 ? "flash" : "";
+      return `
+        <div class="session ${color} ${flash}" data-session-id="${item.id}">
+          <div class="sessionTop">
+            <div>
+              <div class="name">${escapeHtml(item.nome)}</div>
+              <div class="vehicle">🚘 ${escapeHtml(item.veiculo)}</div>
+              <div class="badge">Link do cliente</div>
+            </div>
+            <div>
+              ${item.requestMore ? `<div class="badge">⚠️ Pediu +5 min</div>` : ""}
+            </div>
+          </div>
+
+          <div class="timer" data-timer="${item.id}">${left > 0 ? "⏳ " + formatTime(left) : "⛔ 00:00"}</div>
+          <div class="small">Tempo comprado: ${item.minutesBought} min</div>
+
+          <div class="actions">
+            <a class="linkBtn btn-purple" href="${clientLink(item.id)}" target="_blank">Tela do cliente</a>
+            <button class="btn-blue" data-copy="${item.id}">Copiar link</button>
+            <button class="btn-yellow" data-approve="${item.id}">Liberar +5 min</button>
+            <button class="btn-red" data-end="${item.id}">Encerrar</button>
+          </div>
+        </div>
+      `;
+    }
+
+    function updateTimersOnly(){
+      if(currentView === "attendant"){
+        sessions.filter(s => s.status === "active").forEach(item => {
+          const left = Math.floor((item.endAt - Date.now()) / 1000);
+          const timerEl = document.querySelector(`[data-timer="${item.id}"]`);
+          const cardEl = document.querySelector(`[data-session-id="${item.id}"]`);
+          if(timerEl){
+            timerEl.textContent = left > 0 ? "⏳ " + formatTime(left) : "⛔ 00:00";
+          }
+          if(cardEl){
+            cardEl.classList.remove("green","yellow","red","flash");
+            cardEl.classList.add(colorClass(left));
+            if(left <= 60) cardEl.classList.add("flash");
+          }
+        });
+      } else {
+        const clientId = qs("cliente");
+        const session = sessions.find(s => s.id === clientId);
+        if(session) renderClient(session);
+      }
+    }
+
     function renderClient(session){
+      currentView = "client";
       const left = Math.floor((session.endAt - Date.now()) / 1000);
       const ended = session.status !== "active" || left <= 0;
       const appEl = document.getElementById("app");
@@ -756,17 +769,8 @@
           }
         });
 
-        if(ticking) clearInterval(ticking);
-        ticking = setInterval(() => {
-          const clientId = qs("cliente");
-          if(clientId){
-            const session = sessions.find(s => s.id === clientId);
-            if(session) renderClient(session);
-          }else{
-            renderAttendant();
-          }
-        }, 1000);
-
+        if(timerInterval) clearInterval(timerInterval);
+        timerInterval = setInterval(updateTimersOnly, 1000);
       }catch(err){
         console.error(err);
         document.getElementById("app").innerHTML = `
