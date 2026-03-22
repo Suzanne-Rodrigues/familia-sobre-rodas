@@ -7,98 +7,158 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
   <style>
     :root{
-      --bg1:#6a11cb;
-      --bg2:#2575fc;
+      --bg1:#ff8fb1;
+      --bg2:#6b7cff;
+      --bg3:#8fd3ff;
       --card:#ffffff;
       --text:#1f2937;
       --muted:#6b7280;
+      --line:#dbeafe;
+      --blue:#3366ff;
+      --blue-dark:#2349c7;
       --green:#22c55e;
-      --yellow:#f59e0b;
+      --green-dark:#16984a;
+      --yellow:#facc15;
+      --orange:#f59e0b;
       --red:#ef4444;
-      --blue:#3b82f6;
-      --pink:#ec4899;
+      --red-dark:#dc2626;
       --purple:#8b5cf6;
-      --dark:#111827;
-      --shadow:0 12px 25px rgba(0,0,0,.18);
+      --pink:#ec4899;
+      --shadow:0 16px 30px rgba(0,0,0,.16);
+      --radius:28px;
     }
 
     *{box-sizing:border-box}
+
     body{
       margin:0;
       font-family:Arial, Helvetica, sans-serif;
+      background:linear-gradient(135deg,var(--bg1),var(--bg2),var(--bg3));
       color:var(--text);
-      background:linear-gradient(135deg,var(--bg1),var(--bg2));
       min-height:100vh;
     }
 
     .wrap{
-      max-width:1200px;
+      max-width:1280px;
       margin:0 auto;
       padding:18px;
     }
 
     .hero{
-      background:linear-gradient(135deg,#ff7eb3,#ff758c,#ffb347);
+      background:linear-gradient(135deg,#ff9db7,#ff8c7e,#7b7cff);
       color:#fff;
-      border-radius:24px;
-      padding:22px;
+      border-radius:34px;
       box-shadow:var(--shadow);
+      padding:22px;
       margin-bottom:18px;
     }
 
-    .hero h1{
-      margin:0;
-      font-size:36px;
+    .heroTop{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap:14px;
+      flex-wrap:wrap;
     }
 
-    .hero p{
+    .brand h1{
+      margin:0;
+      font-size:42px;
+      line-height:1.05;
+    }
+
+    .brand p{
       margin:8px 0 0;
       font-size:18px;
-      opacity:.95;
+      opacity:.96;
     }
 
     .tabs{
+      margin-top:18px;
       display:flex;
       gap:10px;
       flex-wrap:wrap;
-      margin-bottom:18px;
     }
 
     .tabBtn{
       border:none;
-      border-radius:16px;
-      padding:12px 18px;
+      border-radius:999px;
+      padding:13px 18px;
       font-size:15px;
       font-weight:bold;
       cursor:pointer;
-      background:rgba(255,255,255,.2);
+      background:rgba(255,255,255,.16);
       color:#fff;
-      backdrop-filter:blur(6px);
+      transition:.18s ease;
+    }
+
+    .tabBtn:hover{
+      transform:translateY(-1px);
+      filter:brightness(1.04);
     }
 
     .tabBtn.active{
       background:#fff;
       color:#111827;
-      box-shadow:var(--shadow);
+      box-shadow:0 8px 20px rgba(0,0,0,.12);
     }
 
     .card{
       background:var(--card);
-      border-radius:24px;
+      border-radius:var(--radius);
       padding:18px;
       box-shadow:var(--shadow);
-      border:4px solid rgba(255,255,255,.25);
+      border:4px solid rgba(255,255,255,.35);
     }
 
     .card h2{
-      margin:0 0 10px;
-      font-size:22px;
-      color:#111827;
+      margin:0 0 8px;
+      font-size:25px;
     }
 
     .sub{
-      color:var(--muted);
       margin:0 0 10px;
+      color:var(--muted);
+    }
+
+    .hidden{display:none}
+
+    .grid{
+      display:grid;
+      gap:18px;
+    }
+
+    .grid2{
+      grid-template-columns:1.05fr .95fr;
+    }
+
+    .statsGrid{
+      display:grid;
+      gap:16px;
+      grid-template-columns:repeat(4,minmax(0,1fr));
+    }
+
+    .statCard{
+      border-radius:24px;
+      padding:18px;
+      color:#fff;
+      box-shadow:var(--shadow);
+    }
+
+    .statBlue{background:linear-gradient(135deg,#2563eb,#3b82f6)}
+    .statPink{background:linear-gradient(135deg,#db2777,#ec4899)}
+    .statGreen{background:linear-gradient(135deg,#16a34a,#22c55e)}
+    .statPurple{background:linear-gradient(135deg,#7c3aed,#a78bfa)}
+
+    .statLabel{
+      font-size:14px;
+      opacity:.94;
+    }
+
+    .statValue{
+      margin-top:8px;
+      font-size:34px;
+      font-weight:bold;
     }
 
     label{
@@ -110,9 +170,9 @@
 
     input, select{
       width:100%;
-      padding:14px 16px;
-      border-radius:16px;
-      border:3px solid #dbeafe;
+      padding:15px 16px;
+      border-radius:18px;
+      border:3px solid var(--line);
       font-size:16px;
       outline:none;
       background:#f8fbff;
@@ -132,200 +192,236 @@
 
     .row > *{
       flex:1;
-      min-width:120px;
+      min-width:140px;
     }
 
     button, .linkBtn{
       border:none;
-      border-radius:16px;
-      padding:12px 16px;
+      border-radius:18px;
+      padding:13px 16px;
       font-size:15px;
       font-weight:bold;
       cursor:pointer;
       text-decoration:none;
       display:inline-block;
       text-align:center;
+      transition:.18s ease;
     }
 
-    .btn-green{ background:#22c55e; color:#fff; }
-    .btn-blue{ background:#3b82f6; color:#fff; }
-    .btn-yellow{ background:#f59e0b; color:#fff; }
-    .btn-red{ background:#ef4444; color:#fff; }
-    .btn-pink{ background:#ec4899; color:#fff; }
-    .btn-purple{ background:#8b5cf6; color:#fff; }
-    .btn-dark{ background:#111827; color:#fff; }
-    .btn-white{ background:#ffffff; color:#111827; }
+    button:hover, .linkBtn:hover{
+      transform:translateY(-1px);
+      filter:brightness(1.04);
+    }
 
-    .actions{
+    .btn-blue{background:var(--blue); color:#fff}
+    .btn-green{background:var(--green); color:#fff}
+    .btn-yellow{background:var(--orange); color:#fff}
+    .btn-red{background:var(--red); color:#fff}
+    .btn-purple{background:var(--purple); color:#fff}
+    .btn-pink{background:var(--pink); color:#fff}
+    .btn-dark{background:#111827; color:#fff}
+    .btn-white{background:#fff; color:#111827}
+
+    .sectionActions{
       display:flex;
       gap:10px;
       flex-wrap:wrap;
       margin-top:14px;
     }
 
-    .vehicleList{
+    .listWrap{
       display:flex;
       flex-direction:column;
-      gap:10px;
+      gap:12px;
       margin-top:14px;
     }
 
-    .vehicleItem{
+    .listItem{
       display:flex;
       justify-content:space-between;
       align-items:center;
-      gap:10px;
-      background:linear-gradient(135deg,#eff6ff,#fdf2f8);
-      border:2px solid #dbeafe;
+      gap:12px;
+      flex-wrap:wrap;
+      padding:14px;
       border-radius:18px;
-      padding:12px;
+      background:linear-gradient(135deg,#eef4ff,#fff2f7);
+      border:2px solid #dbeafe;
     }
 
-    .sessionsGrid{
-      display:grid;
-      grid-template-columns:repeat(auto-fit,minmax(320px,1fr));
-      gap:16px;
-      align-items:start;
+    .empty{
+      color:var(--muted);
+      padding:10px 0;
     }
 
     .session{
-      border-radius:24px;
-      padding:18px;
-      color:#fff;
+      margin-top:16px;
+      border-radius:30px;
+      padding:20px;
+      background:#fff;
       box-shadow:var(--shadow);
+      border:4px solid #e5e7eb;
       position:relative;
       overflow:hidden;
     }
 
-    .session.green{
-      background:linear-gradient(135deg,#22c55e,#16a34a);
+    .session.okay{
+      background:linear-gradient(135deg,#ffffff,#f0fdf4);
+      border-color:#bbf7d0;
     }
 
-    .session.yellow{
-      background:linear-gradient(135deg,#f59e0b,#f97316);
+    .session.warning{
+      background:linear-gradient(135deg,#ffffff,#fff7ed);
+      border-color:#fde68a;
     }
 
-    .session.red{
-      background:linear-gradient(135deg,#ef4444,#dc2626);
+    .session.danger{
+      background:linear-gradient(135deg,#ffffff,#fff1f2);
+      border-color:#fecaca;
+      animation:dangerPulse .75s linear infinite;
     }
 
     .session.requesting{
-      border:6px solid #fff200;
-      box-shadow:0 0 0 6px rgba(255,242,0,.35), 0 14px 30px rgba(0,0,0,.28);
+      border-color:#fff200 !important;
+      box-shadow:0 0 0 8px rgba(255,242,0,.24), var(--shadow);
       animation:requestPulse 1s linear infinite;
     }
 
     @keyframes requestPulse{
-      0%,100%{ transform:scale(1); filter:brightness(1); }
-      50%{ transform:scale(1.01); filter:brightness(1.15); }
+      0%,100%{transform:scale(1)}
+      50%{transform:scale(1.008)}
     }
 
-    .flash{
-      animation:piscar 0.8s linear infinite;
-    }
-
-    @keyframes piscar{
-      0%,50%,100% { filter:brightness(1); }
-      25%,75% { filter:brightness(1.18); }
+    @keyframes dangerPulse{
+      0%,100%{filter:brightness(1)}
+      50%{filter:brightness(1.09)}
     }
 
     .sessionTop{
       display:flex;
       justify-content:space-between;
       align-items:flex-start;
-      gap:10px;
+      gap:14px;
       flex-wrap:wrap;
     }
 
-    .name{
-      font-size:28px;
+    .sessionName{
+      font-size:32px;
       font-weight:bold;
+      color:#111827;
     }
 
-    .vehicle{
+    .sessionVehicle{
       margin-top:6px;
       font-size:18px;
-    }
-
-    .timer{
-      font-size:48px;
+      color:#374151;
       font-weight:bold;
-      margin-top:16px;
     }
 
-    .badge{
+    .planBadge{
       display:inline-block;
-      margin-top:8px;
-      padding:8px 12px;
+      margin-top:10px;
+      background:#eef2ff;
+      color:#111827;
       border-radius:999px;
-      background:rgba(255,255,255,.2);
+      padding:8px 12px;
       font-size:13px;
       font-weight:bold;
     }
 
-    .requestBanner{
-      margin-top:12px;
-      background:#fff200;
-      color:#111827;
-      border-radius:16px;
-      padding:12px 14px;
-      font-size:18px;
+    .timer{
+      font-size:58px;
+      font-weight:bold;
+      line-height:1;
+      text-align:right;
+    }
+
+    .alertBanner{
+      margin-top:16px;
+      border-radius:20px;
+      padding:16px;
+      font-size:22px;
       font-weight:bold;
       text-align:center;
-      box-shadow:0 8px 20px rgba(0,0,0,.18);
+      box-shadow:0 10px 20px rgba(0,0,0,.12);
+    }
+
+    .alertYellow{
+      background:#fff200;
+      color:#111827;
+      animation:alertFlash 0.8s linear infinite;
+    }
+
+    .alertRed{
+      background:#ef4444;
+      color:#fff;
+      animation:alertFlash 0.6s linear infinite;
+    }
+
+    @keyframes alertFlash{
+      0%,100%{filter:brightness(1)}
+      50%{filter:brightness(1.18)}
+    }
+
+    .moneyGrid{
+      margin-top:16px;
+      display:grid;
+      gap:12px;
+      grid-template-columns:repeat(4,minmax(0,1fr));
     }
 
     .moneyBox{
-      margin-top:14px;
-      background:rgba(255,255,255,.18);
+      background:#f8fafc;
+      border:2px solid #dbeafe;
       border-radius:18px;
-      padding:12px;
+      padding:14px;
     }
 
-    .moneyRow{
-      display:flex;
-      justify-content:space-between;
-      gap:10px;
-      margin-top:6px;
-      font-size:15px;
-      font-weight:bold;
+    .moneyLabel{
+      font-size:13px;
+      color:#6b7280;
+      margin-bottom:4px;
     }
 
-    .moneyTotal{
-      margin-top:10px;
-      padding-top:10px;
-      border-top:2px dashed rgba(255,255,255,.35);
-      font-size:20px;
+    .moneyValue{
+      font-size:28px;
       font-weight:bold;
+      color:#1d4ed8;
+    }
+
+    .sessionButtons{
+      margin-top:16px;
+      display:grid;
+      gap:12px;
+      grid-template-columns:repeat(2,minmax(0,1fr));
     }
 
     .qrWrap{
-      margin-top:14px;
-      background:rgba(255,255,255,.18);
-      border-radius:18px;
+      margin-top:16px;
+      background:#f8fafc;
+      border:2px dashed #cbd5e1;
+      border-radius:22px;
       padding:14px;
       display:flex;
-      flex-direction:column;
+      gap:14px;
       align-items:center;
-      gap:8px;
+      flex-wrap:wrap;
     }
 
     .qrBox{
       background:#fff;
-      padding:10px;
       border-radius:16px;
+      padding:10px;
       min-width:140px;
       min-height:140px;
       display:flex;
       align-items:center;
       justify-content:center;
+      box-shadow:0 8px 18px rgba(0,0,0,.08);
     }
 
-    .qrHelp{
-      font-size:13px;
-      color:#fff;
-      text-align:center;
-      max-width:220px;
+    .qrInfo{
+      flex:1;
+      min-width:220px;
     }
 
     .clientWrap{
@@ -334,163 +430,132 @@
       align-items:center;
       justify-content:center;
       padding:20px;
+      background:linear-gradient(135deg,#fef3c7,#dbeafe,#fce7f3);
     }
 
     .clientCard{
-      width:min(780px,100%);
+      width:min(900px,100%);
       background:#fff;
-      border-radius:28px;
-      box-shadow:var(--shadow);
+      border-radius:34px;
       padding:24px;
+      box-shadow:var(--shadow);
+      border:6px solid rgba(255,255,255,.5);
       text-align:center;
-      border:5px solid rgba(255,255,255,.4);
-      transition:all .2s ease;
+      transition:.2s ease;
+    }
+
+    .clientCard.warning{
+      background:linear-gradient(135deg,#fff7ed,#fef3c7);
+    }
+
+    .clientCard.danger{
+      background:linear-gradient(135deg,#fee2e2,#fecaca);
+      animation:clientPulse .55s linear infinite;
+      box-shadow:0 0 0 12px rgba(239,68,68,.18), var(--shadow);
+    }
+
+    @keyframes clientPulse{
+      0%,100%{transform:scale(1); filter:brightness(1)}
+      50%{transform:scale(1.012); filter:brightness(1.22)}
     }
 
     .clientTitle{
-      font-size:18px;
+      font-size:20px;
       color:#6b7280;
     }
 
     .clientName{
-      font-size:40px;
+      font-size:46px;
       font-weight:bold;
-      margin-top:10px;
       color:#111827;
+      margin-top:8px;
     }
 
     .clientVehicle{
-      font-size:24px;
+      font-size:26px;
       margin-top:8px;
       color:#374151;
+      font-weight:bold;
     }
 
     .clientTimer{
-      font-size:84px;
+      font-size:100px;
       font-weight:bold;
-      margin:24px 0;
-      color:#111827;
       line-height:1;
+      margin:24px 0 16px;
+      color:#111827;
     }
 
-    .notice{
-      font-size:24px;
-      font-weight:bold;
-      margin-top:10px;
-    }
-
-    .clientGreen{
-      background:linear-gradient(135deg,#d1fae5,#a7f3d0);
-    }
-
-    .clientYellow{
-      background:linear-gradient(135deg,#fef3c7,#fdba74);
-    }
-
-    .clientRed{
-      background:linear-gradient(135deg,#fee2e2,#fca5a5);
-    }
-
-    .clientDanger{
-      animation:dangerFlash 0.55s linear infinite;
-      box-shadow:0 0 0 10px rgba(239,68,68,.18), 0 16px 30px rgba(0,0,0,.25);
-    }
-
-    @keyframes dangerFlash{
-      0%,100%{
-        transform:scale(1);
-        filter:brightness(1);
-      }
-      50%{
-        transform:scale(1.015);
-        filter:brightness(1.2);
-      }
-    }
-
-    .bigWarning{
-      margin-top:16px;
-      background:#ef4444;
-      color:#fff;
-      border-radius:20px;
-      padding:16px;
-      font-size:28px;
-      font-weight:bold;
-      box-shadow:0 10px 20px rgba(0,0,0,.18);
-    }
-
-    .clientMoney{
-      margin-top:16px;
-      background:#111827;
-      color:#fff;
-      border-radius:20px;
-      padding:16px;
-      text-align:left;
-    }
-
-    .clientMoney .line{
-      display:flex;
-      justify-content:space-between;
-      gap:10px;
-      margin-top:8px;
-      font-size:16px;
-    }
-
-    .clientMoney .total{
+    .clientAlert{
       margin-top:12px;
-      padding-top:12px;
-      border-top:2px dashed rgba(255,255,255,.25);
-      font-size:22px;
-      font-weight:bold;
-    }
-
-    .reportGrid{
-      display:grid;
-      grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
-      gap:16px;
-      margin-top:10px;
-    }
-
-    .reportCard{
-      background:linear-gradient(135deg,#ffffff,#f8fbff);
-      border:2px solid #dbeafe;
-      border-radius:20px;
+      border-radius:22px;
       padding:18px;
-      box-shadow:var(--shadow);
-    }
-
-    .reportTitle{
-      font-size:14px;
-      color:#6b7280;
-      font-weight:bold;
-    }
-
-    .reportValue{
       font-size:30px;
       font-weight:bold;
-      margin-top:8px;
-      color:#111827;
+      box-shadow:0 10px 20px rgba(0,0,0,.14);
     }
 
-    .empty{
+    .clientPrices{
+      display:grid;
+      gap:12px;
+      grid-template-columns:repeat(3,minmax(0,1fr));
+      margin-top:18px;
+    }
+
+    .clientPriceBox{
+      background:#f8fafc;
+      border:2px solid #dbeafe;
+      border-radius:18px;
+      padding:14px;
+    }
+
+    .clientPriceBox .l{
+      font-size:13px;
       color:#6b7280;
-      padding:8px 0;
+      margin-bottom:4px;
     }
 
-    .wakeNote{
-      margin-top:12px;
+    .clientPriceBox .v{
+      font-size:28px;
+      font-weight:bold;
+      color:#1d4ed8;
+    }
+
+    .clientButtons{
+      display:flex;
+      justify-content:center;
+      gap:12px;
+      flex-wrap:wrap;
+      margin-top:18px;
+    }
+
+    .smallNote{
+      margin-top:14px;
+      color:#4b5563;
       font-size:14px;
-      color:#374151;
       font-weight:bold;
     }
 
-    @media (max-width:640px){
-      .hero h1{ font-size:28px; }
-      .name{ font-size:22px; }
-      .timer{ font-size:36px; }
-      .clientName{ font-size:30px; }
-      .clientTimer{ font-size:58px; }
-      .notice{ font-size:20px; }
-      .bigWarning{ font-size:22px; }
+    @media (max-width:1100px){
+      .grid2{grid-template-columns:1fr}
+      .statsGrid{grid-template-columns:repeat(2,minmax(0,1fr))}
+      .moneyGrid{grid-template-columns:repeat(2,minmax(0,1fr))}
+    }
+
+    @media (max-width:760px){
+      .statsGrid,
+      .moneyGrid,
+      .clientPrices,
+      .sessionButtons{
+        grid-template-columns:1fr;
+      }
+
+      .hero .brand h1{font-size:30px}
+      .sessionName{font-size:26px}
+      .timer{text-align:left; font-size:42px}
+      .clientName{font-size:34px}
+      .clientTimer{font-size:68px}
+      .clientAlert{font-size:24px}
     }
   </style>
 </head>
@@ -523,96 +588,83 @@
     const app = initializeApp(firebaseConfig);
     const db = getFirestore(app);
 
-    const EXTRA_5MIN_PRICE = 5;
-
     const defaultVehicles = [
-      "Moto Edge Titan",
-      "Quadriciclo Vermelho",
-      "Jipe Titan",
       "Audi",
-      "Jipe UTV"
+      "Relâmpago Vermelho",
+      "Estrela Azul",
+      "Mini Jeep",
+      "UTV Aventura"
     ];
 
     const defaultPlans = [
-      { tempo: 5, preco: 5 },
-      { tempo: 10, preco: 10 },
-      { tempo: 15, preco: 15 }
+      { nome:"Passeio Rápido", minutos:5, valor:5 },
+      { nome:"Passeio Divertido", minutos:10, valor:10 },
+      { nome:"Passeio Completo", minutos:15, valor:15 }
     ];
+
+    const EXTRA_MINUTES = 5;
 
     let vehicles = [];
     let plans = [];
     let sessions = [];
-    let seededVehicles = false;
-    let seededPlans = false;
+    let currentTab = "novo";
+    let currentView = "admin";
+    let seeded = false;
     let timerInterval = null;
-    let currentView = "attendant";
-    let activeTab = localStorage.getItem("fsr_active_tab") || "atendimentos";
     let wakeLock = null;
 
     let vibrated120 = new Set();
     let vibrated60 = new Set();
     let vibrated0 = new Set();
-    let sounded120 = new Set();
-    let sounded60 = new Set();
-    let sounded0 = new Set();
 
     function qs(name){
       const url = new URL(window.location.href);
       return url.searchParams.get(name);
     }
 
-    function setTab(tab){
-      activeTab = tab;
-      localStorage.setItem("fsr_active_tab", tab);
-      renderAttendant();
+    function money(v){
+      return Number(v || 0).toLocaleString("pt-BR",{ style:"currency", currency:"BRL" });
+    }
+
+    function escapeHtml(str){
+      return String(str ?? "")
+        .replaceAll("&","&amp;")
+        .replaceAll("<","&lt;")
+        .replaceAll(">","&gt;")
+        .replaceAll('"',"&quot;")
+        .replaceAll("'","&#039;");
     }
 
     function formatTime(sec){
       const s = Math.max(0, Math.floor(sec));
       const min = Math.floor(s / 60);
       const seg = s % 60;
-      return `${min}:${String(seg).padStart(2, "0")}`;
+      return `${min}:${String(seg).padStart(2,"0")}`;
     }
 
-    function formatMoney(value){
-      return Number(value || 0).toFixed(2).replace(".", ",");
+    function getSecondsLeft(item){
+      return Math.floor((item.endAt - Date.now()) / 1000);
     }
 
-    function extrasCount(session){
-      return Number(session.extrasCount || 0);
+    function getSessionClass(item){
+      const sec = getSecondsLeft(item);
+      if(sec <= 60) return "danger";
+      if(sec <= 120) return "warning";
+      return "okay";
     }
 
-    function extraPrice(session){
-      return Number(session.extraPrice || EXTRA_5MIN_PRICE);
+    function getTotalValue(item){
+      return Number(item.baseValue || 0) + Number(item.extrasValue || 0);
     }
 
-    function extrasValue(session){
-      return extrasCount(session) * extraPrice(session);
-    }
-
-    function totalValue(session){
-      if (session.totalPaid !== undefined && session.totalPaid !== null) {
-        return Number(session.totalPaid);
-      }
-      return Number(session.price || 0) + extrasValue(session);
-    }
-
-    function colorClass(secondsLeft){
-      if(secondsLeft <= 0) return "red";
-      if(secondsLeft <= 120) return "yellow";
-      return "green";
-    }
-
-    function clientColor(secondsLeft){
-      if(secondsLeft <= 0) return "clientRed";
-      if(secondsLeft <= 120) return "clientYellow";
-      return "clientGreen";
+    function clientLink(id){
+      return `${window.location.origin}${window.location.pathname}?cliente=${id}`;
     }
 
     function vibrate(pattern){
-      if(navigator.vibrate){
-        navigator.vibrate(pattern);
-      }
+      try{
+        if(navigator.vibrate) navigator.vibrate(pattern);
+      }catch(e){}
     }
 
     function beep(times = 1, duration = 220, gap = 120){
@@ -621,21 +673,18 @@
         if(!AudioCtx) return;
         const ctx = new AudioCtx();
         let startAt = ctx.currentTime;
-
-        for(let i = 0; i < times; i++){
+        for(let i=0;i<times;i++){
           const osc = ctx.createOscillator();
           const gain = ctx.createGain();
-          osc.type = "sine";
+          osc.type = "square";
           osc.frequency.value = i % 2 === 0 ? 880 : 660;
           gain.gain.setValueAtTime(0.001, startAt);
           gain.gain.exponentialRampToValueAtTime(0.15, startAt + 0.02);
           gain.gain.exponentialRampToValueAtTime(0.001, startAt + duration / 1000);
-
           osc.connect(gain);
           gain.connect(ctx.destination);
           osc.start(startAt);
           osc.stop(startAt + duration / 1000);
-
           startAt += (duration + gap) / 1000;
         }
       }catch(e){}
@@ -655,73 +704,28 @@
       }
     });
 
-    function clientLink(id){
-      return `${window.location.origin}${window.location.pathname}?cliente=${id}`;
-    }
+    async function seedIfNeeded(){
+      if(seeded) return;
+      seeded = true;
 
-    function escapeHtml(str){
-      return String(str)
-        .replaceAll("&", "&amp;")
-        .replaceAll("<", "&lt;")
-        .replaceAll(">", "&gt;")
-        .replaceAll('"', "&quot;")
-        .replaceAll("'", "&#039;");
-    }
-
-    function endedSessions(){
-      return sessions.filter(s => s.status === "ended");
-    }
-
-    function totalRevenue(){
-      return endedSessions().reduce((sum, s) => sum + totalValue(s), 0);
-    }
-
-    function totalExtrasSold(){
-      return endedSessions().reduce((sum, s) => sum + extrasCount(s), 0);
-    }
-
-    function averageTicket(){
-      const ended = endedSessions();
-      if (!ended.length) return 0;
-      return totalRevenue() / ended.length;
-    }
-
-    function mostUsedVehicle(){
-      const counts = {};
-      endedSessions().forEach(s => {
-        counts[s.veiculo] = (counts[s.veiculo] || 0) + 1;
-      });
-      let winner = "-";
-      let max = 0;
-      Object.entries(counts).forEach(([vehicle, count]) => {
-        if(count > max){
-          max = count;
-          winner = vehicle;
-        }
-      });
-      return winner;
-    }
-
-    async function seedVehiclesIfNeeded(){
-      if(seededVehicles) return;
-      seededVehicles = true;
-      const snap = await getDocs(collection(db, "vehicles"));
-      if(snap.empty){
+      const vehicleSnap = await getDocs(collection(db, "vehicles"));
+      if(vehicleSnap.empty){
         for(const name of defaultVehicles){
           await addDoc(collection(db, "vehicles"), { name });
         }
       }
-    }
 
-    async function seedPlansIfNeeded(){
-      if(seededPlans) return;
-      seededPlans = true;
-      const snap = await getDocs(collection(db, "plans"));
-      if(snap.empty){
-        for(const plan of defaultPlans){
-          await addDoc(collection(db, "plans"), plan);
+      const planSnap = await getDocs(collection(db, "plans"));
+      if(planSnap.empty){
+        for(const p of defaultPlans){
+          await addDoc(collection(db, "plans"), p);
         }
       }
+    }
+
+    function setTab(tab){
+      currentTab = tab;
+      renderAdmin();
     }
 
     async function addVehicle(){
@@ -736,391 +740,465 @@
     }
 
     async function removeVehicle(id){
-      const activeUsing = sessions.some(s => s.status === "active" && s.vehicleId === id);
-      if(activeUsing){
+      const inUse = sessions.some(s => s.status === "active" && s.vehicleId === id);
+      if(inUse){
         alert("Esse veículo está em uso agora.");
         return;
       }
-      if(!confirm("Excluir este veículo?")) return;
+      if(!confirm("Excluir esse veículo?")) return;
       await deleteDoc(doc(db, "vehicles", id));
     }
 
     async function addPlan(){
-      const tempoInput = document.getElementById("tempoPlano");
-      const precoInput = document.getElementById("precoPlano");
+      const nome = (document.getElementById("novoPlanoNome").value || "").trim();
+      const minutos = parseInt(document.getElementById("novoPlanoMin").value, 10);
+      const valor = parseFloat((document.getElementById("novoPlanoValor").value || "0").replace(",", "."));
 
-      const tempo = parseInt((tempoInput.value || "").trim(), 10);
-      const preco = parseFloat((precoInput.value || "").replace(",", "."));
-
-      if(!tempo || tempo <= 0){
-        alert("Digite um tempo válido.");
+      if(!nome){
+        alert("Digite o nome do plano.");
+        return;
+      }
+      if(!minutos || minutos <= 0){
+        alert("Digite os minutos do plano.");
+        return;
+      }
+      if(!valor || valor <= 0){
+        alert("Digite o valor do plano.");
         return;
       }
 
-      if(isNaN(preco) || preco < 0){
-        alert("Digite um preço válido.");
-        return;
-      }
+      await addDoc(collection(db, "plans"), { nome, minutos, valor });
 
-      await addDoc(collection(db, "plans"), { tempo, preco });
-      tempoInput.value = "";
-      precoInput.value = "";
+      document.getElementById("novoPlanoNome").value = "";
+      document.getElementById("novoPlanoMin").value = "";
+      document.getElementById("novoPlanoValor").value = "";
     }
 
     async function removePlan(id){
-      if(!confirm("Excluir este plano?")) return;
+      const inUse = sessions.some(s => s.status === "active" && s.planId === id);
+      if(inUse){
+        alert("Esse plano está em uso agora.");
+        return;
+      }
+      if(!confirm("Excluir esse plano?")) return;
       await deleteDoc(doc(db, "plans", id));
     }
 
     async function startSession(){
-      const nomeInput = document.getElementById("nome");
-      const veiculoSelect = document.getElementById("veiculo");
-      const planoSelect = document.getElementById("plano");
-
-      const nome = (nomeInput.value || "").trim();
-      const vehicleId = veiculoSelect.value;
-      const planId = planoSelect.value;
+      const nome = (document.getElementById("nomeCrianca").value || "").trim();
+      const vehicleId = document.getElementById("veiculoEscolhido").value;
+      const planId = document.getElementById("planoEscolhido").value;
 
       if(!nome){
         alert("Digite o nome da criança.");
-        nomeInput.focus();
         return;
       }
 
       const vehicle = vehicles.find(v => v.id === vehicleId);
       if(!vehicle){
-        alert("Selecione um veículo.");
+        alert("Selecione o veículo.");
         return;
       }
 
       const plan = plans.find(p => p.id === planId);
       if(!plan){
-        alert("Selecione um plano.");
+        alert("Selecione o plano.");
         return;
       }
 
       const now = Date.now();
-      const endAt = now + plan.tempo * 60 * 1000;
 
       await addDoc(collection(db, "sessions"), {
         nome,
         vehicleId,
         veiculo: vehicle.name,
         planId,
-        minutesBought: plan.tempo,
-        price: Number(plan.preco),
+        planName: plan.nome,
+        baseMinutes: Number(plan.minutos),
+        baseValue: Number(plan.valor),
         extrasCount: 0,
-        extraPrice: EXTRA_5MIN_PRICE,
-        totalPaid: Number(plan.preco),
+        extrasValue: 0,
         startAt: now,
-        endAt,
+        endAt: now + Number(plan.minutos) * 60 * 1000,
         status: "active",
         requestMore: false,
         requestAt: null,
-        createdAt: now
+        createdAt: now,
+        endedAt: null
       });
 
-      nomeInput.value = "";
-      veiculoSelect.value = "";
-      planoSelect.value = "";
-    }
-
-    async function approveMore(id){
-      const item = sessions.find(s => s.id === id);
-      if(!item) return;
-
-      const base = item.endAt > Date.now() ? item.endAt : Date.now();
-      const newExtrasCount = Number(item.extrasCount || 0) + 1;
-      const extraUnit = Number(item.extraPrice || EXTRA_5MIN_PRICE);
-      const newTotalPaid = Number(item.price || 0) + (newExtrasCount * extraUnit);
-
-      await updateDoc(doc(db, "sessions", id), {
-        endAt: base + 5 * 60 * 1000,
-        extrasCount: newExtrasCount,
-        totalPaid: newTotalPaid,
-        requestMore: false,
-        requestAt: null
-      });
+      document.getElementById("nomeCrianca").value = "";
+      document.getElementById("veiculoEscolhido").value = "";
+      document.getElementById("planoEscolhido").value = "";
+      currentTab = "andamento";
+      renderAdmin();
     }
 
     async function requestMore(id){
+      const item = sessions.find(s => s.id === id);
+      if(!item || item.status !== "active") return;
+
       await updateDoc(doc(db, "sessions", id), {
         requestMore: true,
         requestAt: Date.now()
       });
     }
 
-    async function endSession(id){
-      const item = sessions.find(s => s.id === id);
-      if(!item) return;
-      if(!confirm("Encerrar atendimento?")) return;
-
-      await updateDoc(doc(db, "sessions", id), {
-        status: "ended",
-        requestMore: false,
-        totalPaid: totalValue(item)
-      });
-    }
-
-    async function reopenSession(id){
+    async function approveMore(id){
       const item = sessions.find(s => s.id === id);
       if(!item) return;
 
-      const base = Date.now();
-      const newExtrasCount = Number(item.extrasCount || 0) + 1;
-      const extraUnit = Number(item.extraPrice || EXTRA_5MIN_PRICE);
-      const newTotalPaid = Number(item.price || 0) + (newExtrasCount * extraUnit);
+      const extraValue = Number(item.baseValue || 0);
+      const base = item.endAt > Date.now() ? item.endAt : Date.now();
 
       await updateDoc(doc(db, "sessions", id), {
-        status: "active",
-        endAt: base + 5 * 60 * 1000,
-        extrasCount: newExtrasCount,
-        totalPaid: newTotalPaid,
+        endAt: base + EXTRA_MINUTES * 60 * 1000,
+        extrasCount: Number(item.extrasCount || 0) + 1,
+        extrasValue: Number(item.extrasValue || 0) + extraValue,
         requestMore: false,
         requestAt: null
       });
     }
 
-    function sortedActiveSessions(){
+    async function endSession(id){
+      if(!confirm("Encerrar atendimento?")) return;
+      await updateDoc(doc(db, "sessions", id), {
+        status: "ended",
+        requestMore: false,
+        requestAt: null,
+        endedAt: Date.now()
+      });
+    }
+
+    function getActiveSorted(){
       return sessions
         .filter(s => s.status === "active")
         .sort((a,b) => {
-          if(a.requestMore !== b.requestMore){
+          if(Boolean(a.requestMore) !== Boolean(b.requestMore)){
             return a.requestMore ? -1 : 1;
           }
-          const aLeft = a.endAt - Date.now();
-          const bLeft = b.endAt - Date.now();
-          return aLeft - bLeft;
+          return getSecondsLeft(a) - getSecondsLeft(b);
         });
+    }
+
+    function getEndedSorted(){
+      return sessions
+        .filter(s => s.status === "ended")
+        .sort((a,b) => Number(b.endedAt || 0) - Number(a.endedAt || 0));
+    }
+
+    function getSummary(){
+      const ended = getEndedSorted();
+      const total = ended.reduce((acc, item) => acc + getTotalValue(item), 0);
+      const extras = ended.reduce((acc, item) => acc + Number(item.extrasCount || 0), 0);
+
+      const vehicleUse = {};
+      ended.forEach(item => {
+        vehicleUse[item.veiculo] = (vehicleUse[item.veiculo] || 0) + 1;
+      });
+
+      let topVehicle = "-";
+      let topCount = 0;
+      Object.entries(vehicleUse).forEach(([name,count]) => {
+        if(count > topCount){
+          topCount = count;
+          topVehicle = name;
+        }
+      });
+
+      return {
+        totalAtivos: getActiveSorted().length,
+        totalRecebido: total,
+        totalExtras: extras,
+        ticketMedio: ended.length ? total / ended.length : 0,
+        topVehicle
+      };
     }
 
     function renderTabs(){
       return `
         <div class="tabs">
-          <button class="tabBtn ${activeTab === "atendimentos" ? "active" : ""}" data-tab="atendimentos">Atendimentos</button>
-          <button class="tabBtn ${activeTab === "andamento" ? "active" : ""}" data-tab="andamento">Em andamento</button>
-          <button class="tabBtn ${activeTab === "veiculos" ? "active" : ""}" data-tab="veiculos">Veículos</button>
-          <button class="tabBtn ${activeTab === "planos" ? "active" : ""}" data-tab="planos">Planos / Preços</button>
-          <button class="tabBtn ${activeTab === "relatorio" ? "active" : ""}" data-tab="relatorio">Relatório</button>
+          <button class="tabBtn ${currentTab === "novo" ? "active" : ""}" data-tab="novo">🎉 Atendimentos</button>
+          <button class="tabBtn ${currentTab === "andamento" ? "active" : ""}" data-tab="andamento">⏱️ Em andamento</button>
+          <button class="tabBtn ${currentTab === "veiculos" ? "active" : ""}" data-tab="veiculos">🚘 Veículos</button>
+          <button class="tabBtn ${currentTab === "planos" ? "active" : ""}" data-tab="planos">💰 Planos / Preços</button>
+          <button class="tabBtn ${currentTab === "relatorio" ? "active" : ""}" data-tab="relatorio">📊 Relatório</button>
         </div>
       `;
     }
 
-    function renderAtendimentosTab(){
-      return `
-        <div class="card">
-          <h2>🎉 Novo atendimento</h2>
-          <p class="sub">Preencha rapidinho e inicie o tempo.</p>
-
-          <label>Nome da criança</label>
-          <input id="nome" placeholder="Ex.: Miguel" />
-
-          <label>Veículo</label>
-          <select id="veiculo">
-            <option value="">Selecione um veículo</option>
-            ${vehicles.map(v => `<option value="${v.id}">${escapeHtml(v.name)}</option>`).join("")}
-          </select>
-
-          <label>Plano</label>
-          <select id="plano">
-            <option value="">Selecione um plano</option>
-            ${plans.map(p => `<option value="${p.id}">${p.tempo} min - R$ ${formatMoney(p.preco)}</option>`).join("")}
-          </select>
-
-          <div class="actions">
-            <button class="btn-green" id="btnIniciar">Iniciar atendimento</button>
-          </div>
-        </div>
-      `;
-    }
-
-    function renderEmAndamentoTab(){
-      const active = sortedActiveSessions();
-      const ended = sessions
-        .filter(s => s.status === "ended")
-        .sort((a,b) => b.createdAt - a.createdAt)
-        .slice(0, 10);
-
-      return `
-        <div class="card">
-          <h2>⏱️ Atendimentos ativos</h2>
-          <p class="sub">Quem pediu +5 min fica no topo. Depois vem quem tem menos tempo.</p>
-
-          <div id="activeSessions" class="sessionsGrid">
-            ${active.length === 0 ? `<div class="empty">Nenhum atendimento ativo agora.</div>` : ""}
-            ${active.map(item => renderSessionCard(item)).join("")}
-          </div>
-        </div>
-
-        <div class="card" style="margin-top:18px;">
-          <h2>🧾 Últimos encerrados</h2>
-          ${ended.length === 0 ? `<div class="empty">Nenhum atendimento encerrado ainda.</div>` : ""}
-          ${ended.map(item => `
-            <div class="vehicleItem" style="margin-top:10px;">
-              <div>
-                <strong>${escapeHtml(item.nome)}</strong><br>
-                <span style="font-size:14px;color:#374151;">${escapeHtml(item.veiculo)}</span><br>
-                <span style="font-size:13px;color:#6b7280;">
-                  Valor pago: <strong>R$ ${formatMoney(totalValue(item))}</strong>
-                </span>
-              </div>
-              <button class="btn-dark" data-reopen="${item.id}">Reabrir +5 min</button>
-            </div>
-          `).join("")}
-        </div>
-      `;
-    }
-
-    function renderVeiculosTab(){
-      return `
-        <div class="card">
-          <h2>🌈 Veículos</h2>
-          <p class="sub">Adicione novos veículos quando comprar mais.</p>
-
-          <label>Novo veículo</label>
-          <div class="row">
-            <input id="novoVeiculo" placeholder="Ex.: Mini Fusca Azul" />
-            <button class="btn-blue" id="btnAddVeiculo">Adicionar</button>
-          </div>
-
-          <div class="vehicleList">
-            ${vehicles.length === 0 ? `<div class="empty">Nenhum veículo cadastrado.</div>` : ""}
-            ${vehicles.map(v => `
-              <div class="vehicleItem">
-                <div><strong>${escapeHtml(v.name)}</strong></div>
-                <button class="btn-red" data-remove-vehicle="${v.id}">Excluir</button>
-              </div>
-            `).join("")}
-          </div>
-        </div>
-      `;
-    }
-
-    function renderPlanosTab(){
-      return `
-        <div class="card">
-          <h2>💰 Planos / Preços</h2>
-          <p class="sub">Aqui você edita minutos e valores quando quiser.</p>
-
-          <label>Tempo (minutos)</label>
-          <input id="tempoPlano" type="number" placeholder="Ex.: 5" />
-
-          <label>Preço (R$)</label>
-          <input id="precoPlano" type="number" step="0.01" placeholder="Ex.: 5,00" />
-
-          <div class="actions">
-            <button class="btn-green" id="btnAddPlano">Adicionar plano</button>
-          </div>
-
-          <div class="vehicleList">
-            ${plans.length === 0 ? `<div class="empty">Nenhum plano cadastrado.</div>` : ""}
-            ${plans.map(p => `
-              <div class="vehicleItem">
-                <div><strong>${p.tempo} min - R$ ${formatMoney(p.preco)}</strong></div>
-                <button class="btn-red" data-remove-plan="${p.id}">Excluir</button>
-              </div>
-            `).join("")}
-          </div>
-
-          <div class="card" style="margin-top:18px;background:#f9fafb;">
-            <h2 style="font-size:18px;">ℹ️ Extra automático</h2>
-            <p class="sub">Cada +5 min aprovado soma R$ ${formatMoney(EXTRA_5MIN_PRICE)} no total.</p>
-          </div>
-        </div>
-      `;
-    }
-
-    function renderRelatorioTab(){
-      const ended = endedSessions();
-
-      return `
-        <div class="card">
-          <h2>📊 Relatório</h2>
-          <p class="sub">Resumo dos atendimentos encerrados.</p>
-
-          <div class="reportGrid">
-            <div class="reportCard">
-              <div class="reportTitle">Atendimentos encerrados</div>
-              <div class="reportValue">${ended.length}</div>
-            </div>
-
-            <div class="reportCard">
-              <div class="reportTitle">Valor total recebido</div>
-              <div class="reportValue">R$ ${formatMoney(totalRevenue())}</div>
-            </div>
-
-            <div class="reportCard">
-              <div class="reportTitle">Extras +5 vendidos</div>
-              <div class="reportValue">${totalExtrasSold()}</div>
-            </div>
-
-            <div class="reportCard">
-              <div class="reportTitle">Ticket médio</div>
-              <div class="reportValue">R$ ${formatMoney(averageTicket())}</div>
-            </div>
-
-            <div class="reportCard">
-              <div class="reportTitle">Veículo mais usado</div>
-              <div class="reportValue" style="font-size:22px;">${escapeHtml(mostUsedVehicle())}</div>
-            </div>
-          </div>
-        </div>
-
-        <div class="card" style="margin-top:18px;">
-          <h2>🧾 Lista de encerrados</h2>
-          ${ended.length === 0 ? `<div class="empty">Nenhum atendimento encerrado ainda.</div>` : ""}
-          ${ended
-            .sort((a,b) => b.createdAt - a.createdAt)
-            .map(item => `
-              <div class="vehicleItem" style="margin-top:10px;">
-                <div>
-                  <strong>${escapeHtml(item.nome)}</strong><br>
-                  <span style="font-size:14px;color:#374151;">${escapeHtml(item.veiculo)}</span><br>
-                  <span style="font-size:13px;color:#6b7280;">
-                    Plano: ${item.minutesBought} min | Extras: ${extrasCount(item)} | Valor pago: <strong>R$ ${formatMoney(totalValue(item))}</strong>
-                  </span>
-                </div>
-              </div>
-            `).join("")}
-        </div>
-      `;
-    }
-
-    function renderAttendant(){
-      currentView = "attendant";
+    function renderAdmin(){
+      currentView = "admin";
       const appEl = document.getElementById("app");
-
-      let content = "";
-      if(activeTab === "atendimentos") content = renderAtendimentosTab();
-      if(activeTab === "andamento") content = renderEmAndamentoTab();
-      if(activeTab === "veiculos") content = renderVeiculosTab();
-      if(activeTab === "planos") content = renderPlanosTab();
-      if(activeTab === "relatorio") content = renderRelatorioTab();
+      const active = getActiveSorted();
+      const ended = getEndedSorted();
+      const summary = getSummary();
 
       appEl.innerHTML = `
         <div class="wrap">
           <div class="hero">
-            <h1>🚗 Família Sobre Rodas</h1>
-            <p>Painel do atendente</p>
+            <div class="heroTop">
+              <div class="brand">
+                <h1>🚗 Família Sobre Rodas</h1>
+                <p>Painel do atendente</p>
+              </div>
+            </div>
+            ${renderTabs()}
           </div>
 
-          ${renderTabs()}
-          ${content}
+          <div class="${currentTab === "novo" ? "" : "hidden"}">
+            <div class="grid grid2">
+              <div class="card">
+                <h2>🎉 Novo atendimento</h2>
+                <p class="sub">Preencha rapidinho e inicie o tempo.</p>
+
+                <label>Nome da criança</label>
+                <input id="nomeCrianca" placeholder="Ex.: Miguel" />
+
+                <label>Veículo</label>
+                <select id="veiculoEscolhido">
+                  <option value="">Selecione um veículo</option>
+                  ${vehicles.map(v => `<option value="${v.id}">${escapeHtml(v.name)}</option>`).join("")}
+                </select>
+
+                <label>Plano</label>
+                <select id="planoEscolhido">
+                  <option value="">Selecione um plano</option>
+                  ${plans.map(p => `<option value="${p.id}">${escapeHtml(p.nome)} - ${p.minutos} min - ${money(p.valor)}</option>`).join("")}
+                </select>
+
+                <div class="sectionActions">
+                  <button class="btn-green" id="btnStart">Iniciar atendimento</button>
+                </div>
+              </div>
+
+              <div class="card">
+                <h2>✨ Resumo rápido</h2>
+                <p class="sub">Visual mais bonito, igual a ideia da versão Lovable.</p>
+                <div class="statsGrid" style="grid-template-columns:repeat(2,minmax(0,1fr));">
+                  <div class="statCard statBlue">
+                    <div class="statLabel">Ativos agora</div>
+                    <div class="statValue">${summary.totalAtivos}</div>
+                  </div>
+                  <div class="statCard statGreen">
+                    <div class="statLabel">Valor recebido</div>
+                    <div class="statValue">${money(summary.totalRecebido)}</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="${currentTab === "andamento" ? "" : "hidden"}">
+            <div class="statsGrid">
+              <div class="statCard statBlue">
+                <div class="statLabel">Ativos</div>
+                <div class="statValue">${summary.totalAtivos}</div>
+              </div>
+              <div class="statCard statPink">
+                <div class="statLabel">Recebido</div>
+                <div class="statValue">${money(summary.totalRecebido)}</div>
+              </div>
+              <div class="statCard statGreen">
+                <div class="statLabel">Extras vendidos</div>
+                <div class="statValue">${summary.totalExtras}</div>
+              </div>
+              <div class="statCard statPurple">
+                <div class="statLabel">Carrinho mais usado</div>
+                <div class="statValue" style="font-size:22px;">${escapeHtml(summary.topVehicle)}</div>
+              </div>
+            </div>
+
+            <div class="card" style="margin-top:18px;">
+              <h2>⏱️ Passeios em andamento</h2>
+              <p class="sub">Quem pedir mais tempo sobe para o topo.</p>
+              ${active.length === 0 ? `<div class="empty">Nenhum atendimento ativo agora.</div>` : ""}
+              ${active.map(item => renderSessionCard(item)).join("")}
+            </div>
+          </div>
+
+          <div class="${currentTab === "veiculos" ? "" : "hidden"}">
+            <div class="card">
+              <h2>🚘 Veículos</h2>
+              <p class="sub">Cadastre e remova veículos.</p>
+
+              <label>Novo veículo</label>
+              <div class="row">
+                <input id="novoVeiculo" placeholder="Ex.: Mini Jeep Azul" />
+                <button class="btn-blue" id="btnAddVehicle">Adicionar</button>
+              </div>
+
+              <div class="listWrap">
+                ${vehicles.length === 0 ? `<div class="empty">Nenhum veículo cadastrado.</div>` : ""}
+                ${vehicles.map(v => `
+                  <div class="listItem">
+                    <div><strong>${escapeHtml(v.name)}</strong></div>
+                    <button class="btn-red" data-remove-vehicle="${v.id}">Excluir</button>
+                  </div>
+                `).join("")}
+              </div>
+            </div>
+          </div>
+
+          <div class="${currentTab === "planos" ? "" : "hidden"}">
+            <div class="card">
+              <h2>💰 Planos / Preços</h2>
+              <p class="sub">Cadastre planos e valores.</p>
+
+              <div class="row">
+                <div>
+                  <label>Nome do plano</label>
+                  <input id="novoPlanoNome" placeholder="Ex.: Passeio Rápido" />
+                </div>
+                <div>
+                  <label>Minutos</label>
+                  <input id="novoPlanoMin" type="number" placeholder="5" />
+                </div>
+                <div>
+                  <label>Valor</label>
+                  <input id="novoPlanoValor" type="number" step="0.01" placeholder="5.00" />
+                </div>
+              </div>
+
+              <div class="sectionActions">
+                <button class="btn-blue" id="btnAddPlan">Adicionar plano</button>
+              </div>
+
+              <div class="listWrap">
+                ${plans.length === 0 ? `<div class="empty">Nenhum plano cadastrado.</div>` : ""}
+                ${plans.map(p => `
+                  <div class="listItem">
+                    <div>
+                      <strong>${escapeHtml(p.nome)}</strong><br />
+                      ${p.minutos} min - ${money(p.valor)}
+                    </div>
+                    <button class="btn-red" data-remove-plan="${p.id}">Excluir</button>
+                  </div>
+                `).join("")}
+              </div>
+            </div>
+          </div>
+
+          <div class="${currentTab === "relatorio" ? "" : "hidden"}">
+            <div class="statsGrid">
+              <div class="statCard statBlue">
+                <div class="statLabel">Encerrados</div>
+                <div class="statValue">${ended.length}</div>
+              </div>
+              <div class="statCard statPink">
+                <div class="statLabel">Total recebido</div>
+                <div class="statValue">${money(summary.totalRecebido)}</div>
+              </div>
+              <div class="statCard statGreen">
+                <div class="statLabel">Ticket médio</div>
+                <div class="statValue">${money(summary.ticketMedio)}</div>
+              </div>
+              <div class="statCard statPurple">
+                <div class="statLabel">Mais usado</div>
+                <div class="statValue" style="font-size:22px;">${escapeHtml(summary.topVehicle)}</div>
+              </div>
+            </div>
+
+            <div class="card" style="margin-top:18px;">
+              <h2>📊 Histórico de atendimentos</h2>
+              ${ended.length === 0 ? `<div class="empty">Nenhum atendimento encerrado ainda.</div>` : ""}
+              ${ended.map(item => `
+                <div class="listItem">
+                  <div>
+                    <strong>${escapeHtml(item.nome)}</strong> - ${escapeHtml(item.veiculo)}<br />
+                    Plano: ${escapeHtml(item.planName)}<br />
+                    Extras: ${item.extrasCount || 0}x = ${money(item.extrasValue || 0)}<br />
+                    Valor pago: <strong>${money(getTotalValue(item))}</strong>
+                  </div>
+                </div>
+              `).join("")}
+            </div>
+          </div>
         </div>
       `;
 
+      bindAdminEvents();
+      renderAllQRCodes();
+    }
+
+    function renderSessionCard(item){
+      const sec = getSecondsLeft(item);
+
+      let banner = "";
+      if(item.requestMore){
+        banner = `<div class="alertBanner alertYellow">🚨 CLIENTE ESTÁ SOLICITANDO MAIS TEMPO</div>`;
+      }else if(sec <= 0){
+        banner = `<div class="alertBanner alertRed">⛔ TEMPO ENCERRADO</div>`;
+      }else if(sec <= 60){
+        banner = `<div class="alertBanner alertRed">⚠️ ATENÇÃO: TEMPO ACABANDO</div>`;
+      }else if(sec <= 120){
+        banner = `<div class="alertBanner alertYellow">⏰ ÚLTIMOS 2 MINUTOS</div>`;
+      }
+
+      return `
+        <div class="session ${getSessionClass(item)} ${item.requestMore ? "requesting" : ""}" data-session-id="${item.id}">
+          <div class="sessionTop">
+            <div>
+              <div class="sessionName">${escapeHtml(item.nome)}</div>
+              <div class="sessionVehicle">🚘 ${escapeHtml(item.veiculo)}</div>
+              <div class="planBadge">${escapeHtml(item.planName)}</div>
+            </div>
+            <div class="timer" data-timer="${item.id}">
+              ${sec > 0 ? formatTime(sec) : "00:00"}
+            </div>
+          </div>
+
+          ${banner}
+
+          <div class="moneyGrid">
+            <div class="moneyBox">
+              <div class="moneyLabel">Plano inicial</div>
+              <div class="moneyValue">${money(item.baseValue)}</div>
+            </div>
+            <div class="moneyBox">
+              <div class="moneyLabel">Extras</div>
+              <div class="moneyValue">${item.extrasCount || 0}x</div>
+            </div>
+            <div class="moneyBox">
+              <div class="moneyLabel">Valor extras</div>
+              <div class="moneyValue">${money(item.extrasValue)}</div>
+            </div>
+            <div class="moneyBox">
+              <div class="moneyLabel">Total atual</div>
+              <div class="moneyValue">${money(getTotalValue(item))}</div>
+            </div>
+          </div>
+
+          <div class="sessionButtons">
+            <button class="btn-green" data-approve="${item.id}">+ Liberar +5 min</button>
+            <button class="btn-red" data-end="${item.id}">⨂ Encerrar</button>
+          </div>
+
+          <div class="qrWrap">
+            <div class="qrBox" data-qrcode="${item.id}"></div>
+            <div class="qrInfo">
+              <strong>Link do cliente</strong><br /><br />
+              <a class="linkBtn btn-purple" href="${clientLink(item.id)}" target="_blank">Abrir tela do cliente</a>
+              <button class="btn-blue" data-copy="${item.id}" style="margin-top:10px;">Copiar link</button>
+            </div>
+          </div>
+        </div>
+      `;
+    }
+
+    function bindAdminEvents(){
       document.querySelectorAll("[data-tab]").forEach(btn => {
         btn.onclick = () => setTab(btn.dataset.tab);
       });
 
-      const btnIniciar = document.getElementById("btnIniciar");
-      if(btnIniciar) btnIniciar.onclick = startSession;
+      const btnStart = document.getElementById("btnStart");
+      if(btnStart) btnStart.onclick = startSession;
 
-      const btnAddVeiculo = document.getElementById("btnAddVeiculo");
-      if(btnAddVeiculo) btnAddVeiculo.onclick = addVehicle;
+      const btnAddVehicle = document.getElementById("btnAddVehicle");
+      if(btnAddVehicle) btnAddVehicle.onclick = addVehicle;
 
-      const btnAddPlano = document.getElementById("btnAddPlano");
-      if(btnAddPlano) btnAddPlano.onclick = addPlan;
+      const btnAddPlan = document.getElementById("btnAddPlan");
+      if(btnAddPlan) btnAddPlan.onclick = addPlan;
 
       document.querySelectorAll("[data-remove-vehicle]").forEach(btn => {
         btn.onclick = () => removeVehicle(btn.dataset.removeVehicle);
@@ -1138,10 +1216,6 @@
         btn.onclick = () => endSession(btn.dataset.end);
       });
 
-      document.querySelectorAll("[data-reopen]").forEach(btn => {
-        btn.onclick = () => reopenSession(btn.dataset.reopen);
-      });
-
       document.querySelectorAll("[data-copy]").forEach(btn => {
         btn.onclick = async () => {
           const link = clientLink(btn.dataset.copy);
@@ -1153,237 +1227,165 @@
           }
         };
       });
+    }
 
+    function renderAllQRCodes(){
       document.querySelectorAll("[data-qrcode]").forEach(el => {
-        const id = el.dataset.qrcode;
-        const url = clientLink(id);
         el.innerHTML = "";
         new QRCode(el, {
-          text: url,
+          text: clientLink(el.dataset.qrcode),
           width: 140,
           height: 140
         });
       });
     }
 
-    function renderSessionCard(item){
-      const left = Math.floor((item.endAt - Date.now()) / 1000);
-      const color = colorClass(left);
-      const flash = left <= 60 ? "flash" : "";
-      const requesting = item.requestMore ? "requesting" : "";
+    async function activateClientAlerts(item, sec){
+      const id = item.id;
 
-      return `
-        <div class="session ${color} ${flash} ${requesting}" data-session-id="${item.id}">
-          <div class="sessionTop">
-            <div>
-              <div class="name">${escapeHtml(item.nome)}</div>
-              <div class="vehicle">🚘 ${escapeHtml(item.veiculo)}</div>
-              <div class="badge">Plano: ${item.minutesBought} min - R$ ${formatMoney(item.price)}</div>
-            </div>
-            <div>
-              ${item.requestMore ? `<div class="badge">🚨 PEDIU +5 MIN</div>` : ""}
-            </div>
-          </div>
-
-          ${item.requestMore ? `<div class="requestBanner">⚠️ O CLIENTE PEDIU MAIS 5 MINUTOS</div>` : ""}
-
-          <div class="timer" data-timer="${item.id}">${left > 0 ? "⏳ " + formatTime(left) : "⛔ 00:00"}</div>
-
-          <div class="moneyBox">
-            <div class="moneyRow">
-              <span>Plano inicial</span>
-              <span>R$ ${formatMoney(item.price)}</span>
-            </div>
-            <div class="moneyRow">
-              <span>Extras aprovados</span>
-              <span>${extrasCount(item)} x R$ ${formatMoney(extraPrice(item))}</span>
-            </div>
-            <div class="moneyRow">
-              <span>Valor extra</span>
-              <span>R$ ${formatMoney(extrasValue(item))}</span>
-            </div>
-            <div class="moneyTotal">
-              Total a cobrar: R$ ${formatMoney(totalValue(item))}
-            </div>
-          </div>
-
-          <div class="qrWrap">
-            <div class="qrBox" data-qrcode="${item.id}"></div>
-            <div class="qrHelp">Peça para o cliente apontar a câmera para este QR Code.</div>
-          </div>
-
-          <div class="actions">
-            <a class="linkBtn btn-purple" href="${clientLink(item.id)}" target="_blank">Tela do cliente</a>
-            <button class="btn-blue" data-copy="${item.id}">Copiar link</button>
-            <button class="btn-yellow" data-approve="${item.id}">Liberar +5 min</button>
-            <button class="btn-red" data-end="${item.id}">Encerrar</button>
-          </div>
-        </div>
-      `;
-    }
-
-    function updateTimersOnly(){
-      if(currentView === "attendant" && activeTab === "andamento"){
-        sessions.filter(s => s.status === "active").forEach(item => {
-          const left = Math.floor((item.endAt - Date.now()) / 1000);
-          const timerEl = document.querySelector(`[data-timer="${item.id}"]`);
-          const cardEl = document.querySelector(`[data-session-id="${item.id}"]`);
-          if(timerEl){
-            timerEl.textContent = left > 0 ? "⏳ " + formatTime(left) : "⛔ 00:00";
-          }
-          if(cardEl){
-            cardEl.classList.remove("green","yellow","red","flash");
-            cardEl.classList.add(colorClass(left));
-            if(left <= 60) cardEl.classList.add("flash");
-          }
-        });
-      } else if(currentView === "client") {
-        const clientId = qs("cliente");
-        const session = sessions.find(s => s.id === clientId);
-        if(session) renderClient(session);
-      }
-    }
-
-    async function activateClientAlerts(session, left){
-      const id = session.id;
-
-      if(left <= 120 && left > 60 && !vibrated120.has(id)){
+      if(sec <= 120 && sec > 60 && !vibrated120.has(id)){
         vibrated120.add(id);
-        vibrate([250,120,250]);
-      }
-      if(left <= 120 && left > 60 && !sounded120.has(id)){
-        sounded120.add(id);
+        vibrate([250,100,250]);
         beep(2, 200, 100);
       }
 
-      if(left <= 60 && left > 0 && !vibrated60.has(id)){
+      if(sec <= 60 && sec > 0 && !vibrated60.has(id)){
         vibrated60.add(id);
         vibrate([400,120,400,120,400,120,400]);
-      }
-      if(left <= 60 && left > 0 && !sounded60.has(id)){
-        sounded60.add(id);
-        beep(4, 220, 120);
+        beep(4, 230, 120);
       }
 
-      if(left <= 0 && !vibrated0.has(id)){
+      if(sec <= 0 && !vibrated0.has(id)){
         vibrated0.add(id);
-        vibrate([600,140,600,140,600]);
-      }
-      if(left <= 0 && !sounded0.has(id)){
-        sounded0.add(id);
-        beep(5, 260, 130);
+        vibrate([700,160,700,160,700]);
+        beep(5, 260, 140);
       }
     }
 
-    async function renderClient(session){
+    async function renderClient(item){
       currentView = "client";
-      const left = Math.floor((session.endAt - Date.now()) / 1000);
-      const ended = session.status !== "active" || left <= 0;
+      const sec = getSecondsLeft(item);
+      const ended = item.status !== "active" || sec <= 0;
       const appEl = document.getElementById("app");
 
-      const strongAlert = left <= 60;
-      const veryEnded = ended ? `<div class="bigWarning">⛔ TEMPO ENCERRADO</div>` : "";
-      const nearlyDone = !ended && strongAlert ? `<div class="bigWarning">⚠️ ESTÁ ACABANDO ⚠️</div>` : "";
+      let clientAlert = "";
+      if(item.requestMore){
+        clientAlert = `<div class="clientAlert alertYellow">📣 PEDIDO ENVIADO PARA A EQUIPE</div>`;
+      }else if(ended){
+        clientAlert = `<div class="clientAlert alertRed">⛔ TEMPO ENCERRADO</div>`;
+      }else if(sec <= 60){
+        clientAlert = `<div class="clientAlert alertRed">⚠️ ATENÇÃO: TEMPO ACABANDO</div>`;
+      }else if(sec <= 120){
+        clientAlert = `<div class="clientAlert alertYellow">⏰ ÚLTIMOS 2 MINUTOS</div>`;
+      }
 
       appEl.innerHTML = `
         <div class="clientWrap">
-          <div class="clientCard ${clientColor(left)} ${strongAlert || ended ? "clientDanger" : ""}">
+          <div class="clientCard ${ended || sec <= 60 ? "danger" : sec <= 120 ? "warning" : ""}">
             <div class="clientTitle">Família Sobre Rodas</div>
-            <div class="clientName">${escapeHtml(session.nome)}</div>
-            <div class="clientVehicle">🚘 ${escapeHtml(session.veiculo)}</div>
-            <div class="clientTimer">${ended ? "00:00" : formatTime(left)}</div>
+            <div class="clientName">${escapeHtml(item.nome)}</div>
+            <div class="clientVehicle">🚘 ${escapeHtml(item.veiculo)}</div>
 
-            <div class="notice">
-              ${ended ? "Tempo encerrado" : left <= 60 ? "Último minuto" : left <= 120 ? "Faltam 2 minutos" : "Tempo em andamento"}
-            </div>
+            <div class="clientTimer">${ended ? "00:00" : formatTime(sec)}</div>
 
-            ${nearlyDone}
-            ${veryEnded}
+            ${clientAlert}
 
-            <div class="clientMoney">
-              <div class="line">
-                <span>Plano inicial</span>
-                <span>R$ ${formatMoney(session.price)}</span>
+            <div class="clientPrices">
+              <div class="clientPriceBox">
+                <div class="l">Plano inicial</div>
+                <div class="v">${money(item.baseValue)}</div>
               </div>
-              <div class="line">
-                <span>Extras aprovados</span>
-                <span>${extrasCount(session)} x R$ ${formatMoney(extraPrice(session))}</span>
+              <div class="clientPriceBox">
+                <div class="l">Extras</div>
+                <div class="v">${money(item.extrasValue)}</div>
               </div>
-              <div class="line">
-                <span>Valor extra</span>
-                <span>R$ ${formatMoney(extrasValue(session))}</span>
-              </div>
-              <div class="total">
-                Total atual: R$ ${formatMoney(totalValue(session))}
+              <div class="clientPriceBox">
+                <div class="l">Total atual</div>
+                <div class="v">${money(getTotalValue(item))}</div>
               </div>
             </div>
 
-            <div class="actions" style="justify-content:center; margin-top:18px;">
-              <button class="btn-pink" id="btnPedirMais" ${ended ? "disabled" : ""}>Pedir +5 min</button>
-              <button class="btn-white" id="btnManterTela">Manter tela ligada</button>
+            <div class="clientButtons">
+              <button class="btn-pink" id="btnClientMore" ${ended || item.requestMore ? "disabled" : ""}>Pedir mais tempo</button>
+              <button class="btn-white" id="btnKeepScreen">Manter tela ligada</button>
             </div>
 
-            <p class="sub" style="margin-top:14px;">
-              ${session.requestMore ? "Pedido enviado. Aguarde a liberação do atendente." : "Se quiser mais tempo, clique no botão acima."}
-            </p>
-
-            <div class="wakeNote">
-              Para não perder o alerta, mantenha essa tela aberta.
+            <div class="smallNote">
+              ${item.requestMore ? "Seu pedido foi enviado para a equipe." : "Se quiser mais tempo, clique no botão acima."}
             </div>
           </div>
         </div>
       `;
 
-      const btn = document.getElementById("btnPedirMais");
-      if(btn){
-        btn.onclick = () => requestMore(session.id);
+      const btnClientMore = document.getElementById("btnClientMore");
+      if(btnClientMore){
+        btnClientMore.onclick = () => requestMore(item.id);
       }
 
-      const wakeBtn = document.getElementById("btnManterTela");
-      if(wakeBtn){
-        wakeBtn.onclick = async () => {
+      const btnKeepScreen = document.getElementById("btnKeepScreen");
+      if(btnKeepScreen){
+        btnKeepScreen.onclick = async () => {
           await requestWakeLock();
           alert("Pronto. O celular vai tentar manter a tela ligada.");
         };
       }
 
-      await activateClientAlerts(session, left);
       await requestWakeLock();
+      await activateClientAlerts(item, sec);
     }
 
     function renderNotFound(){
       document.getElementById("app").innerHTML = `
         <div class="clientWrap">
           <div class="clientCard">
-            <h2>Atendimento não encontrado</h2>
+            <h2>Passeio não encontrado</h2>
+            <p class="sub">Verifique o link ou QR Code com a equipe.</p>
           </div>
         </div>
       `;
     }
 
+    function updateLiveUI(){
+      if(currentView === "admin"){
+        sessions.filter(s => s.status === "active").forEach(item => {
+          const sec = getSecondsLeft(item);
+          const timerEl = document.querySelector(`[data-timer="${item.id}"]`);
+          const cardEl = document.querySelector(`[data-session-id="${item.id}"]`);
+
+          if(timerEl){
+            timerEl.textContent = sec > 0 ? formatTime(sec) : "00:00";
+          }
+
+          if(cardEl){
+            cardEl.classList.remove("okay","warning","danger");
+            cardEl.classList.add(getSessionClass(item));
+          }
+        });
+      }else{
+        const clientId = qs("cliente");
+        const item = sessions.find(s => s.id === clientId);
+        if(item) renderClient(item);
+      }
+    }
+
     async function init(){
       try{
-        await seedVehiclesIfNeeded();
-        await seedPlansIfNeeded();
+        await seedIfNeeded();
 
         onSnapshot(collection(db, "vehicles"), snap => {
           vehicles = snap.docs
             .map(d => ({ id:d.id, ...d.data() }))
             .sort((a,b) => a.name.localeCompare(b.name));
 
-          if(!qs("cliente")){
-            renderAttendant();
-          }
+          if(!qs("cliente")) renderAdmin();
         });
 
         onSnapshot(collection(db, "plans"), snap => {
           plans = snap.docs
             .map(d => ({ id:d.id, ...d.data() }))
-            .sort((a,b) => a.tempo - b.tempo);
+            .sort((a,b) => Number(a.minutos) - Number(b.minutos));
 
-          if(!qs("cliente")){
-            renderAttendant();
-          }
+          if(!qs("cliente")) renderAdmin();
         });
 
         onSnapshot(collection(db, "sessions"), snap => {
@@ -1391,16 +1393,16 @@
 
           const clientId = qs("cliente");
           if(clientId){
-            const session = sessions.find(s => s.id === clientId);
-            if(session) renderClient(session);
+            const item = sessions.find(s => s.id === clientId);
+            if(item) renderClient(item);
             else renderNotFound();
           }else{
-            renderAttendant();
+            renderAdmin();
           }
         });
 
         if(timerInterval) clearInterval(timerInterval);
-        timerInterval = setInterval(updateTimersOnly, 1000);
+        timerInterval = setInterval(updateLiveUI, 1000);
       }catch(err){
         console.error(err);
         document.getElementById("app").innerHTML = `
