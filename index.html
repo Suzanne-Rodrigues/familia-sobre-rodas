@@ -4,7 +4,6 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Família Sobre Rodas</title>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
   <style>
     :root{
       --bg1:#ff8fb1;
@@ -59,7 +58,7 @@
 
     .brand h1{
       margin:0;
-      font-size:42px;
+      font-size:40px;
       line-height:1.05;
     }
 
@@ -102,7 +101,7 @@
     .card{
       background:var(--card);
       border-radius:var(--radius);
-      padding:18px;
+      padding:20px;
       box-shadow:var(--shadow);
       border:4px solid rgba(255,255,255,.35);
     }
@@ -225,199 +224,59 @@
       margin-top:14px;
     }
 
-    .listWrap{
-      display:flex;
-      flex-direction:column;
-      gap:12px;
-      margin-top:14px;
-    }
-
-    .listItem{
-      display:flex;
-      justify-content:space-between;
-      align-items:center;
-      gap:12px;
-      flex-wrap:wrap;
-      padding:14px;
-      border-radius:18px;
-      background:linear-gradient(135deg,#eef4ff,#fff2f7);
-      border:2px solid #dbeafe;
-    }
-
     .empty{
       color:var(--muted);
       padding:10px 0;
     }
 
-    .session{
-      margin-top:16px;
-      border-radius:30px;
-      padding:20px;
-      background:#fff;
-      box-shadow:var(--shadow);
-      border:4px solid #e5e7eb;
-      position:relative;
-      overflow:hidden;
-    }
-
-    .session.okay{
-      background:linear-gradient(135deg,#ffffff,#f0fdf4);
-      border-color:#bbf7d0;
-    }
-
-    .session.warning{
-      background:linear-gradient(135deg,#ffffff,#fff7ed);
-      border-color:#fde68a;
-    }
-
-    .session.danger{
-      background:linear-gradient(135deg,#ffffff,#fff1f2);
-      border-color:#fecaca;
-      animation:dangerPulse .75s linear infinite;
-    }
-
-    .session.requesting{
-      border-color:#fff200 !important;
-      box-shadow:0 0 0 8px rgba(255,242,0,.24), var(--shadow);
-      animation:requestPulse 1s linear infinite;
-    }
-
-    @keyframes requestPulse{
-      0%,100%{transform:scale(1)}
-      50%{transform:scale(1.008)}
-    }
-
-    @keyframes dangerPulse{
-      0%,100%{filter:brightness(1)}
-      50%{filter:brightness(1.09)}
-    }
-
-    .sessionTop{
-      display:flex;
-      justify-content:space-between;
-      align-items:flex-start;
-      gap:14px;
-      flex-wrap:wrap;
-    }
-
-    .sessionName{
-      font-size:32px;
-      font-weight:bold;
-      color:#111827;
-    }
-
-    .sessionVehicle{
-      margin-top:6px;
-      font-size:18px;
-      color:#374151;
-      font-weight:bold;
-    }
-
-    .planBadge{
-      display:inline-block;
-      margin-top:10px;
-      background:#eef2ff;
-      color:#111827;
-      border-radius:999px;
-      padding:8px 12px;
-      font-size:13px;
-      font-weight:bold;
-    }
-
-    .timer{
-      font-size:58px;
-      font-weight:bold;
-      line-height:1;
-      text-align:right;
-    }
-
-    .alertBanner{
-      margin-top:16px;
-      border-radius:20px;
-      padding:16px;
-      font-size:22px;
-      font-weight:bold;
-      text-align:center;
-      box-shadow:0 10px 20px rgba(0,0,0,.12);
-    }
-
-    .alertYellow{
-      background:#fff200;
-      color:#111827;
-      animation:alertFlash 0.8s linear infinite;
-    }
-
-    .alertRed{
-      background:#ef4444;
-      color:#fff;
-      animation:alertFlash 0.6s linear infinite;
-    }
-
-    @keyframes alertFlash{
-      0%,100%{filter:brightness(1)}
-      50%{filter:brightness(1.18)}
-    }
-
-    .moneyGrid{
-      margin-top:16px;
-      display:grid;
-      gap:12px;
-      grid-template-columns:repeat(4,minmax(0,1fr));
-    }
-
-    .moneyBox{
-      background:#f8fafc;
-      border:2px solid #dbeafe;
-      border-radius:18px;
-      padding:14px;
-    }
-
-    .moneyLabel{
-      font-size:13px;
-      color:#6b7280;
-      margin-bottom:4px;
-    }
-
-    .moneyValue{
-      font-size:28px;
-      font-weight:bold;
-      color:#1d4ed8;
-    }
-
-    .sessionButtons{
-      margin-top:16px;
-      display:grid;
-      gap:12px;
-      grid-template-columns:repeat(2,minmax(0,1fr));
-    }
-
-    .qrWrap{
-      margin-top:16px;
-      background:#f8fafc;
-      border:2px dashed #cbd5e1;
-      border-radius:22px;
-      padding:14px;
-      display:flex;
-      gap:14px;
-      align-items:center;
-      flex-wrap:wrap;
-    }
-
-    .qrBox{
-      background:#fff;
-      border-radius:16px;
-      padding:10px;
-      min-width:140px;
-      min-height:140px;
+    .loginWrap{
+      min-height:100vh;
       display:flex;
       align-items:center;
       justify-content:center;
-      box-shadow:0 8px 18px rgba(0,0,0,.08);
+      padding:20px;
     }
 
-    .qrInfo{
-      flex:1;
-      min-width:220px;
+    .loginCard{
+      width:min(520px,100%);
+      background:#fff;
+      border-radius:34px;
+      padding:26px;
+      box-shadow:var(--shadow);
+      border:6px solid rgba(255,255,255,.4);
+    }
+
+    .loginTitle{
+      font-size:34px;
+      font-weight:bold;
+      color:#111827;
+      margin:0;
+      text-align:center;
+    }
+
+    .loginSub{
+      text-align:center;
+      color:#6b7280;
+      margin:8px 0 18px;
+    }
+
+    .loginHelp{
+      margin-top:14px;
+      background:#f8fafc;
+      border:2px solid #dbeafe;
+      border-radius:20px;
+      padding:14px;
+      color:#374151;
+      font-size:14px;
+    }
+
+    .loginError{
+      margin-top:12px;
+      padding:12px 14px;
+      border-radius:16px;
+      background:#fee2e2;
+      color:#991b1b;
+      font-weight:bold;
     }
 
     .clientWrap{
@@ -437,22 +296,6 @@
       box-shadow:var(--shadow);
       border:6px solid rgba(255,255,255,.5);
       text-align:center;
-      transition:.2s ease;
-    }
-
-    .clientCard.warning{
-      background:linear-gradient(135deg,#fff7ed,#fef3c7);
-    }
-
-    .clientCard.danger{
-      background:linear-gradient(135deg,#fee2e2,#fecaca);
-      animation:clientPulse .55s linear infinite;
-      box-shadow:0 0 0 12px rgba(239,68,68,.18), var(--shadow);
-    }
-
-    @keyframes clientPulse{
-      0%,100%{transform:scale(1); filter:brightness(1)}
-      50%{transform:scale(1.012); filter:brightness(1.22)}
     }
 
     .clientTitle{
@@ -489,6 +332,8 @@
       font-size:30px;
       font-weight:bold;
       box-shadow:0 10px 20px rgba(0,0,0,.14);
+      background:#fff200;
+      color:#111827;
     }
 
     .clientPrices{
@@ -525,29 +370,17 @@
       margin-top:18px;
     }
 
-    .smallNote{
-      margin-top:14px;
-      color:#4b5563;
-      font-size:14px;
-      font-weight:bold;
-    }
-
     @media (max-width:1100px){
       .grid2{grid-template-columns:1fr}
       .statsGrid{grid-template-columns:repeat(2,minmax(0,1fr))}
-      .moneyGrid{grid-template-columns:repeat(2,minmax(0,1fr))}
     }
 
     @media (max-width:760px){
       .statsGrid,
-      .moneyGrid,
-      .clientPrices,
-      .sessionButtons{
+      .clientPrices{
         grid-template-columns:1fr;
       }
-      .hero .brand h1{font-size:30px}
-      .sessionName{font-size:26px}
-      .timer{text-align:left; font-size:42px}
+      .brand h1{font-size:30px}
       .clientName{font-size:34px}
       .clientTimer{font-size:68px}
       .clientAlert{font-size:24px}
@@ -562,12 +395,7 @@
     import {
       getFirestore,
       collection,
-      addDoc,
-      onSnapshot,
-      updateDoc,
-      deleteDoc,
-      doc,
-      getDocs
+      onSnapshot
     } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js";
 
     const firebaseConfig = {
@@ -583,34 +411,15 @@
     const app = initializeApp(firebaseConfig);
     const db = getFirestore(app);
 
-    const defaultVehicles = [
-      "Audi",
-      "Relâmpago Vermelho",
-      "Estrela Azul",
-      "Mini Jeep",
-      "UTV Aventura"
-    ];
-
-    const defaultPlans = [
-      { nome:"Passeio Rápido", minutos:5, valor:5 },
-      { nome:"Passeio Divertido", minutos:10, valor:10 },
-      { nome:"Passeio Completo", minutos:15, valor:15 }
-    ];
-
-    const EXTRA_MINUTES = 5;
+    const LOGIN_USER = "admin";
+    const LOGIN_PASS = "148369";
 
     let vehicles = [];
     let plans = [];
     let sessions = [];
     let currentTab = "novo";
     let currentView = "admin";
-    let seeded = false;
     let timerInterval = null;
-    let wakeLock = null;
-
-    let vibrated120 = new Set();
-    let vibrated60 = new Set();
-    let vibrated0 = new Set();
 
     function qs(name){
       const url = new URL(window.location.href);
@@ -641,272 +450,30 @@
       return Math.floor((item.endAt - Date.now()) / 1000);
     }
 
-    function getSessionClass(item){
-      const sec = getSecondsLeft(item);
-      if(sec <= 60) return "danger";
-      if(sec <= 120) return "warning";
-      return "okay";
-    }
-
     function getTotalValue(item){
       return Number(item.baseValue || 0) + Number(item.extrasValue || 0);
     }
 
-    function clientLink(id){
-      return `${window.location.origin}${window.location.pathname}?cliente=${id}`;
+    function isLoggedIn(){
+      return localStorage.getItem("fsr_logged_in") === "true";
     }
 
-    function vibrate(pattern){
-      try{
-        if(navigator.vibrate) navigator.vibrate(pattern);
-      }catch(e){}
-    }
-
-    function beep(times = 1, duration = 220, gap = 120){
-      try{
-        const AudioCtx = window.AudioContext || window.webkitAudioContext;
-        if(!AudioCtx) return;
-        const ctx = new AudioCtx();
-        let startAt = ctx.currentTime;
-        for(let i=0;i<times;i++){
-          const osc = ctx.createOscillator();
-          const gain = ctx.createGain();
-          osc.type = "square";
-          osc.frequency.value = i % 2 === 0 ? 880 : 660;
-          gain.gain.setValueAtTime(0.001, startAt);
-          gain.gain.exponentialRampToValueAtTime(0.15, startAt + 0.02);
-          gain.gain.exponentialRampToValueAtTime(0.001, startAt + duration / 1000);
-          osc.connect(gain);
-          gain.connect(ctx.destination);
-          osc.start(startAt);
-          osc.stop(startAt + duration / 1000);
-          startAt += (duration + gap) / 1000;
-        }
-      }catch(e){}
-    }
-
-    async function requestWakeLock(){
-      try{
-        if("wakeLock" in navigator && document.visibilityState === "visible"){
-          wakeLock = await navigator.wakeLock.request("screen");
-        }
-      }catch(e){}
-    }
-
-    document.addEventListener("visibilitychange", async () => {
-      if(currentView === "client" && document.visibilityState === "visible"){
-        await requestWakeLock();
+    function login(user, pass){
+      if(user === LOGIN_USER && pass === LOGIN_PASS){
+        localStorage.setItem("fsr_logged_in", "true");
+        return true;
       }
-    });
+      return false;
+    }
 
-    async function seedIfNeeded(){
-      if(seeded) return;
-      seeded = true;
-
-      const vehicleSnap = await getDocs(collection(db, "vehicles"));
-      if(vehicleSnap.empty){
-        for(const name of defaultVehicles){
-          await addDoc(collection(db, "vehicles"), { name });
-        }
-      }
-
-      const planSnap = await getDocs(collection(db, "plans"));
-      if(planSnap.empty){
-        for(const p of defaultPlans){
-          await addDoc(collection(db, "plans"), p);
-        }
-      }
+    function logout(){
+      localStorage.removeItem("fsr_logged_in");
+      renderApp();
     }
 
     function setTab(tab){
       currentTab = tab;
       renderAdmin();
-    }
-
-    async function addVehicle(){
-      const input = document.getElementById("novoVeiculo");
-      const name = (input.value || "").trim();
-      if(!name){
-        alert("Digite o nome do veículo.");
-        return;
-      }
-      await addDoc(collection(db, "vehicles"), { name });
-      input.value = "";
-    }
-
-    async function removeVehicle(id){
-      const inUse = sessions.some(s => s.status === "active" && s.vehicleId === id);
-      if(inUse){
-        alert("Esse veículo está em uso agora.");
-        return;
-      }
-      if(!confirm("Excluir esse veículo?")) return;
-      await deleteDoc(doc(db, "vehicles", id));
-    }
-
-    async function addPlan(){
-      const nome = (document.getElementById("novoPlanoNome").value || "").trim();
-      const minutos = parseInt(document.getElementById("novoPlanoMin").value, 10);
-      const valor = parseFloat((document.getElementById("novoPlanoValor").value || "0").replace(",", "."));
-
-      if(!nome){
-        alert("Digite o nome do plano.");
-        return;
-      }
-      if(!minutos || minutos <= 0){
-        alert("Digite os minutos do plano.");
-        return;
-      }
-      if(!valor || valor <= 0){
-        alert("Digite o valor do plano.");
-        return;
-      }
-
-      await addDoc(collection(db, "plans"), { nome, minutos, valor });
-      document.getElementById("novoPlanoNome").value = "";
-      document.getElementById("novoPlanoMin").value = "";
-      document.getElementById("novoPlanoValor").value = "";
-    }
-
-    async function removePlan(id){
-      const inUse = sessions.some(s => s.status === "active" && s.planId === id);
-      if(inUse){
-        alert("Esse plano está em uso agora.");
-        return;
-      }
-      if(!confirm("Excluir esse plano?")) return;
-      await deleteDoc(doc(db, "plans", id));
-    }
-
-    async function startSession(){
-      const nome = (document.getElementById("nomeCrianca").value || "").trim();
-      const vehicleId = document.getElementById("veiculoEscolhido").value;
-      const planId = document.getElementById("planoEscolhido").value;
-
-      if(!nome){
-        alert("Digite o nome da criança.");
-        return;
-      }
-
-      const vehicle = vehicles.find(v => v.id === vehicleId);
-      if(!vehicle){
-        alert("Selecione o veículo.");
-        return;
-      }
-
-      const plan = plans.find(p => p.id === planId);
-      if(!plan){
-        alert("Selecione o plano.");
-        return;
-      }
-
-      const now = Date.now();
-
-      await addDoc(collection(db, "sessions"), {
-        nome,
-        vehicleId,
-        veiculo: vehicle.name,
-        planId,
-        planName: plan.nome,
-        baseMinutes: Number(plan.minutos),
-        baseValue: Number(plan.valor),
-        extrasCount: 0,
-        extrasValue: 0,
-        startAt: now,
-        endAt: now + Number(plan.minutos) * 60 * 1000,
-        status: "active",
-        requestMore: false,
-        requestAt: null,
-        createdAt: now,
-        endedAt: null
-      });
-
-      document.getElementById("nomeCrianca").value = "";
-      document.getElementById("veiculoEscolhido").value = "";
-      document.getElementById("planoEscolhido").value = "";
-      currentTab = "andamento";
-      renderAdmin();
-    }
-
-    async function requestMore(id){
-      const item = sessions.find(s => s.id === id);
-      if(!item || item.status !== "active") return;
-
-      await updateDoc(doc(db, "sessions", id), {
-        requestMore: true,
-        requestAt: Date.now()
-      });
-    }
-
-    async function approveMore(id){
-      const item = sessions.find(s => s.id === id);
-      if(!item) return;
-
-      const extraValue = Number(item.baseValue || 0);
-      const base = item.endAt > Date.now() ? item.endAt : Date.now();
-
-      await updateDoc(doc(db, "sessions", id), {
-        endAt: base + EXTRA_MINUTES * 60 * 1000,
-        extrasCount: Number(item.extrasCount || 0) + 1,
-        extrasValue: Number(item.extrasValue || 0) + extraValue,
-        requestMore: false,
-        requestAt: null
-      });
-    }
-
-    async function endSession(id){
-      if(!confirm("Encerrar atendimento?")) return;
-      await updateDoc(doc(db, "sessions", id), {
-        status: "ended",
-        requestMore: false,
-        requestAt: null,
-        endedAt: Date.now()
-      });
-    }
-
-    function getActiveSorted(){
-      return sessions
-        .filter(s => s.status === "active")
-        .sort((a,b) => {
-          if(Boolean(a.requestMore) !== Boolean(b.requestMore)){
-            return a.requestMore ? -1 : 1;
-          }
-          return getSecondsLeft(a) - getSecondsLeft(b);
-        });
-    }
-
-    function getEndedSorted(){
-      return sessions
-        .filter(s => s.status === "ended")
-        .sort((a,b) => Number(b.endedAt || 0) - Number(a.endedAt || 0));
-    }
-
-    function getSummary(){
-      const ended = getEndedSorted();
-      const total = ended.reduce((acc, item) => acc + getTotalValue(item), 0);
-      const extras = ended.reduce((acc, item) => acc + Number(item.extrasCount || 0), 0);
-
-      const vehicleUse = {};
-      ended.forEach(item => {
-        vehicleUse[item.veiculo] = (vehicleUse[item.veiculo] || 0) + 1;
-      });
-
-      let topVehicle = "-";
-      let topCount = 0;
-      Object.entries(vehicleUse).forEach(([name,count]) => {
-        if(count > topCount){
-          topCount = count;
-          topVehicle = name;
-        }
-      });
-
-      return {
-        totalAtivos: getActiveSorted().length,
-        totalRecebido: total,
-        totalExtras: extras,
-        ticketMedio: ended.length ? total / ended.length : 0,
-        topVehicle
-      };
     }
 
     function renderTabs(){
@@ -921,11 +488,64 @@
       `;
     }
 
+    function renderLogin(error = ""){
+      currentView = "login";
+      const appEl = document.getElementById("app");
+      appEl.innerHTML = `
+        <div class="loginWrap">
+          <div class="loginCard">
+            <h1 class="loginTitle">🔐 Painel da Equipe</h1>
+            <p class="loginSub">Entre com usuário e senha para acessar o painel.</p>
+
+            <label>Usuário</label>
+            <input id="loginUser" placeholder="Digite o usuário" />
+
+            <label>Senha</label>
+            <input id="loginPass" type="password" placeholder="Digite a senha" />
+
+            <div class="sectionActions">
+              <button class="btn-blue" id="btnLogin">Entrar no painel</button>
+            </div>
+
+            ${error ? `<div class="loginError">${escapeHtml(error)}</div>` : ""}
+
+            <div class="loginHelp">
+              <strong>Importante:</strong><br />
+              A tela do cliente continua sem login.<br />
+              O login é somente para a equipe.
+            </div>
+          </div>
+        </div>
+      `;
+
+      document.getElementById("btnLogin").onclick = () => {
+        const user = (document.getElementById("loginUser").value || "").trim();
+        const pass = (document.getElementById("loginPass").value || "").trim();
+
+        if(login(user, pass)){
+          renderAdmin();
+        }else{
+          renderLogin("Usuário ou senha incorretos.");
+        }
+      };
+    }
+
+    function getSummary(){
+      const ended = sessions.filter(s => s.status === "ended");
+      const total = ended.reduce((acc, item) => acc + getTotalValue(item), 0);
+      const extras = ended.reduce((acc, item) => acc + Number(item.extrasCount || 0), 0);
+
+      return {
+        totalAtivos: sessions.filter(s => s.status === "active").length,
+        totalRecebido: total,
+        totalExtras: extras,
+        ticketMedio: ended.length ? total / ended.length : 0
+      };
+    }
+
     function renderAdmin(){
       currentView = "admin";
       const appEl = document.getElementById("app");
-      const active = getActiveSorted();
-      const ended = getEndedSorted();
       const summary = getSummary();
 
       appEl.innerHTML = `
@@ -934,8 +554,9 @@
             <div class="heroTop">
               <div class="brand">
                 <h1>🚗 Família Sobre Rodas</h1>
-                <p>Painel do atendente</p>
+                <p>Painel principal da equipe</p>
               </div>
+              <button class="btn-dark" id="btnLogout">Sair</button>
             </div>
             ${renderTabs()}
           </div>
@@ -943,32 +564,16 @@
           <div class="${currentTab === "novo" ? "" : "hidden"}">
             <div class="grid grid2">
               <div class="card">
-                <h2>🎉 Novo atendimento</h2>
-                <p class="sub">Preencha rapidinho e inicie o tempo.</p>
-
-                <label>Nome da criança</label>
-                <input id="nomeCrianca" placeholder="Ex.: Miguel" />
-
-                <label>Veículo</label>
-                <select id="veiculoEscolhido">
-                  <option value="">Selecione um veículo</option>
-                  ${vehicles.map(v => `<option value="${v.id}">${escapeHtml(v.name)}</option>`).join("")}
-                </select>
-
-                <label>Plano</label>
-                <select id="planoEscolhido">
-                  <option value="">Selecione um plano</option>
-                  ${plans.map(p => `<option value="${p.id}">${escapeHtml(p.nome)} - ${p.minutos} min - ${money(p.valor)}</option>`).join("")}
-                </select>
-
-                <div class="sectionActions">
-                  <button class="btn-green" id="btnStart">Iniciar atendimento</button>
-                </div>
+                <h2>🎉 Aba Atendimentos</h2>
+                <p class="sub">Etapa 1 pronta: login e separação entre equipe e cliente.</p>
+                <p class="sub">
+                  Na próxima etapa vamos fazer só o cadastro dos planos funcionar direito,
+                  sem mexer no resto.
+                </p>
               </div>
 
               <div class="card">
                 <h2>✨ Resumo rápido</h2>
-                <p class="sub">Visual mais bonito, inspirado na versão Lovable.</p>
                 <div class="statsGrid" style="grid-template-columns:repeat(2,minmax(0,1fr));">
                   <div class="statCard statBlue">
                     <div class="statLabel">Ativos agora</div>
@@ -984,33 +589,165 @@
           </div>
 
           <div class="${currentTab === "andamento" ? "" : "hidden"}">
-            <div class="statsGrid">
-              <div class="statCard statBlue">
-                <div class="statLabel">Ativos</div>
-                <div class="statValue">${summary.totalAtivos}</div>
-              </div>
-              <div class="statCard statPink">
-                <div class="statLabel">Recebido</div>
-                <div class="statValue">${money(summary.totalRecebido)}</div>
-              </div>
-              <div class="statCard statGreen">
-                <div class="statLabel">Extras vendidos</div>
-                <div class="statValue">${summary.totalExtras}</div>
-              </div>
-              <div class="statCard statPurple">
-                <div class="statLabel">Carrinho mais usado</div>
-                <div class="statValue" style="font-size:22px;">${escapeHtml(summary.topVehicle)}</div>
-              </div>
-            </div>
-
-            <div class="card" style="margin-top:18px;">
-              <h2>⏱️ Passeios em andamento</h2>
-              <p class="sub">Quem pedir mais tempo sobe para o topo.</p>
-              ${active.length === 0 ? `<div class="empty">Nenhum atendimento ativo agora.</div>` : ""}
-              ${active.map(item => renderSessionCard(item)).join("")}
+            <div class="card">
+              <h2>⏱️ Aba Em andamento</h2>
+              <p class="sub">Esta etapa ainda vai ser ajustada depois.</p>
+              <div class="empty">Vamos mexer nela depois que a aba Planos estiver 100% certa.</div>
             </div>
           </div>
 
           <div class="${currentTab === "veiculos" ? "" : "hidden"}">
             <div class="card">
-              <h2>🚘 Veículos</h2>
+              <h2>🚘 Aba Veículos</h2>
+              <p class="sub">Também vamos corrigir depois, em uma etapa separada.</p>
+              <div class="empty">Por enquanto estamos organizando a estrutura com login.</div>
+            </div>
+          </div>
+
+          <div class="${currentTab === "planos" ? "" : "hidden"}">
+            <div class="card">
+              <h2>💰 Aba Planos / Preços</h2>
+              <p class="sub">Próxima etapa: fazer esta aba funcionar 100%.</p>
+              <div class="empty">
+                Vamos corrigir só o cadastro de planos na próxima versão,
+                sem misturar com o resto.
+              </div>
+            </div>
+          </div>
+
+          <div class="${currentTab === "relatorio" ? "" : "hidden"}">
+            <div class="card">
+              <h2>📊 Aba Relatório</h2>
+              <p class="sub">Também vai ser ajustada depois, em outra etapa.</p>
+              <div class="empty">Primeiro vamos fechar login + planos.</div>
+            </div>
+          </div>
+        </div>
+      `;
+
+      document.getElementById("btnLogout").onclick = logout;
+
+      document.querySelectorAll("[data-tab]").forEach(btn => {
+        btn.onclick = () => setTab(btn.dataset.tab);
+      });
+    }
+
+    function renderClient(){
+      currentView = "client";
+      const clientId = qs("cliente");
+      const item = sessions.find(s => s.id === clientId);
+
+      if(!item){
+        renderNotFound();
+        return;
+      }
+
+      const sec = getSecondsLeft(item);
+      const ended = item.status !== "active" || sec <= 0;
+
+      document.getElementById("app").innerHTML = `
+        <div class="clientWrap">
+          <div class="clientCard">
+            <div class="clientTitle">Família Sobre Rodas</div>
+            <div class="clientName">${escapeHtml(item.nome || "Cliente")}</div>
+            <div class="clientVehicle">🚘 ${escapeHtml(item.veiculo || "Passeio")}</div>
+
+            <div class="clientTimer">${ended ? "00:00" : formatTime(sec)}</div>
+
+            <div class="clientAlert">
+              ${ended ? "⛔ TEMPO ENCERRADO" : "⏰ ACOMPANHE SEU TEMPO"}
+            </div>
+
+            <div class="clientPrices">
+              <div class="clientPriceBox">
+                <div class="l">Plano inicial</div>
+                <div class="v">${money(item.baseValue)}</div>
+              </div>
+              <div class="clientPriceBox">
+                <div class="l">Extras</div>
+                <div class="v">${money(item.extrasValue)}</div>
+              </div>
+              <div class="clientPriceBox">
+                <div class="l">Total atual</div>
+                <div class="v">${money(getTotalValue(item))}</div>
+              </div>
+            </div>
+
+            <div class="clientButtons">
+              <button class="btn-pink" disabled>Pedir mais tempo</button>
+            </div>
+          </div>
+        </div>
+      `;
+    }
+
+    function renderNotFound(){
+      document.getElementById("app").innerHTML = `
+        <div class="clientWrap">
+          <div class="clientCard">
+            <h2>Passeio não encontrado</h2>
+            <p class="sub">Verifique o link ou QR Code com a equipe.</p>
+          </div>
+        </div>
+      `;
+    }
+
+    function updateLiveUI(){
+      if(currentView === "client"){
+        renderClient();
+      }
+    }
+
+    function renderApp(){
+      if(qs("cliente")){
+        renderClient();
+        return;
+      }
+
+      if(isLoggedIn()){
+        renderAdmin();
+      }else{
+        renderLogin();
+      }
+    }
+
+    async function init(){
+      try{
+        onSnapshot(collection(db, "vehicles"), snap => {
+          vehicles = snap.docs.map(d => ({ id:d.id, ...d.data() }));
+          if(!qs("cliente") && currentView === "admin"){
+            renderAdmin();
+          }
+        });
+
+        onSnapshot(collection(db, "plans"), snap => {
+          plans = snap.docs.map(d => ({ id:d.id, ...d.data() }));
+          if(!qs("cliente") && currentView === "admin"){
+            renderAdmin();
+          }
+        });
+
+        onSnapshot(collection(db, "sessions"), snap => {
+          sessions = snap.docs.map(d => ({ id:d.id, ...d.data() }));
+          renderApp();
+        });
+
+        if(timerInterval) clearInterval(timerInterval);
+        timerInterval = setInterval(updateLiveUI, 1000);
+      }catch(err){
+        console.error(err);
+        document.getElementById("app").innerHTML = `
+          <div class="wrap">
+            <div class="card">
+              <h2>Erro ao carregar</h2>
+              <p class="sub">Atualize a página. Se continuar, me avise.</p>
+            </div>
+          </div>
+        `;
+      }
+    }
+
+    init();
+  </script>
+</body>
+</html>
