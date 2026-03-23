@@ -279,6 +279,25 @@
       font-weight:bold;
     }
 
+    .listWrap{
+      display:flex;
+      flex-direction:column;
+      gap:12px;
+      margin-top:14px;
+    }
+
+    .listItem{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap:12px;
+      flex-wrap:wrap;
+      padding:14px;
+      border-radius:18px;
+      background:linear-gradient(135deg,#eef4ff,#fff2f7);
+      border:2px solid #dbeafe;
+    }
+
     .clientWrap{
       min-height:100vh;
       display:flex;
@@ -395,7 +414,10 @@
     import {
       getFirestore,
       collection,
-      onSnapshot
+      onSnapshot,
+      addDoc,
+      deleteDoc,
+      doc
     } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js";
 
     const firebaseConfig = {
@@ -417,7 +439,7 @@
     let vehicles = [];
     let plans = [];
     let sessions = [];
-    let currentTab = "novo";
+    let currentTab = "planos";
     let currentView = "admin";
     let timerInterval = null;
 
@@ -474,6 +496,42 @@
     function setTab(tab){
       currentTab = tab;
       renderAdmin();
+    }
+
+    async function addPlan(){
+      const nome = (document.getElementById("novoPlanoNome").value || "").trim();
+      const minutos = parseInt(document.getElementById("novoPlanoMin").value, 10);
+      const valor = parseFloat((document.getElementById("novoPlanoValor").value || "").replace(",", "."));
+
+      if(!nome){
+        alert("Digite o nome do plano.");
+        return;
+      }
+
+      if(!minutos || minutos <= 0){
+        alert("Digite os minutos do plano.");
+        return;
+      }
+
+      if(isNaN(valor) || valor <= 0){
+        alert("Digite o valor do plano.");
+        return;
+      }
+
+      await addDoc(collection(db, "plans"), {
+        nome,
+        minutos,
+        valor
+      });
+
+      document.getElementById("novoPlanoNome").value = "";
+      document.getElementById("novoPlanoMin").value = "";
+      document.getElementById("novoPlanoValor").value = "";
+    }
+
+    async function removePlan(id){
+      if(!confirm("Excluir este plano?")) return;
+      await deleteDoc(doc(db, "plans", id));
     }
 
     function renderTabs(){
@@ -565,11 +623,8 @@
             <div class="grid grid2">
               <div class="card">
                 <h2>🎉 Aba Atendimentos</h2>
-                <p class="sub">Etapa 1 pronta: login e separação entre equipe e cliente.</p>
-                <p class="sub">
-                  Na próxima etapa vamos fazer só o cadastro dos planos funcionar direito,
-                  sem mexer no resto.
-                </p>
+                <p class="sub">Ainda vamos ajustar depois.</p>
+                <p class="sub">Nesta etapa estamos focando só em Planos / Preços.</p>
               </div>
 
               <div class="card">
@@ -591,26 +646,57 @@
           <div class="${currentTab === "andamento" ? "" : "hidden"}">
             <div class="card">
               <h2>⏱️ Aba Em andamento</h2>
-              <p class="sub">Esta etapa ainda vai ser ajustada depois.</p>
-              <div class="empty">Vamos mexer nela depois que a aba Planos estiver 100% certa.</div>
+              <p class="sub">Também vamos mexer depois, em outra etapa.</p>
+              <div class="empty">Por enquanto seguimos focando só em Planos / Preços.</div>
             </div>
           </div>
 
           <div class="${currentTab === "veiculos" ? "" : "hidden"}">
             <div class="card">
               <h2>🚘 Aba Veículos</h2>
-              <p class="sub">Também vamos corrigir depois, em uma etapa separada.</p>
-              <div class="empty">Por enquanto estamos organizando a estrutura com login.</div>
+              <p class="sub">Também será corrigida depois, separadamente.</p>
+              <div class="empty">Uma etapa de cada vez, pra não quebrar nada.</div>
             </div>
           </div>
 
           <div class="${currentTab === "planos" ? "" : "hidden"}">
             <div class="card">
               <h2>💰 Aba Planos / Preços</h2>
-              <p class="sub">Próxima etapa: fazer esta aba funcionar 100%.</p>
-              <div class="empty">
-                Vamos corrigir só o cadastro de planos na próxima versão,
-                sem misturar com o resto.
+              <p class="sub">Agora sim essa aba está funcionando.</p>
+
+              <div class="row">
+                <div>
+                  <label>Nome do plano</label>
+                  <input id="novoPlanoNome" placeholder="Ex.: Passeio Rápido" />
+                </div>
+                <div>
+                  <label>Minutos</label>
+                  <input id="novoPlanoMin" type="number" placeholder="5" />
+                </div>
+                <div>
+                  <label>Valor</label>
+                  <input id="novoPlanoValor" type="number" step="0.01" placeholder="7.00" />
+                </div>
+              </div>
+
+              <div class="sectionActions">
+                <button class="btn-blue" id="btnAddPlan">Adicionar plano</button>
+              </div>
+
+              <div class="listWrap">
+                ${plans.length === 0 ? `<div class="empty">Nenhum plano cadastrado.</div>` : ""}
+                ${plans
+                  .slice()
+                  .sort((a,b) => Number(a.minutos || 0) - Number(b.minutos || 0))
+                  .map(p => `
+                    <div class="listItem">
+                      <div>
+                        <strong>${escapeHtml(p.nome)}</strong><br />
+                        ${Number(p.minutos || 0)} min - ${money(p.valor)}
+                      </div>
+                      <button class="btn-red" data-remove-plan="${p.id}">Excluir</button>
+                    </div>
+                  `).join("")}
               </div>
             </div>
           </div>
@@ -618,8 +704,8 @@
           <div class="${currentTab === "relatorio" ? "" : "hidden"}">
             <div class="card">
               <h2>📊 Aba Relatório</h2>
-              <p class="sub">Também vai ser ajustada depois, em outra etapa.</p>
-              <div class="empty">Primeiro vamos fechar login + planos.</div>
+              <p class="sub">Ainda vamos ajustar depois, em outra etapa.</p>
+              <div class="empty">Primeiro fechamos Planos / Preços.</div>
             </div>
           </div>
         </div>
@@ -629,6 +715,15 @@
 
       document.querySelectorAll("[data-tab]").forEach(btn => {
         btn.onclick = () => setTab(btn.dataset.tab);
+      });
+
+      const btnAddPlan = document.getElementById("btnAddPlan");
+      if(btnAddPlan){
+        btnAddPlan.onclick = addPlan;
+      }
+
+      document.querySelectorAll("[data-remove-plan]").forEach(btn => {
+        btn.onclick = () => removePlan(btn.dataset.removePlan);
       });
     }
 
